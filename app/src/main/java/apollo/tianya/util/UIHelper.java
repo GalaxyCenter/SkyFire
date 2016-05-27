@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import apollo.tianya.LoginActivity;
+import apollo.tianya.MainActivity;
 
 /**
  * 页面帮助类
@@ -20,4 +21,10 @@ public class UIHelper {
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
     }
+
+    public static void showMainActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+
 }

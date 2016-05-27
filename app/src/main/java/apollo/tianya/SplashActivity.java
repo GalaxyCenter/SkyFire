@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
+import apollo.tianya.util.UIHelper;
+
 /**
  * 应用启动界面
  */
@@ -16,7 +18,6 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_splash);
 
         final View view = View.inflate(this, R.layout.activity_splash, null);
         setContentView(view);
@@ -40,8 +41,7 @@ public class SplashActivity extends Activity {
     }
 
     private void redirectTo() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        UIHelper.showMainActivity(this);
         finish();
     }
 }

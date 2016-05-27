@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    android:background="@drawable/welcome">
+    android:background="@drawable/bg_splash_logo">
 
 </LinearLayout>
