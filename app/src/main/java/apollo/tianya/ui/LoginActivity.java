@@ -1,4 +1,4 @@
-package apollo.tianya;
+package apollo.tianya.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -33,6 +33,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import apollo.tianya.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

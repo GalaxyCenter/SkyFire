@@ -3,8 +3,8 @@ package apollo.tianya.util;
 import android.content.Context;
 import android.content.Intent;
 
-import apollo.tianya.LoginActivity;
-import apollo.tianya.MainActivity;
+import apollo.tianya.ui.LoginActivity;
+import apollo.tianya.ui.MainActivity;
 
 /**
  * 页面帮助类
