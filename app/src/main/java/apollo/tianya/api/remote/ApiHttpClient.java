@@ -93,6 +93,10 @@ public class ApiHttpClient {
         post(partUrl, null, null, handler);
     }
 
+    public static void post(String partUrl, Header[] headers, AsyncHttpResponseHandler handler) {
+        post(partUrl, headers, null, handler);
+    }
+
     public static void post(String partUrl, Header[] headers, RequestParams params,
                             AsyncHttpResponseHandler handler) {
         client.post(null, partUrl, headers, params, null, handler);

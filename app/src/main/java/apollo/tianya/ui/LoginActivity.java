@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,17 +23,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpParams;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import apollo.tianya.R;
 import apollo.tianya.api.TianyaApi;
+import apollo.tianya.api.remote.ApiHttpClient;
+import apollo.tianya.util.TLog;
 import cz.msebera.android.httpclient.Header;
-
-import static android.Manifest.permission.READ_CONTACTS;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.client.protocol.ClientContext;
+import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.protocol.HttpContext;
 
 /**
  * A login screen that offers login via email/password.
@@ -53,6 +56,8 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+    private Header mHeaderCookie = null;
+
     private final AsyncHttpResponseHandler mLoginHandle = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -63,27 +68,65 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            String body = new String(responseBody);
+            String body = null;
+            Pattern pattern = null;
+            Matcher matcher = null;
+            String err_msg = null;
 
+            body = new String(responseBody);
             Log.i(TAG, body);
+
+            pattern = Pattern.compile("(?s)<i class=\"icon icon-error\"><\\/i>(.*?)<\\/div>");
+            matcher = pattern.matcher(body);
+            if(matcher.find()) {
+                err_msg = matcher.group();
+            }
+            Log.i(TAG, "login fail:" + err_msg);
 
             showProgress(false);
             showCaptcha();
 
-            mPasswordView.setError(getString(R.string.error_incorrect_password));
-            mPasswordView.requestFocus();
+            if ("验证码错误".equals(err_msg)) {
+                mCaptchaView.setError(err_msg);
+                mCaptchaView.requestFocus();
+            } else {
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();
+            }
+
         }
     };
 
-    private final HttpCallBack mCaptchaCallback = new HttpCallBack(){
+    private final AsyncHttpResponseHandler mCaptchaHandle = new AsyncHttpResponseHandler(){
 
-        public void onSuccess(byte[] data) {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             BitmapFactory.Options option = new BitmapFactory.Options();
             Bitmap bitmap = null;
 
-            bitmap = BitmapFactory.decodeByteArray(data, 0,
-                    data.length, option);
+            bitmap = BitmapFactory.decodeByteArray(responseBody, 0,
+                    responseBody.length, option);
             mCaptchaImg.setImageBitmap(bitmap);
+            bitmap = null;
+
+            // 读取验证码中的cookie
+            AsyncHttpClient client = ApiHttpClient.getHttpClient();
+            HttpContext httpContext = client.getHttpContext();
+            CookieStore cookies = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
+            if (cookies != null) {
+                String tmpcookies = "";
+                for (Cookie c : cookies.getCookies()) {
+                    TLog.log(TAG,
+                            "cookie:" + c.getName() + " " + c.getValue());
+                    tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
+                }
+                mHeaderCookie = new ApiHttpClient.HttpHeader("Cookie", tmpcookies);
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
         }
     };
 
@@ -119,6 +162,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mCaptchaImg = (ImageView) findViewById(R.id.captcha_img);
+        mCaptchaImg.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCaptcha();
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         mCaptchaLayout = findViewById(R.id.captcha_layout);
@@ -167,7 +216,8 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            TianyaApi.login(mEmailView.getText().toString(), mPasswordView.getText().toString(), mLoginHandle);
+            TianyaApi.login(mEmailView.getText().toString(), mPasswordView.getText().toString(),
+                    mCaptchaView.getText().toString(), mHeaderCookie, mLoginHandle);
         }
     }
 
@@ -228,18 +278,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showCaptcha() {
-        HttpParams params = null;
-
         mCaptchaLayout.setVisibility(View.VISIBLE);
-
-        params = new HttpParams();
-        params.putHeaders("Referer", "https://passport.tianya.cn/login");
-
-        new Core.Builder().size(100, 50)
-                .url("https://passport.tianya.cn/staticHttps/validateImgProxy.jsp")
-                .params(params)
-                .callback(mCaptchaCallback)
-                .loadBitmapRes(R.drawable.pic_bg).doTask();
+        TianyaApi.getCaptcha(mCaptchaHandle);
     }
 
 }

@@ -31,22 +31,24 @@ public class TianyaApi {
      * @param password
      * @param handler
      */
-    public static void login(String username, String password,
+    public static void login(String username, String password, String captcha, Header cookie_header,
                              final AsyncHttpResponseHandler handler) {
         RequestParams params = null;
         String loginurl = null;
         AsyncHttpResponseHandler _hld = null;
         Header[] headers = null;
+        Header header_referer = null;
 
         params = new RequestParams();
         params.put("vwriter", username);
         params.put("vpassword", password);
+        params.put("vc", captcha);
         params.put("rmflag", 1);
         params.put("__sid", "1#4#1.0#a0b0eb92-404d-4ea1-a45c-ad5bdbc439bf");
         params.put("action", "b2.1.1102|7341eb362f75554bf2e0a56029769c43|7b774effe4a349c6dd82ad4f4f21d34c|Mozilla/5.0 (Windows NT 10.0; WOW64; rv:35.0) Gecko/20100101 Firefox/35.0|0|3|v2.2");
 
-        headers = new Header[1];
-        headers[0] = new ApiHttpClient.HttpHeader("Referer", "http://www.tianya.cn");
+        header_referer = new ApiHttpClient.HttpHeader("Referer", "http://www.tianya.cn");
+        headers = new Header[] {header_referer, cookie_header};
 
         loginurl = "https://passport.tianya.cn/login?from=index&_goto=login&returnURL=http://www.tianya.cn";
 
@@ -87,5 +89,15 @@ public class TianyaApi {
             }
         };
         ApiHttpClient.post(loginurl, headers, params, _hld);
+    }
+
+    public static void getCaptcha(AsyncHttpResponseHandler handler) {
+        Header[] headers = null;
+        String url = "https://passport.tianya.cn/staticHttps/validateImgProxy.jsp";
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Referer", "https://passport.tianya.cn/login");
+
+        ApiHttpClient.post(url, headers, handler);
     }
 }
