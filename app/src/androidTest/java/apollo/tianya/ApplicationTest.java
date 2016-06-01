@@ -24,7 +24,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testLogin() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
 
-        TianyaApi.login("kuibobo", "333", new AsyncHttpResponseHandler(){
+        TianyaApi.login("kuibobo", "333", null, null, new AsyncHttpResponseHandler(){
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
