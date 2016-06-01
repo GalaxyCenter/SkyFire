@@ -15,12 +15,14 @@ import apollo.tianya.widget.EmptyLayout;
  * 带有导航条的基类
  * Created by Texel on 2016/6/1.
  */
-public class BaseViewPagerFragment extends BaseFragment {
+public abstract class BaseViewPagerFragment extends BaseFragment {
 
     private TabLayout mTabLayout;
     protected ViewPager mViewPager;
     protected ViewPageFragmentAdapter mTabsAdapter;
     protected EmptyLayout mErrorLayout;
+
+    protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
