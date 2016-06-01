@@ -53,7 +53,7 @@ public class ApiHttpClient {
 
     public static AsyncHttpClient client;
     public final static String HOST = "www.tianya.cn";
-
+    private static String appCookie;
     private static String API_URL = "http://www.tianya.cn/%s";
 
     public ApiHttpClient() {
@@ -74,6 +74,21 @@ public class ApiHttpClient {
         }
         Log.d("BASE_CLIENT", "request:" + url);
         return url;
+    }
+
+    public static void setCookie(String cookie) {
+        client.addHeader("Cookie", cookie);
+    }
+
+    public static String getCookie(AppContext appContext) {
+        if (appCookie == null || appCookie == "") {
+            appCookie = appContext.getProperty("cookie");
+        }
+        return appCookie;
+    }
+
+    public static void cleanCookie() {
+        appCookie = "";
     }
 
     public static void setHttpClient(AsyncHttpClient c) {

@@ -48,7 +48,10 @@ public class TianyaApi {
         params.put("action", "b2.1.1102|7341eb362f75554bf2e0a56029769c43|7b774effe4a349c6dd82ad4f4f21d34c|Mozilla/5.0 (Windows NT 10.0; WOW64; rv:35.0) Gecko/20100101 Firefox/35.0|0|3|v2.2");
 
         header_referer = new ApiHttpClient.HttpHeader("Referer", "http://www.tianya.cn");
-        headers = new Header[] {header_referer, cookie_header};
+        if (cookie_header == null)
+            headers = new Header[] {header_referer};
+        else
+            headers = new Header[] {header_referer, cookie_header};
 
         loginurl = "https://passport.tianya.cn/login?from=index&_goto=login&returnURL=http://www.tianya.cn";
 
@@ -83,9 +86,8 @@ public class TianyaApi {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                String body = new String(responseBody);
-
-                Log.i(TAG, body);
+                handler.sendFailureMessage(statusCode, headers, responseBody, error);
+                return;
             }
         };
         ApiHttpClient.post(loginurl, headers, params, _hld);

@@ -17,6 +17,7 @@
     <string name="error_invalid_password">密码太短</string>
     <string name="error_incorrect_password">无效的密码</string>
     <string name="error_field_required">内容不能为空</string>
+    <string name="error_captcha_load_fail">验证码加载失败,请稍后再登录</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>

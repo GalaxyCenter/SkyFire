@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Build;
@@ -29,6 +30,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import apollo.tianya.AppConfig;
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.api.TianyaApi;
 import apollo.tianya.api.remote.ApiHttpClient;
@@ -37,6 +40,7 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.CookieStore;
 import cz.msebera.android.httpclient.client.protocol.ClientContext;
 import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.cookie.CookieOrigin;
 import cz.msebera.android.httpclient.protocol.HttpContext;
 
 /**
@@ -52,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mCaptchaView;
     private ImageView mCaptchaImg;
 
+    private View mRootLayout;
     private View mCaptchaLayout;
     private View mProgressView;
     private View mLoginFormView;
@@ -61,9 +66,23 @@ public class LoginActivity extends AppCompatActivity {
     private final AsyncHttpResponseHandler mLoginHandle = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-            String body = new String(responseBody);
+            showProgress(false);
+            // 读取cookie
+            AsyncHttpClient client = ApiHttpClient.getHttpClient();
+            HttpContext httpContext = client.getHttpContext();
+            CookieStore cookies = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
+            if (cookies != null) {
+                String cookies_str = "";
 
-            Log.i(TAG, body);
+                for (Cookie c : cookies.getCookies()) {
+                    cookies_str += (c.getName() + "=" + c.getValue()) + "; ";
+                }
+                TLog.log(TAG, "Cookies:" + cookies_str);
+                AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE,
+                        cookies_str);
+                ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
+                        .getInstance()));
+            }
         }
 
         @Override
@@ -74,26 +93,24 @@ public class LoginActivity extends AppCompatActivity {
             String err_msg = null;
 
             body = new String(responseBody);
-            Log.i(TAG, body);
 
             pattern = Pattern.compile("(?s)<i class=\"icon icon-error\"><\\/i>(.*?)<\\/div>");
             matcher = pattern.matcher(body);
             if(matcher.find()) {
-                err_msg = matcher.group();
+                err_msg = matcher.group(1);
             }
             Log.i(TAG, "login fail:" + err_msg);
 
             showProgress(false);
-            showCaptcha();
 
-            if ("验证码错误".equals(err_msg)) {
+            if ("验证码错误".equals(err_msg) || "请输入验证码".equals(err_msg)) {
                 mCaptchaView.setError(err_msg);
                 mCaptchaView.requestFocus();
+                showCaptcha();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
-
         }
     };
 
@@ -114,19 +131,18 @@ public class LoginActivity extends AppCompatActivity {
             HttpContext httpContext = client.getHttpContext();
             CookieStore cookies = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
             if (cookies != null) {
-                String tmpcookies = "";
+                String cookies_str = "";
                 for (Cookie c : cookies.getCookies()) {
-                    TLog.log(TAG,
-                            "cookie:" + c.getName() + " " + c.getValue());
-                    tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
+                    cookies_str += (c.getName() + "=" + c.getValue()) + "; ";
                 }
-                mHeaderCookie = new ApiHttpClient.HttpHeader("Cookie", tmpcookies);
+                mHeaderCookie = new ApiHttpClient.HttpHeader("Cookie", cookies_str);
             }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+            Snackbar.make(mRootLayout, R.string.error_captcha_load_fail, Snackbar.LENGTH_SHORT)
+                    .show();
         }
     };
 
@@ -168,6 +184,9 @@ public class LoginActivity extends AppCompatActivity {
                 showCaptcha();
             }
         });
+        mCaptchaView = (EditText) findViewById(R.id.captcha);
+
+        mRootLayout = findViewById(R.id.root_layout);
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         mCaptchaLayout = findViewById(R.id.captcha_layout);
