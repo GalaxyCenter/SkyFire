@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 /**
  * 碎片基类
  *
@@ -15,9 +16,17 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int getLayoutId();
 
+    public void initView(View view) {};
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutId(), null);
+        View view = null;
+
+        view = inflater.inflate(getLayoutId(), container, false);
+
+        initView(view);
+
+        return view;
     }
 }

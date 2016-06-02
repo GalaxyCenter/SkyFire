@@ -1,20 +1,37 @@
 package apollo.tianya.base;
 
+import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import apollo.tianya.R;
+import apollo.tianya.adapter.ListBaseAdapter;
+import apollo.tianya.bean.Entity;
 
 /**
  * Created by kuibo on 2016/6/1.
  */
-public class BaseListFragment extends BaseFragment {
+public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
-    @InjectView(R.id.listview)
-    protected ListView mListView;
+    protected abstract ListBaseAdapter<T> getListAdapter();
+
+    protected ListBaseAdapter<T> mAdapter;
+
+
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_pull_refresh_listview;
     }
+
+    @Override
+    public void initView(View view) {
+
+        if (mAdapter == null) {
+            mAdapter = getListAdapter();
+        }
+
+    }
+
 }

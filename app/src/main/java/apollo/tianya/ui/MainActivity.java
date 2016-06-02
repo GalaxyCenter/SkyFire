@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
-import apollo.tianya.fragment.NewsViewPagerFragment;
+import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.util.UIHelper;
 
 public class MainActivity extends BaseActivity
@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity
 
 
         // 初始化Fragment
-        fragment = new NewsViewPagerFragment();
+        fragment = new ChannelViewPagerFragment();
 
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
