@@ -102,4 +102,8 @@ public class TianyaApi {
 
         ApiHttpClient.post(url, headers, handler);
     }
+
+    public static void getChannel(String a, int page) {
+
+    }
 }

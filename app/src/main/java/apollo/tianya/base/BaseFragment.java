@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+
 
 /**
  * 碎片基类
@@ -17,6 +19,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract int getLayoutId();
 
     public void initView(View view) {};
+    protected void sendRequestData() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,8 +27,9 @@ public abstract class BaseFragment extends Fragment {
         View view = null;
 
         view = inflater.inflate(getLayoutId(), container, false);
-
+        ButterKnife.bind(this, view);
         initView(view);
+
 
         return view;
     }
