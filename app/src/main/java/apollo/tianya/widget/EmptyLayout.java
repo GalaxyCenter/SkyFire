@@ -1,6 +1,7 @@
 package apollo.tianya.widget;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
@@ -12,4 +13,7 @@ public class EmptyLayout extends LinearLayout {
         super(context);
     }
 
+    public EmptyLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 }

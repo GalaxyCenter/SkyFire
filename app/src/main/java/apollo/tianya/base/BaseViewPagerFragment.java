@@ -25,21 +25,20 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.base_viewpage_fragment, null);
+    protected int getLayoutId() {
+        return R.layout.base_viewpage_fragment;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mTabLayout = (TabLayout) view
-                .findViewById(R.id.tab);
-
+        mTabLayout = (TabLayout) view.findViewById(R.id.tab);
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
-
         mErrorLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
+        mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(), getContext());
 
-        mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
-                mTabLayout, mViewPager);
+        mViewPager.setAdapter(mTabsAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        onSetupTabAdapter(mTabsAdapter);
     }
 }

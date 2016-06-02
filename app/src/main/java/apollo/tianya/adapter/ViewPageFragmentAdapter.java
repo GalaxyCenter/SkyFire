@@ -24,14 +24,16 @@ import apollo.tianya.base.BaseFragment;
  */
 public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
 
-    private final Context mContext;
-    private final List<ViewPageInfo> mTabs = new ArrayList<ViewPageInfo>();
-    private final WeakHashMap<String, BaseFragment> mFragments = null;
+    private Context mContext;
+    private List<ViewPageInfo> mTabs = null;
+    private WeakHashMap<String, BaseFragment> mFragments = null;
 
     public ViewPageFragmentAdapter(FragmentManager m,
                                    Context c) {
         super(m);
         mContext = c;
+        mTabs = new ArrayList<ViewPageInfo>();
+        mFragments = new WeakHashMap<String, BaseFragment>();
     }
 
     @Override
