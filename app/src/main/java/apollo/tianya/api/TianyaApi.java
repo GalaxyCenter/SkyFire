@@ -103,7 +103,24 @@ public class TianyaApi {
         ApiHttpClient.post(url, headers, handler);
     }
 
-    public static void getChannel(String a, int page) {
+    public static void getAvatar(int userId, AsyncHttpResponseHandler handler) {
+        String url = "http://tx.tianyaui.com/logo/" + userId;
 
+        getImage(url, handler);
+    }
+
+    public static void getImage(String url, AsyncHttpResponseHandler handler) {
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Referer", "https://www.tianya.cn");
+
+        ApiHttpClient.post(url, headers, handler);
+    }
+
+    public static void getRecommendThread(AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/m/find/index.shtml";
+
+        ApiHttpClient.post(url, handler);
     }
 }
