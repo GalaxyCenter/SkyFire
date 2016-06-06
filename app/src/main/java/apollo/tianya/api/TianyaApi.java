@@ -121,6 +121,6 @@ public class TianyaApi {
     public static void getRecommendThread(AsyncHttpResponseHandler handler) {
         String url = "http://www.tianya.cn/m/find/index.shtml";
 
-        ApiHttpClient.post(url, handler);
+        ApiHttpClient.get(url, handler);
     }
 }

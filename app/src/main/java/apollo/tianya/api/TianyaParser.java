@@ -1,5 +1,7 @@
 package apollo.tianya.api;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -78,7 +80,8 @@ public class TianyaParser {
             if (sub_matcher.find()) {
                 match_content = sub_matcher.group(1);
                 match_content = Transforms.stripHtmlXmlTags(match_content);
-                thread.setViews(Integer.parseInt(match_content));
+                if (!TextUtils.isEmpty(match_content))
+                    thread.setViews(Integer.parseInt(match_content));
             }
         }
         datas = new DataSet<Thread>();

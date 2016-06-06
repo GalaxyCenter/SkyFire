@@ -2,6 +2,7 @@ package apollo.tianya.base;
 
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -17,7 +18,10 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by kuibo on 2016/6/1.
  */
-public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
+public abstract class BaseListFragment<T extends Entity> extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener {
+
+    private String TAG = this.getClass().getName();
 
     /**
      * HTTP LIST内容解析任务类
@@ -38,6 +42,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
             try {
                 dataset = parseList(responseData);
             } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
                 parserError = true;
             }
 
@@ -78,8 +83,11 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
     };
 
     protected abstract ListBaseAdapter<T> getListAdapter();
+
     protected abstract DataSet<T> parseList(byte[] datas);
-    protected void onRefreshNetworkSuccess() {}
+
+    protected void onRefreshNetworkSuccess() {
+    }
 
     @BindView(R.id.listview)
     protected ListView mListView;
@@ -97,10 +105,19 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
     @Override
     public void initView(View view) {
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         if (mAdapter == null) {
             mAdapter = getListAdapter();
         }
         mListView.setAdapter(mAdapter);
+
+        requestData(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        requestData(true);
     }
 
     protected void executeOnLoadDataSuccess(DataSet<T> ds) {
@@ -113,7 +130,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
         mState = STATE_NONE;
     }
 
-    /** 设置顶部正在加载的状态 */
+    /**
+     * 设置顶部正在加载的状态
+     */
     protected void setSwipeRefreshLoadingState() {
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(true);
@@ -122,7 +141,13 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
         }
     }
 
-    /** 设置顶部加载完毕的状态 */
+    protected void requestData(boolean refresh) {
+        sendRequestData();
+    }
+
+    /**
+     * 设置顶部加载完毕的状态
+     */
     protected void setSwipeRefreshLoadedState() {
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(false);

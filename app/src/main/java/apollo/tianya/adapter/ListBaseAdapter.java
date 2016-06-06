@@ -16,7 +16,7 @@ import apollo.tianya.bean.Entity;
  */
 public abstract class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 
-    private List<T> mItems;
+    protected List<T> mItems;
     private LayoutInflater mInflater;
 
     public abstract View getRealView(int i, View view, ViewGroup viewGroup);
@@ -27,12 +27,12 @@ public abstract class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mItems.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return mItems.indexOf(i);
     }
 
     @Override
@@ -42,7 +42,7 @@ public abstract class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+        return getRealView(i, view, viewGroup);
     }
 
     protected LayoutInflater getLayoutInflater(Context context) {

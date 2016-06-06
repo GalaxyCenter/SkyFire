@@ -4,8 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import apollo.tianya.R;
 import apollo.tianya.bean.Thread;
 import butterknife.BindView;
@@ -29,15 +27,21 @@ public class ThreadAdapter extends ListBaseAdapter<Thread> {
 
     @Override
     public View getRealView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder holder;
+        ViewHolder vh;
+        Thread thread;
+
         if (view == null) {
             view = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_thread, null);
-            holder = new ViewHolder(view);
-            view.setTag(holder);
+            vh = new ViewHolder(view);
+            view.setTag(vh);
         } else {
-            holder = (ViewHolder) view.getTag();
-
+            vh = (ViewHolder) view.getTag();
         }
+
+        thread = mItems.get(i);
+        vh.title.setText(thread.getTitle());
+        vh.author.setText(thread.getAuthor());
+        vh.views.setText(Integer.toString(thread.getViews()));
 
         return view;
     }

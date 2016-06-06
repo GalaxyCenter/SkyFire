@@ -14,7 +14,7 @@
         android:layout_toRightOf="@+id/userface" />
 
     <apollo.tianya.widget.ThreadTextView
-        android:id="@+id/body"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/userface"
@@ -25,14 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imgs"
-        android:layout_below="@+id/body"
+        android:layout_below="@+id/title"
         android:layout_toEndOf="@+id/userface" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/userface"
-        android:layout_below="@+id/body">
+        android:layout_below="@+id/title">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -41,8 +41,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_tweet_time"
-                android:layout_marginRight="10dp"/>
+                android:id="@+id/time"
+                style="@style/list_text_info"/>
 
         </LinearLayout>
 
@@ -51,6 +51,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/views"
+                style="@style/list_text_info"/>
 
         </LinearLayout>
 
