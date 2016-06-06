@@ -1,7 +1,7 @@
 package apollo.tianya.fragment;
 
 
-import apollo.tianya.adapter.ListBaseAdapter;
+import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.adapter.ThreadAdapter;
 import apollo.tianya.api.TianyaApi;
 import apollo.tianya.api.TianyaParser;
@@ -15,7 +15,7 @@ import apollo.tianya.bean.Thread;
 public class ChannelFragment extends BaseListFragment {
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected RecyclerBaseAdapter getListAdapter() {
         return new ThreadAdapter();
     }
 

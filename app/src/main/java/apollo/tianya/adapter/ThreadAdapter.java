@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Texel on 2016/6/2.
  */
-public class ThreadAdapter extends ListBaseAdapter<Thread, ThreadAdapter.ViewHolder> {
+public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

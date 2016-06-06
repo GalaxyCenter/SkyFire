@@ -15,14 +15,14 @@ import apollo.tianya.bean.Entity;
 /**
  * Created by Texel on 2016/6/2.
  */
-public abstract class ListBaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected List<T> mItems;
     private LayoutInflater mInflater;
 
     public abstract VH getViewHolder(ViewGroup viewGroup);
 
-    public ListBaseAdapter() {
+    public RecyclerBaseAdapter() {
         mItems = new ArrayList<T>();
     }
 
