@@ -24,11 +24,11 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
      */
     private class ParserTask extends AsyncTask<Void, Void, DataSet<T>> {
 
-        private final byte[] reponseData;
+        private final byte[] responseData;
         private boolean parserError;
 
         public ParserTask(byte[] data) {
-            this.reponseData = data;
+            this.responseData = data;
         }
 
         @Override
@@ -36,7 +36,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment {
             DataSet<T> dataset = null;
 
             try {
-                dataset = parseList(reponseData);
+                dataset = parseList(responseData);
             } catch (Exception e) {
                 parserError = true;
             }
