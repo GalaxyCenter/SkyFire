@@ -1,62 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <apollo.tianya.widget.AvatarView
-        android:id="@+id/userface"
-        style="@style/user_face_image" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/author"
-        android:layout_toRightOf="@+id/userface" />
-
-    <apollo.tianya.widget.ThreadTextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/userface"
-        android:layout_below="@+id/author"
-        />
-
-    <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imgs"
-        android:layout_below="@+id/title"
-        android:layout_toEndOf="@+id/userface" />
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/userface"
-        android:layout_below="@+id/title">
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <apollo.tianya.widget.AvatarView
+            android:id="@+id/userface"
+            style="@style/user_face_image" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:orientation="horizontal">
+            android:id="@+id/author"
+            android:layout_toRightOf="@+id/userface" />
 
-            <TextView
-                android:id="@+id/time"
-                style="@style/list_text_info"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <apollo.tianya.widget.ThreadTextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:orientation="horizontal">
+            android:layout_toRightOf="@+id/userface"
+            android:layout_below="@+id/author"
+            />
 
-            <TextView
-                android:id="@+id/views"
-                style="@style/list_text_info"/>
+        <GridView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgs"
+            android:layout_below="@+id/title"
+            android:layout_toEndOf="@+id/userface" />
 
-        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/userface"
+            android:layout_below="@+id/title">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time"
+                    style="@style/list_text_info"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/views"
+                    style="@style/list_text_info"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+
+</android.support.v7.widget.CardView>

@@ -1,5 +1,6 @@
 package apollo.tianya.adapter;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,37 +13,34 @@ import butterknife.ButterKnife;
 /**
  * Created by Texel on 2016/6/2.
  */
-public class ThreadAdapter extends ListBaseAdapter<Thread> {
+public class ThreadAdapter extends ListBaseAdapter<Thread, ThreadAdapter.ViewHolder> {
 
-    static class ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.title) TextView title;
         @BindView(R.id.author) TextView author;
         @BindView(R.id.views) TextView views;
 
-        public ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
     }
 
     @Override
-    public View getRealView(int i, View view, ViewGroup viewGroup) {
-        ViewHolder vh;
+    public ViewHolder getViewHolder(ViewGroup viewGroup) {
+        View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_thread, null);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder vh, int position) {
         Thread thread;
 
-        if (view == null) {
-            view = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_thread, null);
-            vh = new ViewHolder(view);
-            view.setTag(vh);
-        } else {
-            vh = (ViewHolder) view.getTag();
-        }
-
-        thread = mItems.get(i);
+        thread = mItems.get(position);
         vh.title.setText(thread.getTitle());
         vh.author.setText(thread.getAuthor());
         vh.views.setText(Integer.toString(thread.getViews()));
-
-        return view;
     }
 }

@@ -1,6 +1,7 @@
 package apollo.tianya.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +15,15 @@ import apollo.tianya.bean.Entity;
 /**
  * Created by Texel on 2016/6/2.
  */
-public abstract class ListBaseAdapter<T extends Entity> extends BaseAdapter {
+public abstract class ListBaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected List<T> mItems;
     private LayoutInflater mInflater;
 
-    public abstract View getRealView(int i, View view, ViewGroup viewGroup);
+    public abstract VH getViewHolder(ViewGroup viewGroup);
 
     public ListBaseAdapter() {
         mItems = new ArrayList<T>();
-    }
-
-    @Override
-    public int getCount() {
-        return mItems.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return mItems.indexOf(i);
     }
 
     @Override
@@ -41,8 +32,12 @@ public abstract class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return getRealView(i, view, viewGroup);
+    public int getItemCount() {
+        return mItems.size();
+    }
+
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        return getViewHolder(parent);
     }
 
     protected LayoutInflater getLayoutInflater(Context context) {

@@ -2,6 +2,8 @@ package apollo.tianya.base;
 
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -82,7 +84,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     };
 
-    protected abstract ListBaseAdapter<T> getListAdapter();
+    protected abstract ListBaseAdapter<T, RecyclerView.ViewHolder> getListAdapter();
 
     protected abstract DataSet<T> parseList(byte[] datas);
 
@@ -90,12 +92,12 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     }
 
     @BindView(R.id.listview)
-    protected ListView mListView;
+    protected RecyclerView mListView;
 
     @BindView(R.id.swiperefreshlayout)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
-    protected ListBaseAdapter<T> mAdapter;
+    protected ListBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -111,6 +113,10 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             mAdapter = getListAdapter();
         }
         mListView.setAdapter(mAdapter);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mListView.setLayoutManager(llm);
 
         requestData(false);
     }
