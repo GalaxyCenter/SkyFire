@@ -23,7 +23,6 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
         }
     }
