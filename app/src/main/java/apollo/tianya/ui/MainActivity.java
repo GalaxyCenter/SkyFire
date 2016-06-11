@@ -1,9 +1,12 @@
 package apollo.tianya.ui;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,17 +15,44 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TabHost;
+import android.widget.TextView;
 
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.util.UIHelper;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    enum Tab {
+        Tab(0, R.string.main_tab_home, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class),
+        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class),
+        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class),
+        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class);
+
+        int position;
+        int resName;
+        int resIcon;
+        Class<? extends BaseFragment> refer;
+
+        private Tab(int position, int resName, int resIcon, Class<? extends BaseFragment> refer) {
+            this.position = position;
+            this.resIcon = resIcon;
+            this.resName = resName;
+            this.refer = refer;
+        }
+    }
+
+
     private static final String TAG = "MainActivity";
+
+    public FragmentTabHost mTabHost;
 
     @Override
     protected int getLayoutId() {
@@ -54,13 +84,8 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        // 初始化Fragment
-        fragment = new ChannelViewPagerFragment();
-
-        FragmentTransaction trans = getSupportFragmentManager()
-                .beginTransaction();
-        trans.replace(R.id.container, fragment, TAG);
-        trans.commit();
+        mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
     }
 
     @Override
@@ -119,4 +144,28 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void initView() {
+        initTabs();
+    }
+
+    private void initTabs() {
+        for (int i = 0; i < Tab.values().length; i++) {
+            Tab tab = Tab.values()[i];
+            TabHost.TabSpec ts = mTabHost.newTabSpec(getString(tab.resName));
+            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.tab_indicator, null);
+            View indicator = LayoutInflater.from(getApplicationContext())
+                    .inflate(R.layout.tab_indicator, null);
+            TextView title = (TextView) v.findViewById(R.id.tab_title);
+            Drawable d = getResources().getDrawable(tab.resIcon);
+
+            ts.setIndicator(indicator);
+            title.setCompoundDrawablesWithIntrinsicBounds(null, d, null, null);
+            title.setText(getString(tab.resName));
+
+            mTabHost.addTab(ts, tab.refer, null);
+        }
+    }
+
 }

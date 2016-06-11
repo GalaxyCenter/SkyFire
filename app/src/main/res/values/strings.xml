@@ -21,4 +21,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- MainTab -->
+    <string name="main_tab_home">首页</string>
+    <string name="main_tab_collections">收藏集</string>
+    <string name="main_tab_commuities">社群</string>
+    <string name="main_tab_notifications">通知</string>
 </resources>

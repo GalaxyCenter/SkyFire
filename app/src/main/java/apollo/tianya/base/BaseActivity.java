@@ -10,6 +10,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void init(Bundle savedInstanceState);
     protected abstract int getLayoutId();
+    protected abstract void initView();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,5 +18,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(getLayoutId());
         init(savedInstanceState);
+        initView();
     }
 }
