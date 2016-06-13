@@ -9,17 +9,18 @@ import apollo.tianya.base.BaseViewPagerFragment;
 import apollo.tianya.bean.ChannelList;
 
 /**
- * Created by Texel on 2016/6/1.
+ * Created by Texel on 2016/6/13.
  */
-public class ChannelViewPagerFragment extends BaseViewPagerFragment {
+public class CollectionViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
         String[] title = getResources().getStringArray(
-                R.array.channel_viewpage_arrays);
-        adapter.addTab(title[0], "news", ChannelFragment.class,
+                R.array.collection_viewpage_arrays);
+
+        adapter.addTab(title[0], "thread", ThreadCollectionFragment.class,
                 getBundle(ChannelList.CATALOG_ALL));
-        adapter.addTab(title[1], "news_week", ChannelFragment.class,
+        adapter.addTab(title[1], "section", ThreadCollectionFragment.class,
                 getBundle(ChannelList.CATALOG_WEEK));
     }
 
@@ -28,5 +29,4 @@ public class ChannelViewPagerFragment extends BaseViewPagerFragment {
         bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, newType);
         return bundle;
     }
-
 }

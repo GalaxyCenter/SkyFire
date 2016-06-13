@@ -1,6 +1,7 @@
 package apollo.tianya.ui;
 
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -21,15 +24,15 @@ import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
+import apollo.tianya.fragment.CollectionViewPagerFragment;
 import apollo.tianya.util.UIHelper;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
     enum Tab {
         Tab(0, R.string.main_tab_home, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
-        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
+        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_home_white_24dp, CollectionViewPagerFragment.class),
         COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
         NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class);
 
@@ -46,7 +49,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-
     private static final String TAG = "MainActivity";
 
     public FragmentTabHost mTabHost;
@@ -58,7 +60,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        BaseFragment fragment = null;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -151,10 +152,9 @@ public class MainActivity extends BaseActivity
         for (int i = 0; i < Tab.values().length; i++) {
             Tab tab = Tab.values()[i];
             TabHost.TabSpec ts = mTabHost.newTabSpec(getString(tab.resName));
-            View v = LayoutInflater.from(getApplicationContext()).inflate(R.layout.tab_indicator, null);
             View indicator = LayoutInflater.from(getApplicationContext())
                     .inflate(R.layout.tab_indicator, null);
-            TextView title = (TextView) v.findViewById(R.id.tab_title);
+            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
             Drawable d = getResources().getDrawable(tab.resIcon);
 
             ts.setIndicator(indicator);
@@ -164,5 +164,4 @@ public class MainActivity extends BaseActivity
             mTabHost.addTab(ts, tab.refer, null);
         }
     }
-
 }
