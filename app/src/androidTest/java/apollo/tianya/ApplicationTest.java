@@ -8,7 +8,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import java.util.concurrent.CountDownLatch;
 
-import apollo.tianya.api.TianyaApi;
+import apollo.tianya.api.remote.TianyaApi;
 import cz.msebera.android.httpclient.Header;
 
 /**

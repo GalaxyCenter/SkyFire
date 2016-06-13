@@ -1,5 +1,7 @@
 package apollo.tianya.bean;
 
+import java.util.Date;
+
 /**
  * Created by Texel on 2016/6/2.
  */
@@ -9,6 +11,8 @@ public class Post extends Entity {
     private String body;
     private String author;
     private String url;
+
+    private Date postDate;
 
     private int authorId;
     private int replies;
@@ -68,5 +72,13 @@ public class Post extends Entity {
 
     public void setViews(int views) {
         this.views = views;
+    }
+
+    public Date getPostDate() {
+        return postDate;
+    }
+
+    public void setPostDate(Date postDate) {
+        this.postDate = postDate;
     }
 }

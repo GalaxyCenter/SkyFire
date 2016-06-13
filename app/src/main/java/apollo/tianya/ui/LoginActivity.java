@@ -33,14 +33,13 @@ import java.util.regex.Pattern;
 import apollo.tianya.AppConfig;
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
-import apollo.tianya.api.TianyaApi;
-import apollo.tianya.api.remote.ApiHttpClient;
+import apollo.tianya.api.remote.TianyaApi;
+import apollo.tianya.api.ApiHttpClient;
 import apollo.tianya.util.TLog;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.CookieStore;
 import cz.msebera.android.httpclient.client.protocol.ClientContext;
 import cz.msebera.android.httpclient.cookie.Cookie;
-import cz.msebera.android.httpclient.cookie.CookieOrigin;
 import cz.msebera.android.httpclient.protocol.HttpContext;
 
 /**

@@ -1,4 +1,4 @@
-package apollo.tianya.api.remote;
+package apollo.tianya.api;
 
 import android.util.Log;
 
@@ -94,8 +94,7 @@ public class ApiHttpClient {
     public static void setHttpClient(AsyncHttpClient c) {
         client = c;
         client.addHeader("Accept-Language", Locale.getDefault().toString());
-        client.addHeader("Host", HOST);
-        client.addHeader("Connection", "Keep-Alive");
+        client.addHeader("Connection", "keep-alive");
         client.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
     }
@@ -121,6 +120,10 @@ public class ApiHttpClient {
 
     public static void get(String partUrl, AsyncHttpResponseHandler handler) {
         get(partUrl, null, null, handler);
+    }
+
+    public static void get(String partUrl, Header[] headers, AsyncHttpResponseHandler handler) {
+        get(partUrl, headers, null, handler);
     }
 
     public static void get(String partUrl, Header[] headers, RequestParams params,

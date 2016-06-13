@@ -3,7 +3,7 @@ package apollo.tianya;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
 
-import apollo.tianya.api.remote.ApiHttpClient;
+import apollo.tianya.api.ApiHttpClient;
 import apollo.tianya.base.BaseApplication;
 
 /**
@@ -32,6 +32,7 @@ public class AppContext extends BaseApplication {
         client.setCookieStore(pcs);
         ApiHttpClient.setHttpClient(client);
         ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
+
     }
 
     public String getProperty(String key) {

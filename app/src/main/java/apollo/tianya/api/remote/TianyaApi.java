@@ -1,8 +1,5 @@
-package apollo.tianya.api;
+package apollo.tianya.api.remote;
 
-
-import android.preference.PreferenceActivity;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -10,13 +7,8 @@ import com.loopj.android.http.RequestParams;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import apollo.tianya.api.remote.ApiHttpClient;
+import apollo.tianya.api.ApiHttpClient;
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HeaderElement;
-import cz.msebera.android.httpclient.ParseException;
-import cz.msebera.android.httpclient.client.HttpResponseException;
-
-import static apollo.tianya.api.remote.ApiHttpClient.HttpHeader;
 
 /**
  * Created by Texel on 2016/5/27.
@@ -103,6 +95,24 @@ public class TianyaApi {
         ApiHttpClient.post(url, headers, handler);
     }
 
+    public static void getUserId(String name, final AsyncHttpResponseHandler handler) {
+        String transf_url = "http://my.tianya.cn/info/" + name;
+        AsyncHttpResponseHandler _hld = null;
+
+        _hld = new AsyncHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        };
+        ApiHttpClient.get(transf_url, _hld);
+    }
+
     public static void getAvatar(int userId, AsyncHttpResponseHandler handler) {
         String url = "http://tx.tianyaui.com/logo/" + userId;
 
@@ -115,7 +125,7 @@ public class TianyaApi {
         headers = new Header[1];
         headers[0] = new ApiHttpClient.HttpHeader("Referer", "https://www.tianya.cn");
 
-        ApiHttpClient.post(url, headers, handler);
+        ApiHttpClient.get(url, headers, handler);
     }
 
     public static void getRecommendThread(AsyncHttpResponseHandler handler) {

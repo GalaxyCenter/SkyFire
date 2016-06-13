@@ -3,7 +3,7 @@ package apollo.tianya.fragment;
 
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.adapter.ThreadAdapter;
-import apollo.tianya.api.TianyaApi;
+import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.api.TianyaParser;
 import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.DataSet;

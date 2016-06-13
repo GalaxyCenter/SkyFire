@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import apollo.tianya.R;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.util.Formatter;
+import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -20,6 +22,8 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         @BindView(R.id.title) TextView title;
         @BindView(R.id.author) TextView author;
         @BindView(R.id.views) TextView views;
+        @BindView(R.id.time) TextView time;
+        @BindView(R.id.userface) AvatarView face;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -41,5 +45,8 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         vh.title.setText(thread.getTitle());
         vh.author.setText(thread.getAuthor());
         vh.views.setText(Integer.toString(thread.getViews()));
+        vh.time.setText(Formatter.friendlyTime(thread.getPostDate()));
+        vh.face.setUserInfo(thread.getAuthorId(), thread.getAuthor());
+        vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/1749397");
     }
 }

@@ -6,11 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import apollo.tianya.R;
-import apollo.tianya.api.TianyaApi;
+import apollo.tianya.api.remote.TianyaApi;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -18,6 +19,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Texel on 2016/6/3.
  */
 public class AvatarView extends CircleImageView {
+
+    private String TAG = this.getClass().getName();
 
     public static final String AVATAR_SIZE_REG = "_[0-9]{1,3}";
     public static final String MIDDLE_SIZE = "_100";
@@ -53,7 +56,7 @@ public class AvatarView extends CircleImageView {
 
     public void setAvatarUrl(String url) {
         if (TextUtils.isEmpty(url)) {
-            setImageResource(R.drawable.widget_dface);
+            setImageResource(R.drawable.ic_account_circle_blue_37dp);
             return;
         }
 
@@ -70,6 +73,7 @@ public class AvatarView extends CircleImageView {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i(TAG, "ERROR");
             }
         });
     }
