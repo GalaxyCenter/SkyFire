@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,18 +22,16 @@ import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.util.UIHelper;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
     enum Tab {
-        Tab(0, R.string.main_tab_home, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class),
-        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class),
-        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class),
-        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_home_black_24dp, ChannelViewPagerFragment.class);
+        Tab(0, R.string.main_tab_home, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
+        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
+        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
+        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class);
 
         int position;
         int resName;
