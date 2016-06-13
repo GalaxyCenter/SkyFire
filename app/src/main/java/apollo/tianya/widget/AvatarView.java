@@ -28,7 +28,6 @@ public class AvatarView extends CircleImageView {
 
     private int id;
     private String mName;
-    private Activity mActivity;
 
     public AvatarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -46,7 +45,7 @@ public class AvatarView extends CircleImageView {
     }
 
     private void init(Context context) {
-        mActivity = (Activity) context;
+
     }
 
     public void setUserInfo(int id, String name) {
