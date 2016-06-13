@@ -133,4 +133,14 @@ public class TianyaApi {
 
         ApiHttpClient.get(url, handler);
     }
+
+    public static void getPosts(String sectionId, String threadId, int pageIndex, AsyncHttpResponseHandler handler) {
+        String post_url = "http://bbs.tianya.cn/m/post-" + sectionId + "-" + threadId + "-" + pageIndex + ".shtml";
+
+        getPosts(post_url, handler);
+    }
+
+    public static void getPosts(String post_url, AsyncHttpResponseHandler handler) {
+        ApiHttpClient.get(post_url, handler);
+    }
 }
