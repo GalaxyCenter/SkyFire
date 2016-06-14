@@ -1,6 +1,7 @@
 package apollo.tianya.bean;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Texel on 2016/6/2.
@@ -17,6 +18,15 @@ public class Post extends Entity {
     private int authorId;
     private int replies;
     private int views;
+    List<String> photos;
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
+    }
 
     public String getTitle() {
         return title;

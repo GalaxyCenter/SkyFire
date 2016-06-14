@@ -1,14 +1,19 @@
 package apollo.tianya.adapter;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import apollo.tianya.R;
 import apollo.tianya.api.TianyaParser;
@@ -44,8 +49,10 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         AsyncUserIdHttpResponseHandler userIdHandle = null;
         ParserTask task = null;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, ViewGroup parent) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
 
             PhotoAdapter adapter = null;
 
@@ -55,9 +62,10 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
             userIdHandle = new AsyncUserIdHttpResponseHandler();
             userIdHandle.vh = this;
 
-            adapter = new PhotoAdapter();
+            adapter = new PhotoAdapter((Activity)parent.getContext());
+
             photos.setAdapter(adapter);
-            ButterKnife.bind(this, itemView);
+            photos.setPageMargin(0);
         }
     }
 
@@ -115,6 +123,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
             DataSet<Post> dataset = null;
             String source = null;
             Post post = null;
+            List<String> photos = null;
 
             source = new String(responseData);
             try {
@@ -125,6 +134,17 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 else
                     post = dataset.getObjects().get(0);
 
+                photos = TianyaParser.parseThreadImage(source);
+                if (photos == null) {
+                    String photo = null;
+
+                    photo = TianyaParser.parseImage(source);
+                    if (!TextUtils.isEmpty(photo)) {
+                        photos = new ArrayList<String>();
+                        photos.add(photo);
+                    }
+                }
+                post.setPhotos(photos);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
                 parserError = true;
@@ -139,11 +159,15 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
             } else {
                 String sub_summary = null;
+                PhotoAdapter adapter = null;
 
                 sub_summary = Formatter.checkStringLength(post.getBody(), 100);
                 vh.summary.setText(sub_summary);
                 vh.views.setText(Integer.toString(post.getViews()));
                 vh.time.setText(DateTime.toString(post.getPostDate()));
+
+                adapter = (PhotoAdapter)vh.photos.getAdapter();
+                adapter.addItems(post.getPhotos());
             }
         }
     }
@@ -151,7 +175,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
     @Override
     public ViewHolder getViewHolder(ViewGroup viewGroup) {
         View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_thread, null);
-        return new ViewHolder(v);
+        return new ViewHolder(v, viewGroup);
     }
 
     @Override
