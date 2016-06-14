@@ -99,6 +99,11 @@ public class TianyaParser {
         return datas;
     }
 
+    /**
+     * 解析一个主题的所有帖子 (http://bbs.tianya.cn/m/post-no04-2668855-1.shtml)
+     * @param source
+     * @return
+     */
     public static DataSet<Post> parsePosts(String source) {
         DataSet<Post> datas = null;
         List<Post> list = null;
@@ -171,6 +176,11 @@ public class TianyaParser {
         return datas;
     }
 
+    /**
+     * 简单解析一个页面内容
+     * @param source
+     * @return
+     */
     public static Post parsePage(String source) {
         Post post = new Post();
         Document doc = null;
@@ -181,6 +191,11 @@ public class TianyaParser {
         return post;
     }
 
+    /**
+     * 从页面上解析出用户Id
+     * @param source
+     * @return
+     */
     public static int parseUserId(String source) {
         int userId = 0;
         Pattern pattern = null;
@@ -194,5 +209,42 @@ public class TianyaParser {
             userId = Integer.parseInt(match_content);
         }
         return userId;
+    }
+
+    /**
+     * 解析一个主贴的图片内容 (http://bbs.tianya.cn/m/post-no04-2668855-1.shtml)
+     * @param source
+     * @return
+     */
+    public static List<String> parseThreadImage(String source) {
+        List<String> list = null;
+        Document doc = null;
+        Elements elms = null;
+
+        doc = Jsoup.parse(source);
+        elms = doc.select("div.item-zt img");
+        list = new ArrayList<String>();
+        for(Element elm:elms) {
+            list.add(elm.attr("original"));
+        }
+        return list;
+    }
+
+    /**
+     * 解析内容中的第一张图片
+     * @param source
+     * @return
+     */
+    public static String parseImage(String source) {
+        String src = null;
+        Document doc = null;
+        Element elm = null;
+
+        doc = Jsoup.parse(source);
+        elm = doc.select("img").first();
+        if (elm != null)
+            src = elm.attr("src");
+
+        return src;
     }
 }

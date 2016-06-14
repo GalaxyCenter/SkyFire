@@ -84,6 +84,10 @@ public class TianyaApi {
         ApiHttpClient.post(loginurl, headers, params, _hld);
     }
 
+    /**
+     * 获取验证码
+     * @param handler
+     */
     public static void getCaptcha(AsyncHttpResponseHandler handler) {
         Header[] headers = null;
         String url = "https://passport.tianya.cn/staticHttps/validateImgProxy.jsp";
@@ -94,18 +98,33 @@ public class TianyaApi {
         ApiHttpClient.post(url, headers, handler);
     }
 
+    /**
+     * 获取用户id
+     * @param name
+     * @param handler
+     */
     public static void getUserId(String name, final AsyncHttpResponseHandler handler) {
         String transf_url = "http://my.tianya.cn/info/" + name;
 
         ApiHttpClient.get(transf_url, handler);
     }
 
+    /**
+     * 获取用户头像
+     * @param userId
+     * @param handler
+     */
     public static void getAvatar(int userId, AsyncHttpResponseHandler handler) {
         String url = "http://tx.tianyaui.com/logo/" + userId;
 
         getImage(url, handler);
     }
 
+    /**
+     * 获取相册内容
+     * @param url
+     * @param handler
+     */
     public static void getImage(String url, AsyncHttpResponseHandler handler) {
         Header[] headers = null;
 
@@ -115,18 +134,34 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    /**
+     * 获取推荐内容
+     * @param handler
+     */
     public static void getRecommendThread(AsyncHttpResponseHandler handler) {
         String url = "http://www.tianya.cn/m/find/index.shtml";
 
         ApiHttpClient.get(url, handler);
     }
 
+    /**
+     * 获取一个主题的所有帖子
+     * @param sectionId 板块Id
+     * @param threadId 主题Id
+     * @param pageIndex 页码
+     * @param handler
+     */
     public static void getPosts(String sectionId, String threadId, int pageIndex, AsyncHttpResponseHandler handler) {
         String post_url = "http://bbs.tianya.cn/m/post-" + sectionId + "-" + threadId + "-" + pageIndex + ".shtml";
 
         getPosts(post_url, handler);
     }
 
+    /**
+     * 获取一个主题的所有帖子
+     * @param post_url 主题的URL
+     * @param handler
+     */
     public static void getPosts(String post_url, AsyncHttpResponseHandler handler) {
         ApiHttpClient.get(post_url, handler);
     }
