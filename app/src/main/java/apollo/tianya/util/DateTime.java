@@ -9,11 +9,6 @@ import java.util.Date;
  * Created by kuibo on 2016/6/13.
  */
 public class DateTime {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -6022894128699751840L;
-
     private Calendar calender;
 
     public static final DateTime MinValue = new DateTime(0);
@@ -22,13 +17,13 @@ public class DateTime {
         this(2000, 0, 1, 0, 0, 0);
     }
 
-    public DateTime(Date time) {
+    public DateTime(Date date) {
         this.calender = Calendar.getInstance();
-        this.calender.setTime(time);
+        this.calender.setTime(date);
     }
 
-    public DateTime(int year, int month, int date) {
-        this(year, month, date, 0, 0, 0);
+    public DateTime(int year, int month, int day) {
+        this(year, month, day, 0, 0, 0);
     }
 
     public DateTime(long t) {
@@ -51,11 +46,15 @@ public class DateTime {
     }
 
     public static long diff(Date t1, Date t2) {
-        return t1.getTime() - t2.getTime();
+        return (t1.getTime() - t2.getTime()) / 1000;
     }
 
     public static DateTime parse(String time) {
         return parse(time, "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static boolean isCurrentDay(DateTime d1, DateTime d2) {
+        return d1.getYear() == d2.getYear() && d1.getMonth() == d2.getMonth() && d1.getDay() == d2.getDay();
     }
 
     public static DateTime parse(String time, String pattern) {
@@ -121,12 +120,24 @@ public class DateTime {
         return calender.get(Calendar.YEAR);
     }
 
+    public void setYear(int value) {
+        calender.set(Calendar.YEAR, value);
+    }
+
     public int getMonth() {
         return calender.get(Calendar.MONTH);
     }
 
+    public void setMonth(int value) {
+        calender.set(Calendar.MONTH, value);
+    }
+
     public int getDay() {
         return calender.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public void setDay(int value) {
+        calender.set(Calendar.DAY_OF_MONTH, value);
     }
 
     public int getWeekOfMonth() {
@@ -149,16 +160,32 @@ public class DateTime {
         return calender.get(Calendar.HOUR_OF_DAY);
     }
 
+    public void setHour(int value) {
+        calender.set(Calendar.HOUR_OF_DAY, value);
+    }
+
     public int getMinute() {
         return calender.get(Calendar.MINUTE);
+    }
+
+    public void setMinute(int value) {
+        calender.set(Calendar.MINUTE, value);
     }
 
     public int getSecond() {
         return calender.get(Calendar.SECOND);
     }
 
+    public void setSecond(int value) {
+        calender.set(Calendar.SECOND, value);
+    }
+
     public int getMillisecond() {
         return calender.get(Calendar.MILLISECOND);
+    }
+
+    public void setMillisecond(int value) {
+        calender.set(Calendar.MILLISECOND, value);
     }
 
     public boolean after(DateTime other) {
@@ -186,5 +213,36 @@ public class DateTime {
         format.applyPattern(pattern);
 
         return format.format(calender.getTime());
+    }
+
+    public static Date getFirstDayOfWeek(Date date) {
+        return getFirstDayOfWeek(date, Calendar.MONDAY);
+    }
+
+    public static Date getFirstDayOfWeek(Date date, int firstDayOfWeek) {
+        Calendar c = Calendar.getInstance();
+        c.setFirstDayOfWeek(firstDayOfWeek);
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek()); // Monday
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        return c.getTime();
+    }
+
+    public static String toString(Date date) {
+        return toString(date, "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String toString(Date date, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat();
+        format.applyPattern(pattern);
+
+        return format.format(date);
+    }
+
+    public static long getTime(Date date) {
+        return date.getTime();
     }
 }

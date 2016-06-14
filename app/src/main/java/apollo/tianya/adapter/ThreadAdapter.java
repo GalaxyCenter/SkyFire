@@ -15,6 +15,7 @@ import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.util.DateTime;
 import apollo.tianya.util.Formatter;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
@@ -37,22 +38,26 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         @BindView(R.id.time) TextView time;
         @BindView(R.id.userface) AvatarView face;
 
-        AsyncHttpResponseHandlerEx handle = null;
+        AsyncPostHttpResponseHandler postHandle = null;
+        AsyncUserIdHttpResponseHandler userIdHandle = null;
         ParserTask task = null;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            handle = new AsyncHttpResponseHandlerEx();
-            handle.vh = this;
+            postHandle = new AsyncPostHttpResponseHandler();
+            postHandle.vh = this;
+
+            userIdHandle = new AsyncUserIdHttpResponseHandler();
+            userIdHandle.vh = this;
 
             ButterKnife.bind(this, itemView);
         }
     }
 
-    static class AsyncHttpResponseHandlerEx extends com.loopj.android.http.AsyncHttpResponseHandler {
+    static class AsyncPostHttpResponseHandler extends AsyncHttpResponseHandler {
 
-        ViewHolder vh;
+        public ViewHolder vh;
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -60,6 +65,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 vh.task.cancel(true);
 
             vh.task = new ParserTask(responseBody);
+            vh.task.vh = vh;
             vh.task.execute();
         }
 
@@ -69,32 +75,70 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         }
     }
 
-    static class ParserTask extends AsyncTask<Void, Void, DataSet<Post>> {
+    static class AsyncUserIdHttpResponseHandler extends AsyncHttpResponseHandler {
+
+        public ViewHolder vh;
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String source = new String(responseBody);
+            int userId = 0;
+
+            userId = TianyaParser.parseUserId(source);
+            vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + userId);
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+        }
+    }
+
+    static class ParserTask extends AsyncTask<Void, Void, Post> {
 
         private final byte[] responseData;
         private boolean parserError;
+        public ViewHolder vh;
 
         public ParserTask(byte[] data) {
             this.responseData = data;
         }
 
         @Override
-        protected DataSet<Post> doInBackground(Void... voids) {
+        protected Post doInBackground(Void... voids) {
             DataSet<Post> dataset = null;
+            String source = null;
+            Post post = null;
 
+            source = new String(responseData);
             try {
-                dataset = TianyaParser.parsePosts(new String(responseData));
+                dataset = TianyaParser.parsePosts(source);
+
+                if (dataset == null || dataset.getObjects() == null || dataset.getObjects().size() == 0)
+                    post = TianyaParser.parsePage(source);
+                else
+                    post = dataset.getObjects().get(0);
+
             } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, e.toString());
                 parserError = true;
             }
 
-            return dataset;
+            return post;
         }
 
         @Override
-        protected void onPostExecute(DataSet<Post> dataset) {
-            Log.i(TAG, "ThreadAdapter@ParserTask OK");
+        protected void onPostExecute(Post post) {
+            if (parserError) {
+
+            } else {
+                String sub_summary = null;
+
+                sub_summary = Formatter.checkStringLength(post.getBody(), 100);
+                vh.summary.setText(sub_summary);
+                vh.views.setText(Integer.toString(post.getViews()));
+                vh.time.setText(DateTime.toString(post.getPostDate()));
+            }
         }
     }
 
@@ -114,8 +158,12 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         vh.views.setText(Integer.toString(thread.getViews()));
         vh.time.setText(Formatter.friendlyTime(thread.getPostDate()));
         vh.face.setUserInfo(thread.getAuthorId(), thread.getAuthor());
-        vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/1749397");
+        vh.summary.setText("");
+        vh.time.setText("");
+        vh.views.setText("0");
 
-        TianyaApi.getPosts(thread.getUrl(), vh.handle);
+        vh.postHandle.vh = vh;
+        TianyaApi.getPosts(thread.getUrl(), vh.postHandle);
+        TianyaApi.getUserId(thread.getAuthor(), vh.userIdHandle);
     }
 }

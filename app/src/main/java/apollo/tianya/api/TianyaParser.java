@@ -8,11 +8,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import apollo.tianya.bean.DataSet;
+import apollo.tianya.bean.Entity;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.util.DateTime;
@@ -106,8 +108,12 @@ public class TianyaParser {
         Element bd = null;
         Element item = null;
 
+        list = new ArrayList<Post>();
         doc = Jsoup.parse(source);
         elms = doc.select("div.content div.item");
+        if (elms == null || elms.size() ==0)
+            return null;
+
         for(Element elm:elms) {
             post = new Post();
 
@@ -129,22 +135,64 @@ public class TianyaParser {
             // 解析PostId
             if (elm.hasAttr("data-replyid"))
                 post.setId(Integer.parseInt(elm.attr("data-replyid")));
+
+            list.add(post);
         }
+        // 解析帖子访问量
+        post = list.get(0);
+
+        int views = 0;
+        item = doc.select("i.icon-view").first();
+        views = Integer.parseInt(item.text());
+        post.setViews(views);
+
+        // 解析回帖数量
+        int replies = 0;
+        item = doc.select("i.icon-reply").first();
+        replies = Integer.parseInt(item.text());
+        post.setReplies(replies);
 
         // 解析页码
-        int total_pages = 1;
-        Element span = null;
-        span = doc.select(".u-pager span").get(1);
-        total_pages = Integer.parseInt(span.text());
+        int total_pages = 0;
+
+        elms = doc.select(".u-pager span");
+        if (elms != null && elms.size() > 2) {
+            item = elms.get(1);
+            total_pages = Integer.parseInt(item.text());
+        }
 
         datas = new DataSet<Post>();
         datas.setObjects(list);
 
-        if (total_pages == 1)
+        if (total_pages < 2)
             datas.setTotalRecords(list.size());
         else
             datas.setTotalRecords(total_pages * 100);
         return datas;
     }
 
+    public static Post parsePage(String source) {
+        Post post = new Post();
+        Document doc = null;
+
+        doc = Jsoup.parse(source);
+        post.setBody(doc.select("body").text());
+        post.setPostDate(new Date());
+        return post;
+    }
+
+    public static int parseUserId(String source) {
+        int userId = 0;
+        Pattern pattern = null;
+        Matcher matcher = null;
+        String match_content = null;
+
+        pattern = Pattern.compile("(?s)\"http://tx.tianyaui.com/logo/(.*?)\"");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            match_content = matcher.group(1);
+            userId = Integer.parseInt(match_content);
+        }
+        return userId;
+    }
 }

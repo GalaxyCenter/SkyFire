@@ -79,7 +79,6 @@ public class TianyaApi {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 handler.sendFailureMessage(statusCode, headers, responseBody, error);
-                return;
             }
         };
         ApiHttpClient.post(loginurl, headers, params, _hld);
@@ -97,20 +96,8 @@ public class TianyaApi {
 
     public static void getUserId(String name, final AsyncHttpResponseHandler handler) {
         String transf_url = "http://my.tianya.cn/info/" + name;
-        AsyncHttpResponseHandler _hld = null;
 
-        _hld = new AsyncHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-            }
-        };
-        ApiHttpClient.get(transf_url, _hld);
+        ApiHttpClient.get(transf_url, handler);
     }
 
     public static void getAvatar(int userId, AsyncHttpResponseHandler handler) {
