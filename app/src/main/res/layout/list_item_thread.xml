@@ -66,16 +66,16 @@
                 android:layout_marginBottom="12dp"
                 android:text="@string/app_name"/>
 
-            <HorizontalScrollView
-                android:id="@+id/images"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/photos"
                 android:layout_width="match_parent"
                 android:layout_height="200dip"
                 android:layout_below="@id/title">
 
-            </HorizontalScrollView>
+            </android.support.v4.view.ViewPager>
 
             <RelativeLayout
-                android:layout_below="@+id/images"
+                android:layout_below="@+id/photos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

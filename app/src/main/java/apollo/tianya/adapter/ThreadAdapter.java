@@ -1,6 +1,7 @@
 package apollo.tianya.adapter;
 
 import android.os.AsyncTask;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         @BindView(R.id.views) TextView views;
         @BindView(R.id.time) TextView time;
         @BindView(R.id.userface) AvatarView face;
+        @BindView(R.id.photos) ViewPager photos;
 
         AsyncPostHttpResponseHandler postHandle = null;
         AsyncUserIdHttpResponseHandler userIdHandle = null;
@@ -45,12 +47,16 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         public ViewHolder(View itemView) {
             super(itemView);
 
+            PhotoAdapter adapter = null;
+
             postHandle = new AsyncPostHttpResponseHandler();
             postHandle.vh = this;
 
             userIdHandle = new AsyncUserIdHttpResponseHandler();
             userIdHandle.vh = this;
 
+            adapter = new PhotoAdapter();
+            photos.setAdapter(adapter);
             ButterKnife.bind(this, itemView);
         }
     }
