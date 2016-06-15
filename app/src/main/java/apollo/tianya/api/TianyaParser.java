@@ -143,9 +143,12 @@ public class TianyaParser {
 
             list.add(post);
         }
-        // 解析帖子访问量
         post = list.get(0);
 
+        // 解析标题
+        post.setTitle(doc.select("div.title h1").text());
+
+        // 解析帖子访问量
         int views = 0;
         item = doc.select("i.icon-view").first();
         views = Integer.parseInt(item.text());

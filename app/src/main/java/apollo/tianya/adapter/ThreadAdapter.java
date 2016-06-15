@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.jsoup.helper.StringUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +65,10 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
             userIdHandle.vh = this;
 
             adapter = new PhotoAdapter((Activity)parent.getContext());
-
             photos.setAdapter(adapter);
-            photos.setPageMargin(0);
+            photos.setClipChildren(false);
+            photos.setClipToPadding(false);
+            photos.setOffscreenPageLimit(30);
         }
     }
 
@@ -150,6 +153,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 parserError = true;
             }
 
+            Log.i(TAG, post.getTitle() + "#" + StringUtil.join(post.getPhotos(), "#"));
             return post;
         }
 
@@ -167,6 +171,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 vh.time.setText(DateTime.toString(post.getPostDate()));
 
                 adapter = (PhotoAdapter)vh.photos.getAdapter();
+                adapter.removeAllItem();
                 adapter.addItems(post.getPhotos());
             }
         }
@@ -191,6 +196,8 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         vh.summary.setText("");
         vh.time.setText("");
         vh.views.setText("0");
+
+        ((PhotoAdapter)vh.photos.getAdapter()).removeAllItem();
 
         vh.postHandle.vh = vh;
         TianyaApi.getPosts(thread.getUrl(), vh.postHandle);

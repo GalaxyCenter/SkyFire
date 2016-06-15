@@ -74,12 +74,22 @@ public class PhotoAdapter extends PagerAdapter {
         }
     }
 
+    public void removeAllItem() {
+        mItems.clear();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         String url = mItems.get(position);
         ImageView imageView = new ImageView(mActivity);
         AsyncPhotoHttpResponseHandler handle = new AsyncPhotoHttpResponseHandler();
-        container.addView(imageView, position);
+        container.addView(imageView);
 
         handle.image = imageView;
         TianyaApi.getImage(url, handle);
