@@ -88,6 +88,8 @@ public class PhotoAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         String url = mItems.get(position);
         ImageView imageView = new ImageView(mActivity);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         AsyncPhotoHttpResponseHandler handle = new AsyncPhotoHttpResponseHandler();
         container.addView(imageView);
 

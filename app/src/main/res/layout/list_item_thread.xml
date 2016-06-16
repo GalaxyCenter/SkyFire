@@ -81,8 +81,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="110dp"
-                android:layout_marginRight="110dp"
                 android:clipChildren="false"/>
 
             </LinearLayout>
