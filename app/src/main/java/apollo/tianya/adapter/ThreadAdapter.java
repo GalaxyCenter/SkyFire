@@ -169,6 +169,10 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 vh.summary.setText(sub_summary);
                 vh.views.setText(Integer.toString(post.getViews()));
                 vh.time.setText(DateTime.toString(post.getPostDate()));
+                if (TextUtils.isEmpty(vh.author.getText())) {
+                    vh.author.setText(post.getAuthor());
+                    TianyaApi.getUserId(post.getAuthor(), vh.userIdHandle);
+                }
 
                 adapter = (PhotoAdapter)vh.photos.getAdapter();
                 adapter.removeAllItem();
@@ -201,6 +205,8 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
         vh.postHandle.vh = vh;
         TianyaApi.getPosts(thread.getUrl(), vh.postHandle);
-        TianyaApi.getUserId(thread.getAuthor(), vh.userIdHandle);
+
+        if(!TextUtils.isEmpty(thread.getAuthor()))
+            TianyaApi.getUserId(thread.getAuthor(), vh.userIdHandle);
     }
 }

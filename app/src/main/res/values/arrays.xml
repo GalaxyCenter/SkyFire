@@ -3,10 +3,21 @@
     <string-array name="channel_viewpage_arrays">
         <item>@string/channel_recommend</item>
         <item>@string/channel_hot</item>
-        <item>@string/channel_ent</item>
-        <item>@string/channel_news</item>
-        <item>@string/channel_stock</item>
-        <item>@string/channel_cart</item>
+        <item>@string/channel_bagua</item>
+
+        <item>@string/channel_guoji</item>
+        <item>@string/channel_gushi</item>
+        <item>@string/channel_car</item>
+
+        <item>@string/channel_guihua</item>
+        <item>@string/channel_qinggan</item>
+        <item>@string/channel_zatan</item>
+
+        <item>@string/channel_shishang</item>
+        <item>@string/channel_lvyou</item>
+        <item>@string/channel_meitu</item>
+
+        <item>@string/channel_chengshi</item>
     </string-array>
 
     <string-array name="collection_viewpage_arrays">

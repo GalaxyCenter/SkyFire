@@ -155,6 +155,16 @@ public class TianyaApi {
     }
 
     /**
+     * 获取栏目内容 
+     * @param channel
+     * @param handler
+     */
+    public static void getChannel(String channel, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/m/find/" + channel + "/index.shtml";
+
+        ApiHttpClient.get(url, handler);
+    }
+    /**
      * 获取一个主题的所有帖子
      * @param sectionId 板块Id
      * @param threadId 主题Id

@@ -31,8 +31,18 @@
     <!-- Channel -->
     <string name="channel_recommend">推荐</string>
     <string name="channel_hot">热贴</string>
-    <string name="channel_ent">八卦</string>
-    <string name="channel_news">国际</string>
-    <string name="channel_stock">股市</string>
-    <string name="channel_cart">汽车</string>
+    <string name="channel_bagua">八卦</string>
+
+    <string name="channel_guoji">国际</string>
+    <string name="channel_gushi">股市</string>
+    <string name="channel_car">汽车</string>
+
+    <string name="channel_guihua">鬼话</string>
+    <string name="channel_qinggan">情感</string>
+    <string name="channel_zatan">杂谈</string>
+
+    <string name="channel_shishang">时尚</string>
+    <string name="channel_lvyou">旅游</string>
+    <string name="channel_meitu">美图</string>
+    <string name="channel_chengshi">城市</string>
 </resources>
