@@ -27,4 +27,12 @@
     <string name="main_tab_collections">收藏集</string>
     <string name="main_tab_commuities">社群</string>
     <string name="main_tab_notifications">通知</string>
+
+    <!-- Channel -->
+    <string name="channel_recommend">推荐</string>
+    <string name="channel_hot">热贴</string>
+    <string name="channel_ent">八卦</string>
+    <string name="channel_news">国际</string>
+    <string name="channel_stock">股市</string>
+    <string name="channel_cart">汽车</string>
 </resources>

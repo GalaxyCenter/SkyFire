@@ -145,6 +145,16 @@ public class TianyaApi {
     }
 
     /**
+     * 获取热贴内容
+     * @param handler
+     */
+    public static void getHotThread(int pageIndex, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/m/hotArticle.jsp?pageNum=" + pageIndex;
+
+        ApiHttpClient.get(url, handler);
+    }
+
+    /**
      * 获取一个主题的所有帖子
      * @param sectionId 板块Id
      * @param threadId 主题Id

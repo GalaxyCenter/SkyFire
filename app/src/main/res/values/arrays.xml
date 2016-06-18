@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="channel_viewpage_arrays">
-        <item>资讯</item>
-        <item>热点</item>
-        <item>博客</item>
-        <item>推荐</item>
+        <item>@string/channel_recommend</item>
+        <item>@string/channel_hot</item>
+        <item>@string/channel_ent</item>
+        <item>@string/channel_news</item>
+        <item>@string/channel_stock</item>
+        <item>@string/channel_cart</item>
     </string-array>
 
     <string-array name="collection_viewpage_arrays">

@@ -1,6 +1,7 @@
 package apollo.tianya.base;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -96,11 +97,22 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     @BindView(R.id.swiperefreshlayout)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
+    protected String mCatalog = null;
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_pull_refresh_listview;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = this.getArguments();
+        if (args != null) {
+            mCatalog = args.getString(BUNDLE_KEY_CATALOG);
+        }
     }
 
     @Override
