@@ -15,6 +15,10 @@ import apollo.tianya.bean.Thread;
  */
 public class UIHelper {
 
+    public static final String BUNDLE_KEY_SECTION_ID = "section_id";
+    public static final String BUNDLE_KEY_THREAD_ID = "thread_id";
+    public static final String BUNDLE_KEY_PAGE_INDEX = "page_index";
+
     /**
      * 显示登录界面
      * @param context
@@ -36,6 +40,10 @@ public class UIHelper {
      */
     public static void showPostDetail(Context context, Thread thread) {
         Intent intent = new Intent(context, DetailActivity.class);
+
+        intent.putExtra(BUNDLE_KEY_SECTION_ID, thread.getSection());
+        intent.putExtra(BUNDLE_KEY_THREAD_ID, thread.getGuid());
+        intent.putExtra(BUNDLE_KEY_PAGE_INDEX, 1);
         context.startActivity(intent);
     }
 }

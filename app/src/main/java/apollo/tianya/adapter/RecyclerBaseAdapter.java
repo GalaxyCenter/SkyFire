@@ -17,8 +17,13 @@ import apollo.tianya.bean.Entity;
  */
 public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
+    public interface OnItemClickListener {
+        void onItemClick(View view,int postion);
+    }
+
     protected List<T> mItems;
     private LayoutInflater mInflater;
+    private OnItemClickListener mItemClickListener;
 
     public abstract VH getViewHolder(ViewGroup viewGroup);
 
@@ -37,7 +42,22 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(parent);
+        final VH vh = getViewHolder(parent);
+
+        vh.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                int position = vh.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && mItemClickListener != null)
+                    mItemClickListener.onItemClick(view, position);
+            }
+        });
+
+        return vh;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener l) {
+        mItemClickListener = l;
     }
 
     protected LayoutInflater getLayoutInflater(Context context) {

@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -22,7 +21,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by kuibo on 2016/6/1.
  */
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener {
+        implements SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener {
 
     private String TAG = this.getClass().getName();
 
@@ -89,7 +88,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected abstract DataSet<T> parseList(byte[] datas);
 
-    protected abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
+    protected abstract void sendRequestData();
 
     protected void onRefreshNetworkSuccess() {
     }
@@ -126,6 +125,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (mAdapter == null) {
             mAdapter = getListAdapter();
         }
+        mAdapter.setOnItemClickListener(this);
         mListView.setAdapter(mAdapter);
 
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());

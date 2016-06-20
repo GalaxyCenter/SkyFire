@@ -39,8 +39,7 @@ public class ChannelFragment extends BaseListFragment<Thread> {
         return dataset;
     }
 
-    @Override
-    protected void onItemClick(AdapterView parent, View view, int position, long id) {
+    public void onItemClick(View view, int position) {
         Thread thread = mAdapter.getItem(position);
         UIHelper.showPostDetail(view.getContext(), thread);
     }

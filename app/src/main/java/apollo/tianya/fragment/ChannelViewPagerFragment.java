@@ -28,5 +28,4 @@ public class ChannelViewPagerFragment extends BaseViewPagerFragment {
         bundle.putString(BaseListFragment.BUNDLE_KEY_CATALOG, type);
         return bundle;
     }
-
 }
