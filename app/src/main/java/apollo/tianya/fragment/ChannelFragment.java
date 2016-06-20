@@ -1,6 +1,9 @@
 package apollo.tianya.fragment;
 
 
+import android.view.View;
+import android.widget.AdapterView;
+
 import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.adapter.ThreadAdapter;
@@ -9,11 +12,12 @@ import apollo.tianya.api.TianyaParser;
 import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.util.UIHelper;
 
 /**
  * Created by kuibo on 2016/6/1.
  */
-public class ChannelFragment extends BaseListFragment {
+public class ChannelFragment extends BaseListFragment<Thread> {
 
     @Override
     protected RecyclerBaseAdapter getListAdapter() {
@@ -33,6 +37,12 @@ public class ChannelFragment extends BaseListFragment {
             dataset = TianyaParser.parseRecommendThread(body);
 
         return dataset;
+    }
+
+    @Override
+    protected void onItemClick(AdapterView parent, View view, int position, long id) {
+        Thread thread = mAdapter.getItem(position);
+        UIHelper.showPostDetail(view.getContext(), thread);
     }
 
     @Override

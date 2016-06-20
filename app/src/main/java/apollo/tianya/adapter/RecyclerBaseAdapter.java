@@ -70,4 +70,8 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
         mItems.clear();
         notifyDataSetChanged();
     }
+
+    public T getItem(int position) {
+        return mItems.get(position);
+    }
 }

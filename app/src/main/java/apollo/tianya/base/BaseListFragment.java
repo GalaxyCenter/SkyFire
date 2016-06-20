@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -87,6 +88,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     protected abstract RecyclerBaseAdapter<T, RecyclerView.ViewHolder> getListAdapter();
 
     protected abstract DataSet<T> parseList(byte[] datas);
+
+    protected abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
 
     protected void onRefreshNetworkSuccess() {
     }
