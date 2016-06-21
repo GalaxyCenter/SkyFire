@@ -7,4 +7,8 @@
     <color name="transparent">#00000000</color>
 
     <color name="main_tab_color">#000</color>
+
+    <!-- ThreadDetail -->
+    <color name="post_floor_owner">#fff</color>
+    <color name="post_floor">#fff</color>
 </resources>

@@ -45,4 +45,8 @@
     <string name="channel_lvyou">旅游</string>
     <string name="channel_meitu">美图</string>
     <string name="channel_chengshi">城市</string>
+
+    <!-- ThreadDetail -->
+    <string name="post_floor_owner">楼主</string>
+    <string name="post_floor">楼</string>
 </resources>

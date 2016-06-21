@@ -19,6 +19,15 @@ public class Post extends Entity {
     private int replies;
     private int views;
     List<String> photos;
+    List<Post> comment;
+
+    public List<Post> getComment() {
+        return comment;
+    }
+
+    public void setComment(List<Post> comment) {
+        this.comment = comment;
+    }
 
     public List<String> getPhotos() {
         return photos;

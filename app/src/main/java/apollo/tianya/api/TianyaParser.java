@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -80,7 +81,18 @@ public class TianyaParser {
             sub_matcher = pattern.matcher(item);
             if (sub_matcher.find()) {
                 match_content = sub_matcher.group(1);
-                thread.setSection(match_content);
+                thread.setSectionName(match_content);
+            }
+
+            // 解析板块id和帖子id
+            pattern = Pattern.compile("/post-(.*?)-(.*?)-");
+            sub_matcher = pattern.matcher(thread.getUrl());
+            if (sub_matcher.find()) {
+                match_content = sub_matcher.group(1);
+                thread.setSectionId(match_content);
+
+                match_content = sub_matcher.group(2);
+                thread.setGuid(match_content);
             }
 
             // 解析访问量
@@ -148,12 +160,15 @@ public class TianyaParser {
      */
     public static DataSet<Post> parsePosts(String source) {
         DataSet<Post> datas = null;
-        List<Post> list = null;
-        Post post = null;
         Document doc = null;
         Elements elms = null;
+        Elements comment_elms = null;
         Element bd = null;
         Element item = null;
+        List<Node> post_items = null;
+        Post post = null;
+        Post comment = null;
+        List<Post> list = null;
 
         list = new ArrayList<Post>();
         doc = Jsoup.parse(source);
@@ -169,7 +184,29 @@ public class TianyaParser {
             if (bd == null)
                 continue;
 
-            post.setBody(bd.text());
+            post_items = bd.childNodes();
+            post.setBody(post_items.get(0).outerHtml());
+
+            // 解析评论
+            comment_elms = elm.select(".bd .comments li");
+            post.setComment(new ArrayList<Post>());
+            for(Element celm:comment_elms) {
+                comment = new Post();
+
+                // 解析内容
+                comment.setBody(celm.select(".cnt").text());
+
+                // 解析作者
+                item = celm.select(".author").first();
+                comment.setAuthor(item.text());
+                comment.setAuthorId(Integer.parseInt(item.attr("data-id")));
+
+                // 解析时间
+                item = celm.select(".time").first();
+                comment.setPostDate(DateTime.parse(item.text(), "yyyy-MM-dd HH:mm").getDate());
+
+                post.getComment().add(comment);
+            }
 
             // 解析时间
             item = elm.select("a p").first();

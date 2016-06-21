@@ -10,6 +10,7 @@ import apollo.tianya.bean.Post;
 import apollo.tianya.util.Formatter;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Texel on 2016/6/20.
@@ -22,9 +23,12 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         @BindView(R.id.author) TextView author;
         @BindView(R.id.time) TextView time;
         @BindView(R.id.userface) AvatarView face;
+        @BindView(R.id.floor) TextView floor;
 
         public ViewHolder(View itemView, ViewGroup parent) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -41,9 +45,12 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
 
         post = mItems.get(position);
         vh.author.setText(post.getAuthor());
+        vh.body.setText(post.getBody());
         vh.time.setText(Formatter.friendlyTime(post.getPostDate()));
         vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
-        vh.time.setText("");
         vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + post.getAuthorId());
+
+        if (mDisplayFloorHandle != null)
+            mDisplayFloorHandle.setFloor(vh.floor, post, position);
     }
 }

@@ -39,6 +39,15 @@
                     />
 
                 <TextView
+                    android:id="@+id/floor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12.0dip"
+                    android:text="@string/app_name"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/author" />
+
+                <TextView
                     android:id="@+id/time"
                     android:text="@string/app_name"
                     style="@style/list_text_info"

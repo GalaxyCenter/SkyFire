@@ -2,7 +2,9 @@ package apollo.tianya.fragment;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
+import apollo.tianya.R;
 import apollo.tianya.adapter.PostAdapter;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.api.TianyaParser;
@@ -16,17 +18,25 @@ import apollo.tianya.util.UIHelper;
 /**
  * Created by Texel on 2016/6/20.
  */
-public class ThreadDetailFragment extends BaseListFragment<Post> {
+public class ThreadDetailFragment extends BaseListFragment<Post> implements
+        RecyclerBaseAdapter.DisplayFloorHandle<Post> {
 
-    private String mSection;
+    private String mSectionId;
     private String mThreadId;
+    private String mAuthor;
     private int mPageIndex;
+    private int mFloor;
 
     @Override
     public void initView(View view) {
-        mSection = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_SECTION_ID);
+        mSectionId = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_SECTION_ID);
         mThreadId = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_THREAD_ID);
+        mAuthor = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_AUTHOR);
         mPageIndex = getActivity().getIntent().getIntExtra(UIHelper.BUNDLE_KEY_PAGE_INDEX, 1);
+
+        super.initView(view);
+
+        mAdapter.setDisplayFloor(this);
     }
 
     @Override
@@ -46,10 +56,26 @@ public class ThreadDetailFragment extends BaseListFragment<Post> {
 
     @Override
     protected void sendRequestData() {
-        TianyaApi.getPosts(mSection, mThreadId, mPageIndex, mHandler);
+        TianyaApi.getPosts(mSectionId, mThreadId, mPageIndex, mHandler);
     }
 
     @Override
     public void onItemClick(View view, int postion) {
+
+    }
+
+
+    @Override
+    public void setFloor(TextView view, Post post, int position) {
+        if (mAuthor.equals(post.getAuthor())) {
+            view.setText(R.string.post_floor_owner);
+            view.setBackgroundResource(R.drawable.post_floor_owner);
+            view.setTextColor(getResources().getColor(R.color.post_floor_owner));
+        } else {
+            view.setText(Integer.toString(mFloor + position)
+                    + getResources().getText(R.string.post_floor));
+            view.setBackgroundResource(R.drawable.post_floor);
+            view.setTextColor(getResources().getColor(R.color.post_floor));
+        }
     }
 }

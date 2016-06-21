@@ -3,8 +3,12 @@ package apollo.tianya;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import apollo.tianya.bean.Post;
 import apollo.tianya.util.DateTime;
@@ -17,12 +21,17 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void parsePosts() throws Exception {
-        Document doc = Jsoup.connect("http://bbs.tianya.cn/m/post-funinfo-6960592-1.shtml").timeout(10000).get();
+        Document doc = Jsoup.connect("http://bbs.tianya.cn/m/post-funinfo-6968005-1.shtml").timeout(10000).get();
         Elements elms = null;
+        Elements comment_elms = null;
         Element bd = null;
         Element item = null;
+        List<Node> post_items = null;
         Post post = null;
+        Post comment = null;
+        List<Post> list = null;
 
+        list = new ArrayList<Post>();
         elms = doc.select("div.content div.item");
         for(Element elm:elms) {
             post = new Post();
@@ -32,8 +41,29 @@ public class ExampleUnitTest {
             if (bd == null)
                 continue;
 
-            post.setBody(bd.text());
+            post_items = bd.childNodes();
+            post.setBody(post_items.get(0).outerHtml());
 
+            // 解析评论
+            comment_elms = elm.select(".bd .comments li");
+            post.setComment(new ArrayList<Post>());
+            for(Element celm:comment_elms) {
+                comment = new Post();
+
+                // 解析内容
+                comment.setBody(celm.select(".cnt").text());
+
+                // 解析作者
+                item = celm.select(".author").first();
+                comment.setAuthor(item.text());
+                comment.setAuthorId(Integer.parseInt(item.attr("data-id")));
+
+                // 解析时间
+                item = celm.select(".time").first();
+                comment.setPostDate(DateTime.parse(item.text(), "yyyy-MM-dd HH:mm").getDate());
+
+                post.getComment().add(comment);
+            }
             // 解析时间
             item = elm.select("a p").first();
             post.setPostDate(DateTime.parse(item.text(), "yyyy-MM-dd HH:mm").getDate());
@@ -45,6 +75,8 @@ public class ExampleUnitTest {
             // 解析PostId
             if (elm.hasAttr("data-replyid"))
                 post.setId(Integer.parseInt(elm.attr("data-replyid")));
+
+            list.add(post);
         }
 
         int total_pages = 1;

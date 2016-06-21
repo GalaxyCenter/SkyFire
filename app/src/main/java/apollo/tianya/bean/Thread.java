@@ -5,13 +5,22 @@ package apollo.tianya.bean;
  */
 public class Thread extends Post {
 
-    private String section;
+    private String sectionName;
+    private String sectionId;
 
-    public String getSection() {
-        return section;
+    public String getSectionId() {
+        return sectionId;
     }
 
-    public void setSection(String section) {
-        this.section = section;
+    public void setSectionId(String sectionId) {
+        this.sectionId = sectionId;
+    }
+
+    public String getSectionName() {
+        return sectionName;
+    }
+
+    public void setSectionName(String sectionName) {
+        this.sectionName = sectionName;
     }
 }

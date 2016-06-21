@@ -18,6 +18,7 @@ public class UIHelper {
     public static final String BUNDLE_KEY_SECTION_ID = "section_id";
     public static final String BUNDLE_KEY_THREAD_ID = "thread_id";
     public static final String BUNDLE_KEY_PAGE_INDEX = "page_index";
+    public static final String BUNDLE_KEY_AUTHOR = "author";
 
     /**
      * 显示登录界面
@@ -41,9 +42,11 @@ public class UIHelper {
     public static void showPostDetail(Context context, Thread thread) {
         Intent intent = new Intent(context, DetailActivity.class);
 
-        intent.putExtra(BUNDLE_KEY_SECTION_ID, thread.getSection());
+        intent.putExtra(BUNDLE_KEY_SECTION_ID, thread.getSectionId());
         intent.putExtra(BUNDLE_KEY_THREAD_ID, thread.getGuid());
         intent.putExtra(BUNDLE_KEY_PAGE_INDEX, 1);
+        intent.putExtra(BUNDLE_KEY_AUTHOR, thread.getAuthor());
+
         context.startActivity(intent);
     }
 }

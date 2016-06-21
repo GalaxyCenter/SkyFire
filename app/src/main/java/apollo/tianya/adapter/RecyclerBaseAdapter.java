@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,15 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
         void onItemClick(View view,int postion);
     }
 
+    public interface DisplayFloorHandle<T> {
+        void setFloor(TextView view, T t, int position);
+    }
+
     protected List<T> mItems;
     private LayoutInflater mInflater;
-    private OnItemClickListener mItemClickListener;
+
+    protected OnItemClickListener mItemClickListener;
+    protected DisplayFloorHandle mDisplayFloorHandle;
 
     public abstract VH getViewHolder(ViewGroup viewGroup);
 
@@ -58,6 +65,10 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public void setOnItemClickListener(OnItemClickListener l) {
         mItemClickListener = l;
+    }
+
+    public void setDisplayFloor(DisplayFloorHandle<T> callBack) {
+        mDisplayFloorHandle = callBack;
     }
 
     protected LayoutInflater getLayoutInflater(Context context) {
