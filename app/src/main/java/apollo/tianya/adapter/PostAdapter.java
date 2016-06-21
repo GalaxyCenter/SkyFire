@@ -1,6 +1,7 @@
 package apollo.tianya.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import apollo.tianya.R;
 import apollo.tianya.bean.Post;
 import apollo.tianya.util.Formatter;
+import apollo.tianya.util.Transforms;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,15 +44,19 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     @Override
     public void onBindViewHolder(PostAdapter.ViewHolder vh, int position) {
         Post post = null;
-
+        SpannableString span_body = null;
+        String body = null;
         post = mItems.get(position);
         vh.author.setText(post.getAuthor());
-        vh.body.setText(post.getBody());
         vh.time.setText(Formatter.friendlyTime(post.getPostDate()));
         vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
         vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + post.getAuthorId());
 
         if (mDisplayFloorHandle != null)
             mDisplayFloorHandle.setFloor(vh.floor, post, position);
+
+        body = Transforms.formatPost(post.getBody());
+        span_body = new SpannableString(body);
+        vh.body.setText(span_body);
     }
 }

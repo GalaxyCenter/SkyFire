@@ -25,6 +25,7 @@ import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.util.DateTime;
 import apollo.tianya.util.Formatter;
+import apollo.tianya.util.Transforms;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -165,8 +166,10 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 String sub_summary = null;
                 PhotoAdapter adapter = null;
 
-                sub_summary = Formatter.checkStringLength(post.getBody(), 100);
+                sub_summary = Transforms.stripHtmlXmlTags(post.getBody());
+                sub_summary = Formatter.checkStringLength(sub_summary, 100);
                 vh.summary.setText(sub_summary);
+
                 vh.views.setText(Integer.toString(post.getViews()));
                 vh.time.setText(DateTime.toString(post.getPostDate()));
                 if (TextUtils.isEmpty(vh.author.getText())) {

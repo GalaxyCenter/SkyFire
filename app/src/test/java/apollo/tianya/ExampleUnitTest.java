@@ -21,12 +21,11 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void parsePosts() throws Exception {
-        Document doc = Jsoup.connect("http://bbs.tianya.cn/m/post-funinfo-6968005-1.shtml").timeout(10000).get();
+        Document doc = Jsoup.connect("http://bbs.tianya.cn/m/post-free-5500114-1.shtml").timeout(10000).get();
         Elements elms = null;
         Elements comment_elms = null;
-        Element bd = null;
         Element item = null;
-        List<Node> post_items = null;
+        Element bd = null;
         Post post = null;
         Post comment = null;
         List<Post> list = null;
@@ -36,13 +35,9 @@ public class ExampleUnitTest {
         for(Element elm:elms) {
             post = new Post();
 
-            // 解析内容
             bd = elm.select(".bd").first();
             if (bd == null)
                 continue;
-
-            post_items = bd.childNodes();
-            post.setBody(post_items.get(0).outerHtml());
 
             // 解析评论
             comment_elms = elm.select(".bd .comments li");
@@ -64,6 +59,12 @@ public class ExampleUnitTest {
 
                 post.getComment().add(comment);
             }
+            // 解析内容
+            if (bd.children().size() != 0) {
+               bd.select("div.comments").remove();
+            }
+            post.setBody(bd.html());
+
             // 解析时间
             item = elm.select("a p").first();
             post.setPostDate(DateTime.parse(item.text(), "yyyy-MM-dd HH:mm").getDate());

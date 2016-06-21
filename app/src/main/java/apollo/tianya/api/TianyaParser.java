@@ -179,13 +179,9 @@ public class TianyaParser {
         for(Element elm:elms) {
             post = new Post();
 
-            // 解析内容
             bd = elm.select(".bd").first();
             if (bd == null)
                 continue;
-
-            post_items = bd.childNodes();
-            post.setBody(post_items.get(0).outerHtml());
 
             // 解析评论
             comment_elms = elm.select(".bd .comments li");
@@ -207,6 +203,11 @@ public class TianyaParser {
 
                 post.getComment().add(comment);
             }
+            // 解析内容
+            if (bd.children().size() != 0) {
+                bd.select("div.comments").remove();
+            }
+            post.setBody(bd.html());
 
             // 解析时间
             item = elm.select("a p").first();
