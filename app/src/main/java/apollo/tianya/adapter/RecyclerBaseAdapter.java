@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
 
     protected List<T> mItems;
     private LayoutInflater mInflater;
+    private LinearLayout mFooterView;
 
     protected OnItemClickListener mItemClickListener;
     protected DisplayFloorHandle mDisplayFloorHandle;
@@ -46,6 +49,10 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    protected boolean hasFooterView(){
+        return true;
     }
 
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {

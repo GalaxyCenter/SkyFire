@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -126,12 +127,42 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             mAdapter = getListAdapter();
         }
         mAdapter.setOnItemClickListener(this);
-        mListView.setAdapter(mAdapter);
 
-        LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
+
+        final LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         mListView.setLayoutManager(llm);
+        mListView.setAdapter(mAdapter);
+        mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (mAdapter == null || mAdapter.getItemCount() == 0) {
+                    return;
+                }
+                // 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+                if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+                    return;
+                }
+                // 判断是否滚动到底部
+                boolean scrollEnd = false;
+                try {
+                    if (llm.findLastVisibleItemPosition() == llm.getItemCount())
+                        scrollEnd = true;
+                } catch (Exception e) {
+                    scrollEnd = false;
+                }
 
+                if (mState == STATE_NONE && scrollEnd) {
+                    if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
+                            || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
+                        mCurrentPage++;
+                        mState = STATE_LOADMORE;
+                        requestData(false);
+                        mAdapter.setFooterViewLoading();
+                    }
+                }
+            }
+        });
         requestData(false);
     }
 
