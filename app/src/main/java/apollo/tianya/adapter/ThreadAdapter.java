@@ -191,6 +191,11 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
     }
 
     @Override
+    public ViewHolder getFootViewHolder(ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
     public void onBindViewHolder(ViewHolder vh, int position) {
         Thread thread;
 

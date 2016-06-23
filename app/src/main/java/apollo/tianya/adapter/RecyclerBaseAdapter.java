@@ -28,6 +28,9 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
         void setFloor(TextView view, T t, int position);
     }
 
+    public final static int TYPE_NORMAL = 0;
+    public final static int TYPE_FOOTER = 1;
+
     protected List<T> mItems;
     private LayoutInflater mInflater;
     private LinearLayout mFooterView;
@@ -36,6 +39,7 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     protected DisplayFloorHandle mDisplayFloorHandle;
 
     public abstract VH getViewHolder(ViewGroup viewGroup);
+    public abstract VH getFootViewHolder(ViewGroup viewGroup);
 
     public RecyclerBaseAdapter() {
         mItems = new ArrayList<T>();
@@ -48,26 +52,42 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        int count = mItems.size();
+
+        if (hasFooterView())
+            count ++;
+
+        return count;
     }
 
-    protected boolean hasFooterView(){
-        return true;
-    }
-
+    @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        final VH vh = getViewHolder(parent);
 
-        vh.itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                int position = vh.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && mItemClickListener != null)
-                    mItemClickListener.onItemClick(view, position);
-            }
-        });
+        if (viewType == TYPE_FOOTER) {
+            return getFootViewHolder(parent);
+        } else {
+            final VH vh = getViewHolder(parent);
+            vh.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = vh.getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && mItemClickListener != null)
+                        mItemClickListener.onItemClick(view, position);
+                }
+            });
+            return vh;
+        }
+    }
 
-        return vh;
+    @Override
+    public int getItemViewType(int position) {
+        int type = TYPE_NORMAL;
+
+        if (position == getItemCount() - 1) {
+            type = TYPE_FOOTER;
+        }
+
+        return type;
     }
 
     public void setOnItemClickListener(OnItemClickListener l) {
@@ -76,6 +96,10 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public void setDisplayFloor(DisplayFloorHandle<T> callBack) {
         mDisplayFloorHandle = callBack;
+    }
+
+    protected boolean hasFooterView(){
+        return false;
     }
 
     protected LayoutInflater getLayoutInflater(Context context) {

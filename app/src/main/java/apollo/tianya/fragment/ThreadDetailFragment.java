@@ -24,7 +24,6 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     private String mSectionId;
     private String mThreadId;
     private String mAuthor;
-    private int mPageIndex;
     private int mFloor;
 
     @Override

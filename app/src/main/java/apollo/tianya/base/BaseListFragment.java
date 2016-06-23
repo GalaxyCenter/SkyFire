@@ -24,8 +24,6 @@ import cz.msebera.android.httpclient.Header;
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         implements SwipeRefreshLayout.OnRefreshListener, RecyclerBaseAdapter.OnItemClickListener {
 
-    private String TAG = this.getClass().getName();
-
     /**
      * HTTP LIST内容解析任务类
      */
@@ -63,10 +61,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     }
 
-    public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
-
-    private ParserTask mParserTask = null;
-
     protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
         @Override
@@ -85,14 +79,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     };
 
-    protected abstract RecyclerBaseAdapter<T, RecyclerView.ViewHolder> getListAdapter();
-
-    protected abstract DataSet<T> parseList(byte[] datas);
-
-    protected abstract void sendRequestData();
-
-    protected void onRefreshNetworkSuccess() {
-    }
+    public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
+    private String TAG = this.getClass().getName();
 
     @BindView(R.id.listview)
     protected RecyclerView mListView;
@@ -101,7 +89,20 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     protected String mCatalog = null;
+    protected int mPageIndex = 0;
+
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
+    private ParserTask mParserTask = null;
+
+
+    protected abstract RecyclerBaseAdapter<T, RecyclerView.ViewHolder> getListAdapter();
+
+    protected abstract DataSet<T> parseList(byte[] datas);
+
+    protected abstract void sendRequestData();
+
+    protected void onRefreshNetworkSuccess() {
+    }
 
     @Override
     protected int getLayoutId() {
@@ -146,20 +147,23 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 // 判断是否滚动到底部
                 boolean scrollEnd = false;
                 try {
-                    if (llm.findLastVisibleItemPosition() == llm.getItemCount())
+                    if (llm.findLastVisibleItemPosition() == llm.getItemCount() - 1)
                         scrollEnd = true;
                 } catch (Exception e) {
                     scrollEnd = false;
                 }
 
                 if (mState == STATE_NONE && scrollEnd) {
-                    if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
-                            || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
-                        mCurrentPage++;
-                        mState = STATE_LOADMORE;
-                        requestData(false);
-                        mAdapter.setFooterViewLoading();
-                    }
+                    //if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
+                    //        || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
+                    //    mCurrentPage++;
+                    //    mState = STATE_LOADMORE;
+                    //    requestData(false);
+                    //    mAdapter.setFooterViewLoading();
+                    //}
+                    mPageIndex++;
+                    mState = STATE_LOADMORE;
+                    requestData(false);
                 }
             }
         });
@@ -168,6 +172,11 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     @Override
     public void onRefresh() {
+        if (mState == STATE_REFRESH)
+            return;
+
+        mState = STATE_REFRESH;
+        mPageIndex = 0;
         requestData(true);
     }
 
