@@ -6,16 +6,22 @@ import android.support.v4.app.FragmentTransaction;
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
-import apollo.tianya.emoji.ToolbarFragment;
+import apollo.tianya.fragment.bar.BarBaseFragment;
+import apollo.tianya.fragment.bar.InputFragment;
+import apollo.tianya.fragment.bar.ToolbarFragment;
 import apollo.tianya.fragment.ThreadDetailFragment;
+import apollo.tianya.fragment.bar.BarBaseFragment.Action;
+import apollo.tianya.fragment.bar.BarBaseFragment.OnActionClickListener;
 
 /**
  * 帖子详情Activity
  * Created by Texel on 2016/6/20.
  */
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends BaseActivity implements OnActionClickListener {
 
-    private ToolbarFragment toolFragment = new ToolbarFragment();
+    private ToolbarFragment mToolFragment = new ToolbarFragment();
+    private InputFragment mInputFragment = new InputFragment();
+    private BarBaseFragment mNextFragment = null;
 
     @Override
     protected void init(Bundle savedInstanceState) {
@@ -36,6 +42,26 @@ public class DetailActivity extends BaseActivity {
     @Override
     protected void initView() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.emoji_keyboard, toolFragment).commit();
+                .replace(R.id.emoji_keyboard, mToolFragment).commit();
+        mToolFragment.setOnActionClickListener(this);
+        mInputFragment.setOnActionClickListener(this);
+        mNextFragment = mInputFragment;
+    }
+
+    @Override
+    public void onActionClick(Action action) {
+        switch (action) {
+            case ACTION_CHANGE:
+            case ACTION_WRITE_COMMENT:
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.footer_menu_slide_in,
+                                R.anim.footer_menu_slide_out)
+                        .replace(R.id.emoji_keyboard, mNextFragment)
+                        .commit();
+
+                mNextFragment = mNextFragment == mInputFragment ? mToolFragment : mInputFragment;
+                break;
+        }
     }
 }
