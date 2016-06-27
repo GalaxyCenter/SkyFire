@@ -21,7 +21,7 @@ public class DetailActivity extends BaseActivity implements OnActionClickListene
 
     private ToolbarFragment mToolFragment = new ToolbarFragment();
     private InputFragment mInputFragment = new InputFragment();
-    private BarBaseFragment mNextFragment = null;
+    private BarBaseFragment mNewFragment = null;
 
     @Override
     protected void init(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class DetailActivity extends BaseActivity implements OnActionClickListene
                 .replace(R.id.emoji_keyboard, mToolFragment).commit();
         mToolFragment.setOnActionClickListener(this);
         mInputFragment.setOnActionClickListener(this);
-        mNextFragment = mInputFragment;
+        mNewFragment = mInputFragment;
     }
 
     @Override
@@ -57,10 +57,10 @@ public class DetailActivity extends BaseActivity implements OnActionClickListene
                         .beginTransaction()
                         .setCustomAnimations(R.anim.footer_menu_slide_in,
                                 R.anim.footer_menu_slide_out)
-                        .replace(R.id.emoji_keyboard, mNextFragment)
+                        .replace(R.id.emoji_keyboard, mNewFragment)
                         .commit();
 
-                mNextFragment = mNextFragment == mInputFragment ? mToolFragment : mInputFragment;
+                mNewFragment = mNewFragment == mInputFragment ? mToolFragment : mInputFragment;
                 break;
         }
     }
