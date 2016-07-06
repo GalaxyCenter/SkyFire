@@ -1,57 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:gravity="center_vertical"
-    android:layout_height="48dp">
+    android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/btn_change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        android:background="@null"
-        android:paddingLeft="@dimen/space_8"
-        android:paddingRight="@dimen/space_8"
-        android:src="@drawable/btn_opt_tools_to_text_selector"/>
-    
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical">
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="48dp">
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/content"
+        <ImageButton
+            android:id="@+id/btn_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:background="@null"
+            android:paddingLeft="@dimen/space_8"
+            android:paddingRight="@dimen/space_8"
+            android:src="@drawable/btn_opt_tools_to_text_selector"/>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/editor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="@string/app_name"
+                android:minHeight="38dp"
+                android:textSize="15sp" />
+
+
+            <CheckBox
+                android:id="@+id/btn_face_change"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/btn_opt_faces_selector"
+                android:button="@null"
+                android:checked="false"
+                android:focusable="false" />
+
+        </LinearLayout>
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
             android:background="@null"
-            android:gravity="center_vertical"
-            android:hint="@string/app_name"
-            android:minHeight="38dp"
-            android:textSize="15sp" />
-
-
-        <CheckBox
-            android:id="@+id/btn_face_change"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="@drawable/btn_opt_faces_selector"
-            android:button="@null"
-            android:checked="false"
-            android:focusable="false" />
+            android:paddingLeft="@dimen/space_8"
+            android:paddingRight="@dimen/space_8"
+            android:src="@drawable/btn_content_send_selector"/>
 
     </LinearLayout>
 
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@null"
-        android:background="@null"
-        android:paddingLeft="@dimen/space_8"
-        android:paddingRight="@dimen/space_8"
-        android:src="@drawable/btn_content_send_selector"/>
+    <GridView android:gravity="center" android:id="@+id/face_view"
+        android:focusable="false" android:visibility="gone" android:fadingEdge="none"
+        android:layout_width="fill_parent" android:layout_height="220.0dip"
+        android:horizontalSpacing="5.0dip" android:verticalSpacing="5.0dip"
+        android:stretchMode="columnWidth" android:columnWidth="50.0dip"
+        android:numColumns="auto_fit" />
 
 </LinearLayout>

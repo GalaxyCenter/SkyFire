@@ -88,7 +88,7 @@ public class EmotionAdapter extends BaseAdapter {
         if (convertView == null) {
             view = new ImageView(mContext);
             view.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            view.setLayoutParams(new AbsListView.LayoutParams(50, 50));
+            view.setLayoutParams(new AbsListView.LayoutParams(100, 100));
         } else {
             view = (ImageView) convertView;
         }
