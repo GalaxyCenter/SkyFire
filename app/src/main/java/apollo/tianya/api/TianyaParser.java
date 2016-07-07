@@ -240,22 +240,9 @@ public class TianyaParser {
         replies = Integer.parseInt(item.text());
         post.setReplies(replies);
 
-        // 解析页码
-        int total_pages = 0;
-
-        elms = doc.select(".u-pager span");
-        if (elms != null && elms.size() > 2) {
-            item = elms.get(1);
-            total_pages = Integer.parseInt(item.text());
-        }
-
         datas = new DataSet<Post>();
         datas.setObjects(list);
-
-        if (total_pages < 2)
-            datas.setTotalRecords(list.size());
-        else
-            datas.setTotalRecords(total_pages * 100);
+        datas.setTotalRecords(replies);
         return datas;
     }
 

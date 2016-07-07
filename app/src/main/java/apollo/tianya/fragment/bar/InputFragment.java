@@ -8,14 +8,18 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import apollo.tianya.R;
 import apollo.tianya.emotion.EmotionAdapter;
+import apollo.tianya.util.CompatibleUtil;
 
 /**
  * Created by kuibo on 2016/6/27.
@@ -99,6 +103,12 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
      * 隐藏Emoji并显示软键盘
      */
     public void hideEmojiKeyBoard() {
+        LinearLayout.LayoutParams params = null;
+
+        params = (LinearLayout.LayoutParams) mGridView.getLayoutParams();
+        params.height = CompatibleUtil.getSoftInputHeight(super.getActivity());
+        params.weight = 0.0f;
+
         mGridView.setVisibility(View.GONE);
     }
 
