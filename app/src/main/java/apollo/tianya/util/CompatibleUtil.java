@@ -5,29 +5,42 @@ import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 
 /**
  * Created by Texel on 2016/7/7.
  */
 public class CompatibleUtil {
 
-    public static int getSoftInputHeight(Activity activity) {
-        Rect rect = null;
-        int screenHeight = 0;
-        int softInputHeight = 0;
+    private static String TAG = "CompatibleUtil";
 
-        rect = new Rect();
+    public static int getScreenHeight(Activity activity) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+
+        return metrics.heightPixels;
+    }
+
+    public static int getStatusBarHeight(Activity activity) {
+        Rect rect = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
 
-        //获取屏幕的高度
-        screenHeight = activity.getWindow().getDecorView().getRootView().getHeight();
-        //计算软件盘的高度
-        softInputHeight = screenHeight - rect.bottom;
+        return rect.top;
+    }
 
-        if (Build.VERSION.SDK_INT >= 18) {
-            // When SDK Level >= 18, the softInputHeight will contain the height of softButtonsBar (if has)
-            //softInputHeight = softInputHeight - getSoftButtonsBarHeight(activity);
-        }
+    public static int getAppHeight(Activity activity) {
+        Rect rect = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        return rect.height();
+    }
+
+    public static int getSoftInputHeight(Activity activity) {
+        int softInputHeight = 0;
+
+        softInputHeight = getScreenHeight(activity) - getStatusBarHeight(activity) - getAppHeight(activity);
+        Log.i(TAG, "INPUT_HEIGHT:" + softInputHeight);
         return softInputHeight;
     }
 

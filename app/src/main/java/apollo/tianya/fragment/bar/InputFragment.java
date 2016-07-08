@@ -30,6 +30,8 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
     private AppCompatEditText mEditor;
     private GridView mGridView;
     private EmotionAdapter mEmoAdapter;
+    private LinearLayout mInputLayout;
+    private boolean mKeyBoardShowed = false;
 
     protected int getLayoutId() {
         return R.layout.fragment_detail_input_bar;
@@ -37,6 +39,7 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
 
     @Override
     public void initView(View view) {
+        mInputLayout = (LinearLayout) view.findViewById(R.id.input_layout);
         mEmoAdapter = new EmotionAdapter(super.getContext());
         mGridView = (GridView) view.findViewById(R.id.face_view);
         mGridView.setAdapter(mEmoAdapter);
@@ -73,11 +76,9 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    hideSoftKeyboard();
                     showEmojiKeyBoard();
                 } else {
                     hideEmojiKeyBoard();
-                    showSoftKeyboard();
                 }
             }
         });
@@ -103,29 +104,42 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
      * 隐藏Emoji并显示软键盘
      */
     public void hideEmojiKeyBoard() {
-        LinearLayout.LayoutParams params = null;
+        if (!mKeyBoardShowed) {
+            LinearLayout.LayoutParams params = null;
 
-        params = (LinearLayout.LayoutParams) mGridView.getLayoutParams();
-        params.height = CompatibleUtil.getSoftInputHeight(super.getActivity());
-        params.weight = 0.0f;
+            //params = (LinearLayout.LayoutParams) mInputLayout.getLayoutParams();
+            //params.height = mGridView.getTop();
+            //params.height = 520;
+            //params.weight = 0.0f;
+        }
 
         mGridView.setVisibility(View.GONE);
+        showSoftKeyboard();
     }
 
     /**
      * 显示Emoji并隐藏软键盘
      */
     public void showEmojiKeyBoard() {
+        if (mKeyBoardShowed) {
+            LinearLayout.LayoutParams params = null;
+
+            params = (LinearLayout.LayoutParams) mGridView.getLayoutParams();
+            params.height = CompatibleUtil.getSoftInputHeight(super.getActivity());
+        }
         mGridView.setVisibility(View.VISIBLE);
+        hideSoftKeyboard();
     }
 
     /**
      * 隐藏软键盘
      */
     public void hideSoftKeyboard() {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         ((InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                 mEditor.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        mKeyBoardShowed = false;
     }
 
     /**
@@ -133,8 +147,10 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
      */
     public void showSoftKeyboard() {
         mEditor.requestFocus();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         ((InputMethodManager) getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).showSoftInput(mEditor,
                 InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        mKeyBoardShowed = true;
     }
 }
