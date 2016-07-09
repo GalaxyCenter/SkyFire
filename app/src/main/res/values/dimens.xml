@@ -6,6 +6,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="keyboard_height">267dp</dimen>
 
     <dimen name="space_100">100.0dip</dimen>
     <dimen name="space_60">60dp</dimen>

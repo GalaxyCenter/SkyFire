@@ -28,7 +28,8 @@
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".ui.DetailActivity"/>
+            android:name=".ui.DetailActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
