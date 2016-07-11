@@ -67,4 +67,13 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="input_sender">
+        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/txt_input_send_selector</item>
+        <item name="android:background">@drawable/txt_input_send_selector</item>
+    </style>
+
+
 </resources>

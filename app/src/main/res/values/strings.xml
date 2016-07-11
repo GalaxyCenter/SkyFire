@@ -50,4 +50,6 @@
     <string name="post_floor_owner">楼主</string>
     <string name="post_floor">楼</string>
     <string name="loading">加载中</string>
+
+    <string name="input_sender">发送</string>
 </resources>

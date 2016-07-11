@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.support.v7.widget.AppCompatEditText;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +24,19 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.lang.annotation.Annotation;
 
 import apollo.tianya.R;
 import apollo.tianya.emotion.EmotionAdapter;
 import apollo.tianya.util.CompatibleUtil;
+import butterknife.BindView;
+import butterknife.OnTextChanged;
 
 /**
  * Created by kuibo on 2016/6/27.
@@ -90,9 +102,22 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
     };
 
     private OnActionClickListener mActionListener;
-    private AppCompatEditText mEditor;
-    private GridView mGridView;
+
+    @BindView(R.id.editor)
+    AppCompatEditText mEditor;
+
+    @BindView(R.id.face_view)
+    GridView mGridView;
+
+    @BindView(R.id.btn_option)
+    ImageView mOption;
+
+    @BindView(R.id.btn_sender)
+    TextView mSender;
+
     private EmotionAdapter mEmoAdapter;
+
+
     private boolean mKeyBoardShowed = false;
     private int mKeyBoardHeight = 0;
 
@@ -105,7 +130,6 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
         mKeyBoardHeight = getContext().getResources().getDimensionPixelSize(R.dimen.keyboard_height);
 
         mEmoAdapter = new EmotionAdapter(super.getContext());
-        mGridView = (GridView) view.findViewById(R.id.face_view);
         mGridView.setAdapter(mEmoAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,7 +150,7 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
 
                         draw = new BitmapDrawable(bmp);
                         draw.setBounds(0, 0, 1 + bmp.getWidth(), bmp.getHeight());
-                        draw.setGravity(3);
+                        draw.setGravity(Gravity.CENTER);
                         spannable.setSpan(new ImageSpan(draw, 0), 0, spannable.length(), Spannable.SPAN_POINT_MARK);
                         mEditor.getText().insert(start, spannable);
                     }
@@ -134,7 +158,6 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
             }
         });
 
-        mEditor = (AppCompatEditText) view.findViewById(R.id.editor);
         mEditor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,6 +165,29 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
                 if (isEmojiPanelShowing()) {
                     mGridView.postDelayed(mHideEmotionPanelTask, 500);
                 }
+            }
+        });
+        mEditor.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0) {
+                    mOption.setVisibility(View.VISIBLE);
+                    mSender.setVisibility(View.GONE);
+                } else {
+                    mOption.setVisibility(View.GONE);
+                    mSender.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -157,6 +203,9 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
                 }
             }
         });
+
+        mOption.setVisibility(View.VISIBLE);
+        mSender.setVisibility(View.GONE);
 
         CloseKeyboardOnOutsideContainer frameLayout = new CloseKeyboardOnOutsideContainer(getActivity());
         getActivity().addContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
