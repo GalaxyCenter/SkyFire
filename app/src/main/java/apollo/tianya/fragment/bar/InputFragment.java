@@ -73,45 +73,12 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
         }
 
         private boolean isTouchKeyboardOutside(int touchY) {
-            View editText = getActivity().getCurrentFocus();
-            if (editText == null) {
-                return false;
-            }
-            int[] location = new int[2];
-            editText.getLocationInWindow(location);
-            int editY = location[1] - CompatibleUtil.getStatusBarHeight(getActivity());
-            int offset = touchY - editY;
-            if (offset > 0 && offset < editText.getMeasuredHeight()) {
-                return false;
-            }
-            return true;
-        }
+            int[] l = new int[2];
+            int confine = 0;
 
-        /**
-         * 根据EditText所在坐标和用户点击的坐标相对比，来判断是否隐藏键盘，因为当用户点击EditText时则不能隐藏
-         *
-         * @param v
-         * @param event
-         * @return
-         */
-        private boolean isShouldHideKeyboard(View v, MotionEvent event) {
-            if (v != null && (v instanceof EditText)) {
-                int[] l = {0, 0};
-                v.getLocationInWindow(l);
-                int left = l[0],
-                        top = l[1],
-                        bottom = top + v.getHeight(),
-                        right = left + v.getWidth();
-                if (event.getX() > left && event.getX() < right
-                        && event.getY() > top && event.getY() < bottom) {
-                    // 点击EditText的事件，忽略它。
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-            // 如果焦点不是EditText则忽略，这个发生在视图刚绘制完，第一个焦点不在EditText上，和用户用轨迹球选择其他的焦点
-            return false;
+            mEditor.getLocationOnScreen(l);
+            confine = l[1] - CompatibleUtil.getStatusBarHeight(getActivity());
+            return touchY < confine;
         }
     }
 
@@ -221,6 +188,7 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
     public void hideEmojiKeyBoard() {
         mGridView.setVisibility(View.GONE);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mKeyBoardShowed = true;
     }
 
     /**
@@ -266,7 +234,7 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
         mKeyBoardShowed = true;
     }
 
-    public static void toggleSoftInput(View currentFocusView) {
+    public void toggleSoftInput(View currentFocusView) {
         InputMethodManager imm = (InputMethodManager) currentFocusView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(currentFocusView, InputMethodManager.RESULT_SHOWN);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
