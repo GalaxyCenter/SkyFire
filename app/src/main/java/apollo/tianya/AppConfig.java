@@ -32,6 +32,12 @@ public class AppConfig {
         setProps(props);
     }
 
+    public void set(Properties ps) {
+        Properties props = get();
+        props.putAll(ps);
+        setProps(props);
+    }
+
     private void setProps(Properties p) {
         FileOutputStream fos = null;
         try {

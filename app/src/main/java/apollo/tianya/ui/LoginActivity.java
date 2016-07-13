@@ -3,6 +3,7 @@ package apollo.tianya.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
@@ -33,8 +34,11 @@ import java.util.regex.Pattern;
 import apollo.tianya.AppConfig;
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
+import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.api.ApiHttpClient;
+import apollo.tianya.bean.Constants;
+import apollo.tianya.bean.User;
 import apollo.tianya.util.TLog;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.CookieStore;
@@ -46,8 +50,11 @@ import cz.msebera.android.httpclient.protocol.HttpContext;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE_INIT = 0;
 
-    private static String TAG = "LoginActivity";
+    private static final String TAG = "LoginActivity";
+    private static final String BUNDLE_KEY_REQUEST_CODE = "BUNDLE_KEY_REQUEST_CODE";
+    private final int requestCode = REQUEST_CODE_INIT;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -81,6 +88,13 @@ public class LoginActivity extends AppCompatActivity {
                         cookies_str);
                 ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
                         .getInstance()));
+
+                // 保存登录信息
+                User loginUser = new User();
+                loginUser.setId(TianyaParser.parseCookieUserId(cookies_str));
+                loginUser.setName(mEmailView.getText().toString());
+                AppContext.getInstance().saveUserInfo(loginUser);
+                handleLoginSuccess();
             }
         }
 
@@ -300,5 +314,12 @@ public class LoginActivity extends AppCompatActivity {
         TianyaApi.getCaptcha(mCaptchaHandle);
     }
 
+    private void handleLoginSuccess() {
+        Intent data = new Intent();
+        data.putExtra(BUNDLE_KEY_REQUEST_CODE, requestCode);
+        setResult(RESULT_OK, data);
+        this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
+        finish();
+    }
 }
 

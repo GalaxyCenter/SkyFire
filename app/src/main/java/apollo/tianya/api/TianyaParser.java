@@ -18,8 +18,10 @@ import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Entity;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.util.CookieUtil;
 import apollo.tianya.util.DateTime;
 import apollo.tianya.util.Transforms;
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 /**
  * Created by Texel on 2016/6/3.
@@ -316,5 +318,17 @@ public class TianyaParser {
             src = elm.attr("src");
 
         return src;
+    }
+
+    /**
+     * 解析Cookie中用户id
+     * @param cookies
+     * @return
+     */
+    public static int parseCookieUserId(String cookies) {
+        Cookie[] _cookies = CookieUtil.parse(cookies);
+        String userId = CookieUtil.getCookieValue(_cookies, "user", "id");
+
+        return userId.equals("") ? 0 : Integer.parseInt(userId);
     }
 }

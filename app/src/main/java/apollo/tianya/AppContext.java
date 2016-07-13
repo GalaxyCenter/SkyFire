@@ -3,6 +3,8 @@ package apollo.tianya;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
 
+import java.util.Properties;
+
 import apollo.tianya.api.ApiHttpClient;
 import apollo.tianya.base.BaseApplication;
 import apollo.tianya.bean.User;
@@ -49,6 +51,10 @@ public class AppContext extends BaseApplication {
         AppConfig.getAppConfig(this).set(key, value);
     }
 
+    public void setProperties(Properties ps) {
+        AppConfig.getAppConfig(this).set(ps);
+    }
+
     public void removeProperty(String... key) {
         AppConfig.getAppConfig(this).remove(key);
     }
@@ -82,11 +88,21 @@ public class AppContext extends BaseApplication {
         return user;
     }
 
+    public void saveUserInfo(final User user) {
+        mLogin = true;
+        setProperties(new Properties() {
+            {
+                setProperty("user.uid", String.valueOf(user.getId()));
+                setProperty("user.name", user.getName());
+            }
+        });
+    }
+
     /**
      * 清除登录信息
      */
     public void cleanLoginInfo() {
-        this.mLogin = false;
+        mLogin = false;
         removeProperty("user.uid", "user.name", "user.face", "user.location",
                 "user.followers", "user.fans", "user.score",
                 "user.isRememberMe", "user.gender", "user.favoritecount");
