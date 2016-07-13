@@ -26,4 +26,18 @@ public class StringUtil {
         return new_str;
     }
 
+    /**
+     * 字符串转整数
+     *
+     * @param str
+     * @param defValue
+     * @return
+     */
+    public static int toInt(String str, int defValue) {
+        try {
+            return Integer.parseInt(str);
+        } catch (Exception e) {
+        }
+        return defValue;
+    }
 }

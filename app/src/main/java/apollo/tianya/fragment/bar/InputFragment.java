@@ -43,6 +43,10 @@ import butterknife.OnTextChanged;
  */
 public class InputFragment extends BarBaseFragment implements View.OnClickListener {
 
+    public static interface OnSendListener {
+        void onSend();
+    }
+
     class CloseKeyboardOnOutsideContainer extends FrameLayout {
         /**
          * @param context context
@@ -116,7 +120,7 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
     TextView mSender;
 
     private EmotionAdapter mEmoAdapter;
-
+    private OnSendListener mSendListener;
 
     private boolean mKeyBoardShowed = false;
     private int mKeyBoardHeight = 0;
@@ -203,6 +207,14 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
                 }
             }
         });
+        mSender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mSendListener != null) {
+                    mSendListener.onSend();
+                }
+            }
+        });
 
         mOption.setVisibility(View.VISIBLE);
         mSender.setVisibility(View.GONE);
@@ -229,6 +241,10 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
 
     public boolean isEmojiPanelShowing() {
         return mGridView.getVisibility() == View.VISIBLE;
+    }
+
+    public void setOnSendListener(OnSendListener l) {
+        mSendListener = l;
     }
 
     /**

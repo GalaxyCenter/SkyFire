@@ -17,11 +17,13 @@ import apollo.tianya.fragment.bar.BarBaseFragment.OnActionClickListener;
  * 帖子详情Activity
  * Created by Texel on 2016/6/20.
  */
-public class DetailActivity extends BaseActivity implements OnActionClickListener {
+public class DetailActivity extends BaseActivity implements
+        OnActionClickListener, InputFragment.OnSendListener {
 
     private ToolbarFragment mToolFragment = new ToolbarFragment();
     private InputFragment mInputFragment = new InputFragment();
     private BarBaseFragment mNewFragment = null;
+    private InputFragment.OnSendListener mSendListener = null;
 
     @Override
     protected void init(Bundle savedInstanceState) {
@@ -32,6 +34,9 @@ public class DetailActivity extends BaseActivity implements OnActionClickListene
         trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.container, fragment);
         trans.commitAllowingStateLoss();
+
+        if (fragment instanceof InputFragment.OnSendListener)
+            mSendListener = (InputFragment.OnSendListener) fragment;
     }
 
     @Override
@@ -45,6 +50,7 @@ public class DetailActivity extends BaseActivity implements OnActionClickListene
                 .replace(R.id.emoji_keyboard, mToolFragment).commit();
         mToolFragment.setOnActionClickListener(this);
         mInputFragment.setOnActionClickListener(this);
+        mInputFragment.setOnSendListener(this);
         mNewFragment = mInputFragment;
     }
 
@@ -63,5 +69,10 @@ public class DetailActivity extends BaseActivity implements OnActionClickListene
                 mNewFragment = mNewFragment == mInputFragment ? mToolFragment : mInputFragment;
                 break;
         }
+    }
+
+    @Override
+    public void onSend() {
+        mSendListener.onSend();
     }
 }

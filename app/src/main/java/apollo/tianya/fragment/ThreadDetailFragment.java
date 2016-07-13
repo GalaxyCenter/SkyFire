@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.adapter.PostAdapter;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
@@ -13,13 +14,14 @@ import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.fragment.bar.InputFragment;
 import apollo.tianya.util.UIHelper;
 
 /**
  * Created by Texel on 2016/6/20.
  */
 public class ThreadDetailFragment extends BaseListFragment<Post> implements
-        RecyclerBaseAdapter.DisplayFloorHandle<Post> {
+        RecyclerBaseAdapter.DisplayFloorHandle<Post>, InputFragment.OnSendListener {
 
     private String mSectionId;
     private String mThreadId;
@@ -60,9 +62,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     @Override
     public void onItemClick(View view, int postion) {
-
     }
-
 
     @Override
     public void setFloor(TextView view, Post post, int position) {
@@ -75,6 +75,14 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                     + getResources().getText(R.string.post_floor));
             view.setBackgroundResource(R.drawable.post_floor);
             view.setTextColor(getResources().getColor(R.color.post_floor));
+        }
+    }
+
+    @Override
+    public void onSend() {
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
         }
     }
 }

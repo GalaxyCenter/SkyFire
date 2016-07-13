@@ -82,4 +82,11 @@ public class AppConfig {
         }
         return props;
     }
+
+    public void remove(String... key) {
+        Properties props = get();
+        for (String k : key)
+            props.remove(k);
+        setProps(props);
+    }
 }
