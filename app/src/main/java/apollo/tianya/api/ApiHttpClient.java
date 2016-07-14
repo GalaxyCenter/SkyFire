@@ -93,7 +93,7 @@ public class ApiHttpClient {
 
     public static void setHttpClient(AsyncHttpClient c) {
         client = c;
-        client.setProxy("192.168.33.55", 8888);
+        //client.setProxy("192.168.33.55", 8888);
         client.addHeader("Accept-Language", Locale.getDefault().toString());
         client.addHeader("Connection", "keep-alive");
         client.getHttpClient().getParams()

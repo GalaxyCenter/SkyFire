@@ -2,7 +2,9 @@ package apollo.tianya.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.view.MenuItem;
 
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
@@ -47,6 +49,16 @@ public class DetailActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
+        Toolbar toolbar = null;
+        int actionBarTitle = 0;
+
+        actionBarTitle = R.string.actionbar_title_detail;
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(actionBarTitle);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.emoji_keyboard, mToolFragment).commit();
         mToolFragment.setOnActionClickListener(this);
@@ -75,5 +87,16 @@ public class DetailActivity extends BaseActivity implements
     @Override
     public void onSend(Editable editor) {
         mSendListener.onSend(editor);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            this.finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

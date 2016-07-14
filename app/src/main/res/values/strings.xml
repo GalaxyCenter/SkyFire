@@ -55,4 +55,6 @@
 
     <string name="post_reply_success">赞,回帖成功!+3分</string>
     <string name="post_content_tail">\r\n\r\n--来自最有情怀可以 #发表情# 的天涯客户端--</string>
+
+    <string name="actionbar_title_detail">帖子详情</string>
 </resources>
