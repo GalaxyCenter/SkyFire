@@ -6,6 +6,8 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -60,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private EditText mCaptchaView;
-    private ImageView mCaptchaImg;
 
     private View mRootLayout;
     private View mCaptchaLayout;
@@ -107,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
             body = new String(responseBody);
 
-            pattern = Pattern.compile("(?s)<i class=\"icon icon-error\"><\\/i>(.*?)<\\/div>");
+            pattern = Pattern.compile("(?s)\"msg\": \"(.*?)\"");
             matcher = pattern.matcher(body);
             if(matcher.find()) {
                 err_msg = matcher.group(1);
@@ -117,7 +118,10 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if ("验证码错误".equals(err_msg) || "请输入验证码".equals(err_msg)) {
-                mCaptchaView.setError(err_msg);
+                //mCaptchaView.setError(err_msg);
+                Snackbar.make(mCaptchaView, err_msg, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+
                 mCaptchaView.requestFocus();
                 showCaptcha();
             } else {
@@ -133,11 +137,15 @@ public class LoginActivity extends AppCompatActivity {
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             BitmapFactory.Options option = new BitmapFactory.Options();
             Bitmap bitmap = null;
+            Drawable drawable = null;
 
             bitmap = BitmapFactory.decodeByteArray(responseBody, 0,
                     responseBody.length, option);
-            mCaptchaImg.setImageBitmap(bitmap);
+            drawable = new BitmapDrawable(getResources(), bitmap);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             bitmap = null;
+
+            mCaptchaView.setCompoundDrawables(null, null, drawable, null);
 
             // 读取验证码中的cookie
             AsyncHttpClient client = ApiHttpClient.getHttpClient();
@@ -190,13 +198,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mCaptchaImg = (ImageView) findViewById(R.id.captcha_img);
-        mCaptchaImg.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCaptcha();
-            }
-        });
+//        mCaptchaImg = (ImageView) findViewById(R.id.captcha_img);
+//        mCaptchaImg.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showCaptcha();
+//            }
+//        });
         mCaptchaView = (EditText) findViewById(R.id.captcha);
 
         mRootLayout = findViewById(R.id.root_layout);
