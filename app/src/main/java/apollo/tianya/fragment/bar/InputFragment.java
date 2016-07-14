@@ -44,7 +44,7 @@ import butterknife.OnTextChanged;
 public class InputFragment extends BarBaseFragment implements View.OnClickListener {
 
     public static interface OnSendListener {
-        void onSend();
+        void onSend(Editable editor);
     }
 
     class CloseKeyboardOnOutsideContainer extends FrameLayout {
@@ -211,7 +211,7 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
             @Override
             public void onClick(View view) {
                 if (mSendListener != null) {
-                    mSendListener.onSend();
+                    mSendListener.onSend(mEditor.getText());
                 }
             }
         });

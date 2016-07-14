@@ -50,9 +50,9 @@
         </LinearLayout>
 
         <LinearLayout android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical">
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/btn_option"
@@ -60,15 +60,16 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
                 android:background="@null"
-                android:paddingLeft="@dimen/space_4"
-                android:paddingRight="@dimen/space_4"
-                android:src="@drawable/btn_input_option"/>
+                android:src="@drawable/btn_input_option"
+                android:visibility="visible"
+                />
 
             <TextView
                 android:id="@+id/btn_sender"
                 android:text="@string/input_sender"
                 android:paddingLeft="@dimen/space_4"
                 android:paddingRight="@dimen/space_4"
+                android:visibility="gone"
                 style="@style/input_sender" />
 
         </LinearLayout>

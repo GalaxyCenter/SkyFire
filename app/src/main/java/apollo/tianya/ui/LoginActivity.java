@@ -75,15 +75,19 @@ public class LoginActivity extends AppCompatActivity {
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             showProgress(false);
             // 读取cookie
-            AsyncHttpClient client = ApiHttpClient.getHttpClient();
-            HttpContext httpContext = client.getHttpContext();
-            CookieStore cookies = (CookieStore) httpContext.getAttribute(ClientContext.COOKIE_STORE);
-            if (cookies != null) {
+            if (headers != null) {
                 String cookies_str = "";
 
-                for (Cookie c : cookies.getCookies()) {
-                    cookies_str += (c.getName() + "=" + c.getValue()) + "; ";
+                for (Header header : headers) {
+                    String key = header.getName();
+                    String value = header.getValue();
+                    if (key.contains("Set-Cookie"))
+                        cookies_str += value + ";";
                 }
+                if (cookies_str.length() > 0) {
+                    cookies_str = cookies_str.substring(0, cookies_str.length() - 1);
+                }
+
                 TLog.log(TAG, "Cookies:" + cookies_str);
                 AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE,
                         cookies_str);

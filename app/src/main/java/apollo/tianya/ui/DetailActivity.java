@@ -2,6 +2,7 @@ package apollo.tianya.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
 
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
@@ -72,7 +73,7 @@ public class DetailActivity extends BaseActivity implements
     }
 
     @Override
-    public void onSend() {
-        mSendListener.onSend();
+    public void onSend(Editable editor) {
+        mSendListener.onSend(editor);
     }
 }

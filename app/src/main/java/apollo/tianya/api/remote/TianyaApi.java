@@ -1,13 +1,19 @@
 package apollo.tianya.api.remote;
 
 
+import android.text.TextUtils;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import apollo.tianya.AppConfig;
+import apollo.tianya.AppContext;
+import apollo.tianya.R;
 import apollo.tianya.api.ApiHttpClient;
+import apollo.tianya.util.DateTime;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -70,7 +76,7 @@ public class TianyaApi {
                 }
 
                 headers = new Header[1];
-                headers[0] = new ApiHttpClient.HttpHeader("Referer", "http://passport.tianya.cn/online/loginSuccess.jsp?fowardurl=http%3A%2F%2Fwww.tianya.cn%2F1749397&userthird=index&regOrlogin=%E7%99%BB%E5%BD%95%E4%B8%AD......=" + querys);
+                headers[0] = new ApiHttpClient.HttpHeader("Referer", "http://passport.tianya.cn/online/loginSuccess.jsp?fowardurl=http%3A%2F%2Fwww.tianya.cn%2F1749397&userthird=index&regOrlogin=%E7%99%BB%E5%BD%95%E4%B8%AD......&" + querys);
 
                 url = "http://passport.tianya.cn/online/domain.jsp?" + querys + "&domain=tianya.cn";
                 ApiHttpClient.get(url, headers, null, handler);
@@ -184,5 +190,53 @@ public class TianyaApi {
      */
     public static void getPosts(String post_url, AsyncHttpResponseHandler handler) {
         ApiHttpClient.get(post_url, handler);
+    }
+
+    public static void createPost(String sectionId, String threadId, String title, String content, AsyncHttpResponseHandler handler) {
+        String url = null;
+        String referer = null;
+        RequestParams params = new RequestParams();
+        Header[] headers = null;
+
+        if (TextUtils.isEmpty(threadId)) {
+            url = "http://bbs.tianya.cn/api?method=bbs.ice.compose";
+            referer = "http://bbs.tianya.cn/post-" + sectionId + "-" + threadId + "-1.shtml";
+        } else {
+            url = "http://bbs.tianya.cn/api?method=bbs.ice.reply";
+            referer = "http://bbs.tianya.cn/post-" + sectionId + "-" + threadId + "-1.shtml";
+        }
+        headers = new Header[11];
+        headers[0] = new ApiHttpClient.HttpHeader("Referer", referer);
+        headers[1] = new ApiHttpClient.HttpHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; rv:18.0) Gecko/20100101 Firefox/18.0");
+        headers[2] = new ApiHttpClient.HttpHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+        headers[3] = new ApiHttpClient.HttpHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
+        headers[4] = new ApiHttpClient.HttpHeader("Accept-Encoding", "gzip, deflate");
+        headers[5] = new ApiHttpClient.HttpHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        headers[6] = new ApiHttpClient.HttpHeader("X-Requested-With", "XMLHttpRequest");
+        headers[7] = new ApiHttpClient.HttpHeader("Connection", "keep-alive");
+        headers[8] = new ApiHttpClient.HttpHeader("Pragma", "no-cache");
+        headers[9] = new ApiHttpClient.HttpHeader("Cache-Control", "no-cache");
+        headers[10] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        content += AppContext.getInstance().getResources().getString(R.string.post_content_tail);
+        params.put("params.action", "");
+        params.put("params.appBlock", sectionId);
+        params.put("params.appId", "bbs");
+        params.put("params.artId", threadId);
+        params.put("params.bScore", "true");
+        params.put("params.bWeibo", "false");
+        params.put("params.content", content);
+        params.put("params.item", sectionId);
+        params.put("params.postId", threadId);
+        params.put("params.prePostTime", Long.toString(DateTime.now().getTime()));
+        params.put("params.preTitle", title);
+        params.put("params.preUrl", "");
+        params.put("params.preUserId", "");
+        params.put("params.preUserName", "");
+        params.put("params.sourceName", "iTianya");
+        params.put("params.title", title);
+        params.put("params.appId", "3");
+
+        ApiHttpClient.post(url, headers, params, handler);
     }
 }
