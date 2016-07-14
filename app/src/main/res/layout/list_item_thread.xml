@@ -24,7 +24,7 @@
 
                 <apollo.tianya.widget.AvatarView
                     android:id="@+id/userface"
-                    style="@style/user_face_image" />
+                    style="@style/thread_user_face_image" />
 
                 <TextView
                     android:layout_width="wrap_content"

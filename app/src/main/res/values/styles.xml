@@ -16,9 +16,17 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="user_face_image">
+    <style name="thread_user_face_image">
         <item name="android:layout_width">40.0dip</item>
         <item name="android:layout_height">40.0dip</item>
+        <item name="android:padding">1.0dip</item>
+        <item name="android:clickable">true</item>
+        <item name="android:src">@drawable/ic_account_circle_blue_37dp</item>
+    </style>
+
+    <style name="nav_header_user_face_image">
+        <item name="android:layout_width">80.0dip</item>
+        <item name="android:layout_height">80.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
         <item name="android:src">@drawable/ic_account_circle_blue_37dp</item>
