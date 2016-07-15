@@ -30,6 +30,9 @@
         <activity
             android:name=".ui.DetailActivity"
             android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".ui.SimpleBackActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

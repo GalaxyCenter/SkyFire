@@ -29,7 +29,7 @@
         <item name="android:layout_height">80.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
-        <item name="android:src">@drawable/ic_account_circle_blue_37dp</item>
+        <item name="android:src">@drawable/ic_account_circle_blue_80dp</item>
     </style>
 
     <style name="list_text_info" parent="@style/wrap_wrap">

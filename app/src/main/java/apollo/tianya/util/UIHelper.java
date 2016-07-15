@@ -7,6 +7,7 @@ import apollo.tianya.ui.LoginActivity;
 import apollo.tianya.ui.MainActivity;
 import apollo.tianya.ui.DetailActivity;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.ui.SimpleBackActivity;
 
 /**
  * 页面帮助类
@@ -47,6 +48,12 @@ public class UIHelper {
         intent.putExtra(BUNDLE_KEY_PAGE_INDEX, 1);
         intent.putExtra(BUNDLE_KEY_AUTHOR, thread.getAuthor());
 
+        context.startActivity(intent);
+    }
+
+    public static void showSimpleBack(Context context, SimpleBackActivity.SimpleBackPage page) {
+        Intent intent = new Intent(context, SimpleBackActivity.class);
+        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
         context.startActivity(intent);
     }
 }

@@ -21,6 +21,7 @@ public class AppContext extends BaseApplication {
     private static AppContext instance;
 
     private boolean mLogin;
+    private int mLoginUserId;
 
     @Override
     public void onCreate() {
@@ -76,9 +77,14 @@ public class AppContext extends BaseApplication {
         User user = getLoginUser();
         if (null != user && user.getId() > 0) {
             mLogin = true;
+            mLoginUserId = user.getId();
         } else {
             this.cleanLoginInfo();
         }
+    }
+
+    public int getLoginUserId() {
+        return mLoginUserId;
     }
 
     public User getLoginUser() {

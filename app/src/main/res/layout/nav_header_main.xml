@@ -17,6 +17,7 @@
 
     <TextView
         android:id="@+id/username"
+        android:text="@string/nav_unlogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"

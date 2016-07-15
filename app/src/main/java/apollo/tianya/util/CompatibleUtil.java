@@ -3,10 +3,13 @@ package apollo.tianya.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+
+import apollo.tianya.base.BaseApplication;
 
 /**
  * Created by Texel on 2016/7/7.
@@ -61,4 +64,13 @@ public class CompatibleUtil {
         }
     }
 
+    public static boolean hasInternet() {
+        boolean flag;
+        if (((ConnectivityManager) BaseApplication.context().getSystemService(
+                "connectivity")).getActiveNetworkInfo() != null)
+            flag = true;
+        else
+            flag = false;
+        return flag;
+    }
 }
