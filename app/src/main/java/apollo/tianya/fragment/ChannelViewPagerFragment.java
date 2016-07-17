@@ -6,6 +6,7 @@ import apollo.tianya.R;
 import apollo.tianya.adapter.ViewPageFragmentAdapter;
 import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.base.BaseViewPagerFragment;
+import apollo.tianya.bean.Constants;
 
 /**
  * Created by Texel on 2016/6/1.
@@ -25,7 +26,7 @@ public class ChannelViewPagerFragment extends BaseViewPagerFragment {
 
     private Bundle getBundle(String type) {
         Bundle bundle = new Bundle();
-        bundle.putString(BaseListFragment.BUNDLE_KEY_CATALOG, type);
+        bundle.putString(Constants.BUNDLE_KEY_ARGS, type);
         return bundle;
     }
 }

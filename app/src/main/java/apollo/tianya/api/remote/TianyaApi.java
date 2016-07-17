@@ -170,6 +170,23 @@ public class TianyaApi {
 
         ApiHttpClient.get(url, handler);
     }
+
+    /**
+     * 获取收藏
+     * @param pageIndex
+     * @param handler
+     */
+    public static void getBookMarks(int pageIndex, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/my_collect.jsp?pageNo=" + pageIndex;
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+
     /**
      * 获取一个主题的所有帖子
      * @param sectionId 板块Id

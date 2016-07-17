@@ -13,6 +13,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
+import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Entity;
 import butterknife.BindView;
@@ -79,7 +80,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     };
 
-    public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
     private String TAG = this.getClass().getName();
 
     @BindView(R.id.listview)
@@ -93,7 +93,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
     private ParserTask mParserTask = null;
-
 
     protected abstract RecyclerBaseAdapter<T, RecyclerView.ViewHolder> getListAdapter();
 
@@ -115,13 +114,12 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
         Bundle args = this.getArguments();
         if (args != null) {
-            mCatalog = args.getString(BUNDLE_KEY_CATALOG);
+            mCatalog = args.getString(Constants.BUNDLE_KEY_ARGS);
         }
     }
 
     @Override
     public void initView(View view) {
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         if (mAdapter == null) {

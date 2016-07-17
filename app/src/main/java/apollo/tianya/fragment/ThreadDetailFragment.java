@@ -18,6 +18,7 @@ import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseListFragment;
+import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
@@ -72,10 +73,10 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     @Override
     public void initView(View view) {
-        mSectionId = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_SECTION_ID);
-        mThreadId = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_THREAD_ID);
-        mAuthor = getActivity().getIntent().getStringExtra(UIHelper.BUNDLE_KEY_AUTHOR);
-        mPageIndex = getActivity().getIntent().getIntExtra(UIHelper.BUNDLE_KEY_PAGE_INDEX, 1);
+        mSectionId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_SECTION_ID);
+        mThreadId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_THREAD_ID);
+        mAuthor = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_AUTHOR);
+        mPageIndex = getActivity().getIntent().getIntExtra(Constants.BUNDLE_KEY_PAGE_INDEX, 1);
 
         super.initView(view);
 

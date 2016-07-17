@@ -2,7 +2,11 @@ package apollo.tianya.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 
+import apollo.tianya.adapter.ViewPageInfo;
+import apollo.tianya.bean.Constants;
 import apollo.tianya.ui.LoginActivity;
 import apollo.tianya.ui.MainActivity;
 import apollo.tianya.ui.DetailActivity;
@@ -15,11 +19,6 @@ import apollo.tianya.ui.SimpleBackActivity;
  * Created by Texel on 2016/5/26.
  */
 public class UIHelper {
-
-    public static final String BUNDLE_KEY_SECTION_ID = "section_id";
-    public static final String BUNDLE_KEY_THREAD_ID = "thread_id";
-    public static final String BUNDLE_KEY_PAGE_INDEX = "page_index";
-    public static final String BUNDLE_KEY_AUTHOR = "author";
 
     /**
      * 显示登录界面
@@ -43,17 +42,24 @@ public class UIHelper {
     public static void showPostDetail(Context context, Thread thread) {
         Intent intent = new Intent(context, DetailActivity.class);
 
-        intent.putExtra(BUNDLE_KEY_SECTION_ID, thread.getSectionId());
-        intent.putExtra(BUNDLE_KEY_THREAD_ID, thread.getGuid());
-        intent.putExtra(BUNDLE_KEY_PAGE_INDEX, 1);
-        intent.putExtra(BUNDLE_KEY_AUTHOR, thread.getAuthor());
+        intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, thread.getSectionId());
+        intent.putExtra(Constants.BUNDLE_KEY_THREAD_ID, thread.getGuid());
+        intent.putExtra(Constants.BUNDLE_KEY_PAGE_INDEX, 1);
+        intent.putExtra(Constants.BUNDLE_KEY_AUTHOR, thread.getAuthor());
 
         context.startActivity(intent);
     }
 
-    public static void showSimpleBack(Context context, SimpleBackActivity.SimpleBackPage page) {
+    public static void showSimpleBack(Context context, ViewPageInfo page) {
         Intent intent = new Intent(context, SimpleBackActivity.class);
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+        intent.putExtra(Constants.BUNDLE_KEY_PAGEINFO, (Parcelable)page);
+        context.startActivity(intent);
+    }
+
+    public static void showSimpleBack(Context context, ViewPageInfo page, Bundle args) {
+        Intent intent = new Intent(context, SimpleBackActivity.class);
+        intent.putExtra(Constants.BUNDLE_KEY_PAGEINFO, (Parcelable)page);
+        intent.putExtra(Constants.BUNDLE_KEY_ARGS, args);
         context.startActivity(intent);
     }
 }

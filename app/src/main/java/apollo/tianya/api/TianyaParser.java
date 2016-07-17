@@ -155,6 +155,45 @@ public class TianyaParser {
         return datas;
     }
 
+    public static DataSet<Thread> parseBookmarks(String source) {
+        DataSet<Thread> datas = null;
+        List<Thread> list = null;
+        Thread thread = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+        Matcher sub_matcher = null;
+        String item = null;
+        String match_content = null;
+
+        list = new ArrayList<>();
+        // 解析回帖信息
+        pattern = Pattern.compile("(?s)<tbody>(.*?)</tbody>");
+        matcher = pattern.matcher(source);
+        while (matcher.find()) {
+            item = matcher.group(1);
+            thread = new Thread();
+            list.add(thread);
+
+            // 解析URL
+            pattern = Pattern.compile("(?s)<a href=\"(.*?)\"[^>]*>");
+            sub_matcher = pattern.matcher(item);
+            if (sub_matcher.find()) {
+                match_content = sub_matcher.group(1);
+                thread.setUrl(match_content);
+            }
+
+            // 解析标题
+            pattern = Pattern.compile("<p class=\"title\">(.*?)</p>");
+            sub_matcher = pattern.matcher(item);
+            if (sub_matcher.find()) {
+                match_content = sub_matcher.group(1);
+                match_content = Transforms.stripHtmlXmlTags(match_content);
+                thread.setTitle(match_content);
+            }
+        }
+        return datas;
+    }
+
     /**
      * 解析一个主题的所有帖子 (http://bbs.tianya.cn/m/post-no04-2668855-1.shtml)
      * @param source
