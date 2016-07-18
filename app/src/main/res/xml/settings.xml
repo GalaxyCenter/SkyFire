@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/prefs_settings" android:key="browsing_category" android:layout="@layout/prefs_category_widget">
+        <ListPreference android:persistent="false" android:title="@string/prefs_font_size" android:key="font_size" android:order="1" android:entries="@array/font_size_entries" android:layout="@layout/perfs_item"  android:entryValues="@array/font_size_values" />
+        <CheckBoxPreference android:persistent="false" android:title="@string/prefs_show_image" android:key="show_image" android:order="2" android:layout="@layout/perfs_item"   />
+        <CheckBoxPreference android:persistent="false" android:title="@string/prefs_show_head_img" android:key="show_head_img" android:order="3" android:layout="@layout/perfs_item"  />
+    </PreferenceCategory>
+
+</PreferenceScreen>

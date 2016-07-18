@@ -3,9 +3,7 @@ package apollo.tianya.base;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import apollo.tianya.R;
 import apollo.tianya.adapter.ViewPageFragmentAdapter;

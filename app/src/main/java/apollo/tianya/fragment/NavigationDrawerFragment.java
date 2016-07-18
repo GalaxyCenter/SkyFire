@@ -85,8 +85,10 @@ public class NavigationDrawerFragment extends BaseFragment
             bundle.putInt(Constants.BUNDLE_KEY_USER_ID, userId);
 
             UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, UserPostViewPagerFragment.class, bundle));
+        } else if (id == R.id.nav_my_settings) {
+            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, SettingsFragment.class, null));
         } else if (id == R.id.nav_activities) {
-            UIHelper.showLoginActivity(getActivity());
+
         }
 
         DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);

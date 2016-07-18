@@ -29,4 +29,16 @@
         <item>@string/channel_user_threads</item>
         <item>@string/channel_user_posts</item>
     </string-array>
+
+    <array name="font_size_entries">
+        <item>@string/prefs_font_size_small</item>
+        <item>@string/prefs_font_size_mid</item>
+        <item>@string/prefs_font_size_big</item>
+    </array>
+
+    <string-array name="font_size_values">
+        <item>14</item>
+        <item>24</item>
+        <item>34</item>
+    </string-array>
 </resources>
