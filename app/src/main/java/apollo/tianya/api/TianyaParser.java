@@ -242,6 +242,55 @@ public class TianyaParser {
         return dsetex;
     }
 
+
+    public static DataSet<Thread> parseHistory(String source) {
+        DataSet<Thread> datas = null;
+        List<Thread> list = null;
+        Thread thread = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+        Matcher sub_matcher = null;
+        String item = null;
+        String match_content = null;
+
+        datas = new DataSet<Thread>();
+        list = new ArrayList<Thread>();
+
+        datas.setObjects(list);
+        // 解析回帖信息
+        pattern = Pattern.compile("(?s)<tr.*?>(.*?)</tr>");
+        matcher = pattern.matcher(source);
+        while (matcher.find()) {
+            item = matcher.group(1);
+            thread = new Thread();
+            list.add(thread);
+
+            // 栏目信息
+            pattern = Pattern.compile("<a href=\"/post-(.*?)-(.*?)-1.shtml\".*?title=\"(.*?)\">");
+            sub_matcher = pattern.matcher(item);
+            if (sub_matcher.find()) {
+                match_content = sub_matcher.group(1);
+                thread.setSectionId(match_content);
+
+                match_content = sub_matcher.group(2);
+                thread.setId(Integer.parseInt(match_content));
+
+                match_content = sub_matcher.group(3);
+                thread.setTitle(match_content);
+            }
+
+            pattern = Pattern.compile("<a href=\"http://www.tianya.cn/n/(.*?)\"");
+            sub_matcher = pattern.matcher(item);
+            if (sub_matcher.find()) {
+                match_content = sub_matcher.group(1);
+                thread.setAuthor(match_content);
+            }
+        }
+        list.remove(0);
+        datas.setTotalRecords(list.size());
+        return datas;
+    }
+
     /**
      * 解析一个主题的所有帖子 (http://bbs.tianya.cn/m/post-no04-2668855-1.shtml)
      * @param source

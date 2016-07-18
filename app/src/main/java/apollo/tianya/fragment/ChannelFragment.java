@@ -34,6 +34,8 @@ public class ChannelFragment extends BaseListFragment<Thread> {
             dataset = TianyaParser.parseHotThread(body);
         else if (mCatalog.equals(getString(R.string.nav_my_bookmarks)))
             dataset = TianyaParser.parseBookmarks(body);
+        else if (mCatalog.equals(getString(R.string.nav_my_histories)))
+            dataset = TianyaParser.parseHistory(body);
         else
             dataset = TianyaParser.parseRecommendThread(body);
 
@@ -79,6 +81,8 @@ public class ChannelFragment extends BaseListFragment<Thread> {
 
         else if (mCatalog.equals(getString(R.string.nav_my_bookmarks)))
             TianyaApi.getBookMarks(mPageIndex, mHandler);
+        else if (mCatalog.equals(getString(R.string.nav_my_histories)))
+            TianyaApi.getUserHistory(mHandler);
     }
 
 

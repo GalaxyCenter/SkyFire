@@ -75,7 +75,8 @@ public class NavigationDrawerFragment extends BaseFragment
             UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFragment.class, getBundle(tag)));
         } else if (id == R.id.nav_my_histories) {
             tag = getResources().getString(R.string.actionbar_title_histories);
-            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFragment.class, getBundle(tag)));
+
+            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, HistoryFragment.class, getBundle(tag)));
         } else if (id == R.id.nav_my_posts) {
             int userId = AppContext.getInstance().getLoginUserId();
             Bundle bundle = getBundle(tag);
