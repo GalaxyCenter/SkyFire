@@ -2,13 +2,12 @@ package apollo.tianya.fragment;
 
 
 import android.view.View;
-import android.widget.AdapterView;
 
 import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.adapter.ThreadAdapter;
-import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.api.TianyaParser;
+import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Thread;

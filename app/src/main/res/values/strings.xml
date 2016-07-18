@@ -46,6 +46,8 @@
     <string name="channel_meitu">美图</string>
     <string name="channel_chengshi">城市</string>
 
+    <string name="channel_user_threads">我的发表</string>
+    <string name="channel_user_posts">我的回复</string>
     <!-- ThreadDetail -->
     <string name="post_floor_owner">楼主</string>
     <string name="post_floor">楼</string>

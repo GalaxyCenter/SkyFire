@@ -72,13 +72,18 @@ public class NavigationDrawerFragment extends BaseFragment
         if (id == R.id.nav_my_bookmarks) {
             tag = getResources().getString(R.string.actionbar_title_bookmarks);
 
-            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFrament.class, null), getBundle(tag));
+            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFragment.class, getBundle(tag)));
         } else if (id == R.id.nav_my_histories) {
             tag = getResources().getString(R.string.actionbar_title_histories);
-            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFrament.class, null), getBundle(tag));
+            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFragment.class, getBundle(tag)));
         } else if (id == R.id.nav_my_posts) {
+            int userId = AppContext.getInstance().getLoginUserId();
+            Bundle bundle = getBundle(tag);
+
             tag = getResources().getString(R.string.actionbar_title_posts);
-            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, BookMarksFrament.class, null), getBundle(tag));
+            bundle.putInt(Constants.BUNDLE_KEY_USER_ID, userId);
+
+            UIHelper.showSimpleBack(getActivity(), new ViewPageInfo(tag, tag, UserPostViewPagerFragment.class, bundle));
         } else if (id == R.id.nav_activities) {
             UIHelper.showLoginActivity(getActivity());
         }
@@ -86,6 +91,12 @@ public class NavigationDrawerFragment extends BaseFragment
         DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private Bundle getBundle(int val) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.BUNDLE_KEY_ARGS, val);
+        return bundle;
     }
 
     private Bundle getBundle(String type) {

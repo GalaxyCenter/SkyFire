@@ -24,4 +24,9 @@
         <item>帖子</item>
         <item>板块</item>
     </string-array>
+
+    <string-array name="user_posts_viewpage_arrays">
+        <item>@string/channel_user_threads</item>
+        <item>@string/channel_user_posts</item>
+    </string-array>
 </resources>

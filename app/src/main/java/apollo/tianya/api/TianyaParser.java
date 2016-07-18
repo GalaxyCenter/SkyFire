@@ -22,6 +22,7 @@ import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Entity;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.fragment.UserPostsFragment;
 import apollo.tianya.util.CookieUtil;
 import apollo.tianya.util.DateTime;
 import apollo.tianya.util.Transforms;
@@ -160,6 +161,11 @@ public class TianyaParser {
         return datas;
     }
 
+    /**
+     * 解析用户收藏
+     * @param source
+     * @return
+     */
     public static DataSet<Thread> parseBookmarks(String source) {
         DataSet<Thread> datas = null;
         List<Thread> list = null;
@@ -194,6 +200,46 @@ public class TianyaParser {
             Log.e(TAG, e.getMessage());
         }
         return datas;
+    }
+
+    public static UserPostsFragment.DataSetEx parseUserPosts(String source) {
+        UserPostsFragment.DataSetEx dsetex= null;
+        DataSet<Thread> datas = null;
+        List<Thread> list = null;
+        Thread thread = null;
+        JSONObject json = null;
+        JSONArray jarr = null;
+
+        list = new ArrayList<Thread>();
+        datas = new DataSet<Thread>();
+        datas.setObjects(list);
+        datas.setTotalRecords(Integer.MAX_VALUE);
+        dsetex = new UserPostsFragment.DataSetEx();
+
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+
+            dsetex.pubNextId = Integer.parseInt(json.getString("public_next_id"));
+            dsetex.techNextId = Integer.parseInt(json.getString("tech_next_id"));
+            dsetex.cityNextId = Integer.parseInt(json.getString("city_next_id"));
+
+            jarr = json.getJSONArray("rows");
+            for(int i=0; i<jarr.length(); i++) {
+                json = jarr.getJSONObject(i);
+                thread = new Thread();
+
+                thread.setTitle(json.getString("title"));
+                thread.setSectionId(json.getString("item"));
+                thread.setId(Integer.parseInt(json.getString("art_id")));
+
+                list.add(thread);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        dsetex.dataset = datas;
+        return dsetex;
     }
 
     /**

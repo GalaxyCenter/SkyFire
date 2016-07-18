@@ -55,11 +55,4 @@ public class UIHelper {
         intent.putExtra(Constants.BUNDLE_KEY_PAGEINFO, (Parcelable)page);
         context.startActivity(intent);
     }
-
-    public static void showSimpleBack(Context context, ViewPageInfo page, Bundle args) {
-        Intent intent = new Intent(context, SimpleBackActivity.class);
-        intent.putExtra(Constants.BUNDLE_KEY_PAGEINFO, (Parcelable)page);
-        intent.putExtra(Constants.BUNDLE_KEY_ARGS, args);
-        context.startActivity(intent);
-    }
 }

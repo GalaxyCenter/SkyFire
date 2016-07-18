@@ -186,6 +186,40 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    /**
+     * 获取用户发表的帖子
+     * @param userId
+     * @param publicNextId
+     * @param techNextId
+     * @param cityNextId
+     * @param handler
+     */
+    public static void getUserThreads(int userId, int publicNextId, int techNextId, int cityNextId, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/tw?method=userinfo.ice.getUserTotalArticleList&params.userId="
+                + userId + "&params.pageSize=20&params.bMore=true&params.publicNextId="
+                + publicNextId + "&params.techNextId="
+                + techNextId + "&params.cityNextId="
+                + cityNextId;
+
+        ApiHttpClient.get(url, handler);
+    }
+
+    /**
+     * 获取用户回复的帖子
+     * @param userId
+     * @param publicNextId
+     * @param techNextId
+     * @param cityNextId
+     * @param handler
+     */
+    public static void getUserPosts(int userId, int publicNextId, int techNextId, int cityNextId, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/tw?method=userinfo.ice.getUserTotalReplyList&params.userId="
+                + userId + "&params.pageSize=20&params.bMore=true&params.publicNextId="
+                + publicNextId + "&params.techNextId="
+                + techNextId + "&params.cityNextId="
+                + cityNextId;
+        ApiHttpClient.get(url, handler);
+    }
 
     /**
      * 获取一个主题的所有帖子

@@ -12,9 +12,7 @@ import java.lang.ref.WeakReference;
 import apollo.tianya.R;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.base.BaseActivity;
-import apollo.tianya.base.BaseFragment;
 import apollo.tianya.bean.Constants;
-import apollo.tianya.fragment.BookMarksFrament;
 
 /**
  * Created by Texel on 2016/7/15.
@@ -72,7 +70,7 @@ public class SimpleBackActivity extends BaseActivity {
         try {
             Fragment fragment = (Fragment) mPageInfo.refer.newInstance();
 
-            Bundle args = intent.getBundleExtra(Constants.BUNDLE_KEY_ARGS);
+            Bundle args = mPageInfo.args;
             if (args != null) {
                 fragment.setArguments(args);
             }
