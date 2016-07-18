@@ -1,5 +1,7 @@
 package apollo.tianya.bean;
 
+import android.text.TextUtils;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +13,6 @@ public class Post extends Entity {
     private String title;
     private String body;
     private String author;
-    private String url;
 
     private Date postDate;
 
@@ -59,14 +60,6 @@ public class Post extends Entity {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public int getAuthorId() {

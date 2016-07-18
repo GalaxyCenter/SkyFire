@@ -177,7 +177,7 @@ public class TianyaApi {
      * @param handler
      */
     public static void getBookMarks(int pageIndex, AsyncHttpResponseHandler handler) {
-        String url = "http://bbs.tianya.cn/my_collect.jsp?pageNo=" + pageIndex;
+        String url = "http://www.tianya.cn/api/tw?method=bbsArticleMark.select&params.pageSize=20&params.pageNo=" + pageIndex;
         Header[] headers = null;
 
         headers = new Header[1];

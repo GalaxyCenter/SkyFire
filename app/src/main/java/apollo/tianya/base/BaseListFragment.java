@@ -89,7 +89,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     protected String mCatalog = null;
-    protected int mPageIndex = 0;
+    protected int mPageIndex = 1;
 
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
     private ParserTask mParserTask = null;
@@ -174,7 +174,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             return;
 
         mState = STATE_REFRESH;
-        mPageIndex = 0;
+        mPageIndex = 1;
         requestData(true);
     }
 
