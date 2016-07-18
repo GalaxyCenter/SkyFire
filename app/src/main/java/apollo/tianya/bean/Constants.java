@@ -1,11 +1,25 @@
 package apollo.tianya.bean;
 
-import android.os.Bundle;
-
 /**
  * Created by Texel on 2016/7/13.
  */
 public class Constants {
+
+    public static class Settings {
+        public static final String BLANK_SUMMARY = " ";
+        public static String KEY_REMIND_MODE = "remind_mode";
+        public static String KEY_MANAGE_ACCOUNT = "account_manage";
+        public static String KEY_MANAGE_AUTOPOST = "autopost_manage";
+
+        public static String KEY_REMIND_ENABLE = "remind_enable";
+        public static String KEY_SOUND = "sound_enable";
+        public static String KEY_VIBRATE = "vibrate_enable";
+        public static String KEY_FONT_SIZE = "font_size";
+        public static String KEY_SHOW_IMG = "show_image";
+        public static String KEY_SHOW_HEAD_IMG = "show_head_img";
+        public static String KEY_CLEAR_CACHE = "clear_cache";
+    }
+
     public static final String INTENT_ACTION_USER_CHANGE = "apollo.tianya.action.USER_CHANGE";
     public static final String INTENT_ACTION_LOGOUT = "apollo.tianya.action.LOGOUT";
     public static final String INTENT_ACTION_NOTICE = "apollo.tianya.action.APPWIDGET_UPDATE";

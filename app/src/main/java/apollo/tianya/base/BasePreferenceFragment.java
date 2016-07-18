@@ -1,7 +1,6 @@
 package apollo.tianya.base;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 
@@ -13,7 +12,9 @@ public abstract class BasePreferenceFragment extends PreferenceFragment {
 
     protected abstract int getLayoutId();
 
-    public void initView(View view) {}
+    protected abstract void initPreference();
+
+    protected abstract void initEntryValues();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
