@@ -1,10 +1,18 @@
 package apollo.tianya.fragment;
 
 import android.content.res.Resources;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.base.BasePreferenceFragment;
 import apollo.tianya.bean.Constants;
@@ -19,6 +27,10 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     private static final int mFontSizeValueSize = 3;
 
     private ListPreference mFontSize = null;
+    private CheckBoxPreference mShowImgEnable = null;
+    private CheckBoxPreference mShowHeadEnable = null;
+
+    private boolean mConfigChanged;
 
     @Override
     protected int getLayoutId() {
@@ -28,16 +40,27 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     @Override
     protected void initPreference() {
         mFontSize = (ListPreference) findPreference(Constants.Settings.KEY_FONT_SIZE);
+        mShowImgEnable = (CheckBoxPreference) findPreference(Constants.Settings.KEY_SHOW_IMG);
+        mShowHeadEnable = (CheckBoxPreference) findPreference(Constants.Settings.KEY_SHOW_HEAD_IMG);
 
         mFontSize.setOnPreferenceChangeListener(this);
+        mShowImgEnable.setOnPreferenceChangeListener(this);
+        mShowHeadEnable.setOnPreferenceChangeListener(this);
     }
 
     @Override
     protected void initEntryValues() {
         Resources res = getResources();
+        int fontSize = AppContext.getFontSize();
+        boolean showImage = AppContext.isShowImage();
+        boolean showHeadImage = AppContext.isShowHeadImage();
 
         mFontSizeEntries = res.getStringArray(R.array.font_size_entries);
         mFontSizeValues = res.getStringArray(R.array.font_size_values);
+
+        setPreference(mFontSize, fontSize, mFontSizeEntries, mFontSizeValues, mFontSizeValueSize);
+        mShowImgEnable.setChecked(showImage);
+        mShowHeadEnable.setChecked(showHeadImage);
     }
 
     @Override
@@ -49,9 +72,17 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mFontSize) {
-            mConfig.fontSize = Integer.parseInt((String) newValue);
-            setPreference(mFontSize, mConfig.fontSize, mFontSizeEntries, mFontSizeValues, mFontSizeValueSize);
+            int fontSize = Integer.parseInt((String) newValue);
+
+            AppContext.setFontSize(fontSize);
+            setPreference(mFontSize, fontSize, mFontSizeEntries, mFontSizeValues, mFontSizeValueSize);
+        } else if (preference == mShowImgEnable) {
+            AppContext.setShowImage((Boolean) newValue);
+        } else if (preference == mShowHeadEnable) {
+            AppContext.setShowHeadImage((Boolean) newValue);
         }
+
+        mConfigChanged = true;
         return true;
     }
 }

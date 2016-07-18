@@ -1,5 +1,10 @@
 package apollo.tianya;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
 
@@ -7,6 +12,7 @@ import java.util.Properties;
 
 import apollo.tianya.api.ApiHttpClient;
 import apollo.tianya.base.BaseApplication;
+import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.User;
 import apollo.tianya.util.StringUtil;
 
@@ -16,12 +22,20 @@ import apollo.tianya.util.StringUtil;
  * Created by Texel on 2016/5/30.
  */
 public class AppContext extends BaseApplication {
+    private static String PREF_NAME = "creativelocker.pref";
 
     public static final int PAGE_SIZE = 20;// 默认分页大小
     private static AppContext instance;
 
     private boolean mLogin;
     private int mLoginUserId;
+    private static boolean sIsAtLeastGB;
+
+    static {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            sIsAtLeastGB = true;
+        }
+    }
 
     @Override
     public void onCreate() {
@@ -112,5 +126,80 @@ public class AppContext extends BaseApplication {
         removeProperty("user.uid", "user.name", "user.face", "user.location",
                 "user.followers", "user.fans", "user.score",
                 "user.isRememberMe", "user.gender", "user.favoritecount");
+    }
+
+    /************ Settings *************/
+    public static void setFontSize(int size) {
+        set(Constants.Settings.KEY_FONT_SIZE, size);
+    }
+
+    public static int getFontSize() {
+        return getInt(Constants.Settings.KEY_FONT_SIZE, AppConfig.FONT_SIZE);
+    }
+
+    public static void setShowImage(boolean v) {
+        set(Constants.Settings.KEY_SHOW_IMG, v);
+    }
+
+    public static boolean isShowImage() {
+        return getBool(Constants.Settings.KEY_SHOW_IMG, true);
+    }
+
+    public static void setShowHeadImage(boolean v) {
+        set(Constants.Settings.KEY_SHOW_HEAD_IMG, v);
+    }
+
+    public static boolean isShowHeadImage() {
+        return getBool(Constants.Settings.KEY_SHOW_HEAD_IMG, true);
+    }
+
+    public static void set(String key, int value) {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putInt(key, value);
+        apply(editor);
+    }
+
+    public static void set(String key, boolean value) {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putBoolean(key, value);
+        apply(editor);
+    }
+
+    public static void set(String key, String value) {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putString(key, value);
+        apply(editor);
+    }
+
+    public static int getInt(String key) {
+        return getInt(key, -1);
+    }
+
+    public static int getInt(String key, int defVal) {
+        return getPreferences().getInt(key, defVal);
+    }
+
+    public static boolean getBool(String key) {
+        return getBool(key, false);
+    }
+
+    public static boolean getBool(String key, boolean defVal) {
+        return getPreferences().getBoolean(key, defVal);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static SharedPreferences getPreferences() {
+        SharedPreferences pre = context().getSharedPreferences(PREF_NAME,
+                Context.MODE_MULTI_PROCESS);
+        return pre;
+    }
+
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    public static void apply(SharedPreferences.Editor editor) {
+        if (sIsAtLeastGB) {
+            editor.apply();
+        } else {
+            editor.commit();
+        }
     }
 }

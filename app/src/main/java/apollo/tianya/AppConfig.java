@@ -12,6 +12,8 @@ import java.util.Properties;
  * Created by Texel on 2016/6/1.
  */
 public class AppConfig {
+    public final static int FONT_SIZE = 12;
+
     public final static String CONF_COOKIE = "cookie";
     private final static String APP_CONFIG = "config";
 
