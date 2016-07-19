@@ -33,6 +33,10 @@
         <activity
             android:name=".ui.SimpleBackActivity"
             android:windowSoftInputMode="adjustResize"/>
+
+        <service
+            android:name=".service.NoticeService" />
+
     </application>
 
 </manifest>

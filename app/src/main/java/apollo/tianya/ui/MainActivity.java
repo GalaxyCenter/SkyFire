@@ -1,5 +1,9 @@
 package apollo.tianya.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,9 +24,13 @@ import android.widget.TextView;
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
+import apollo.tianya.bean.Constants;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.fragment.CollectionViewPagerFragment;
 import apollo.tianya.fragment.NavigationDrawerFragment;
+import apollo.tianya.service.NoticeService;
+import apollo.tianya.service.NoticeUtils;
+import apollo.tianya.util.TLog;
 import apollo.tianya.util.UIHelper;
 
 public class MainActivity extends BaseActivity {
@@ -46,6 +54,18 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
+                TLog.log(TAG, "BroadcastReceiver:INTENT_ACTION_NOTICE");
+            } else if (intent.getAction().equals(Constants.INTENT_ACTION_LOGOUT)) {
+                TLog.log(TAG, "BroadcastReceiver:INTENT_ACTION_LOGOUT");
+            }
+        }
+    };
+
     private static final String TAG = "MainActivity";
 
     public FragmentTabHost mTabHost;
@@ -59,29 +79,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
+        filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+        registerReceiver(mReceiver, filter);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
-        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.navigation_drawer);
+        NoticeUtils.bindToService(this);
     }
 
     @Override
@@ -118,6 +120,30 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navigation_drawer);
+
         initTabs();
     }
 

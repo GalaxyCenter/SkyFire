@@ -2,6 +2,7 @@ package apollo.tianya;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 
@@ -95,6 +96,24 @@ public class AppContext extends BaseApplication {
         } else {
             this.cleanLoginInfo();
         }
+    }
+
+    public void logOut() {
+        cleanLoginInfo();
+        ApiHttpClient.cleanCookie();
+        this.cleanCookie();
+        this.mLogin = false;
+        this.mLoginUserId = 0;
+
+        Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
+        sendBroadcast(intent);
+    }
+
+    /**
+     * 清除保存的缓存
+     */
+    public void cleanCookie() {
+        removeProperty(AppConfig.CONF_COOKIE);
     }
 
     public int getLoginUserId() {

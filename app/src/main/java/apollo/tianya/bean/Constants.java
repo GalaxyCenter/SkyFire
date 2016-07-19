@@ -20,6 +20,9 @@ public class Constants {
         public static String KEY_CLEAR_CACHE = "clear_cache";
     }
 
+    public static final String KEY_NOTIFICATION_VIBRATION = "KEY_NOTIFICATION_VIBRATION";
+    public static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
+
     public static final String INTENT_ACTION_USER_CHANGE = "apollo.tianya.action.USER_CHANGE";
     public static final String INTENT_ACTION_LOGOUT = "apollo.tianya.action.LOGOUT";
     public static final String INTENT_ACTION_NOTICE = "apollo.tianya.action.APPWIDGET_UPDATE";
