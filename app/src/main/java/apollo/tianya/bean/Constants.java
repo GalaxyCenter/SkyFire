@@ -22,6 +22,7 @@ public class Constants {
 
     public static final String KEY_NOTIFICATION_VIBRATION = "KEY_NOTIFICATION_VIBRATION";
     public static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
+    public static final String KEY_NOTIFICATION_ACCEPT = "KEY_NOTIFICATION_ACCEPT";
 
     public static final String INTENT_ACTION_USER_CHANGE = "apollo.tianya.action.USER_CHANGE";
     public static final String INTENT_ACTION_LOGOUT = "apollo.tianya.action.LOGOUT";
@@ -34,4 +35,5 @@ public class Constants {
     public static final String BUNDLE_KEY_THREAD_ID = "BUNDLE_KEY_THREAD_ID";
     public static final String BUNDLE_KEY_PAGE_INDEX = "BUNDLE_KEY_PAGE_INDEX";
     public static final String BUNDLE_KEY_AUTHOR = "BUNDLE_KEY_AUTHOR";
+    public static final String BUNDLE_KEY_NOTICES = "BUNDLE_KEY_NOTICES";
 }

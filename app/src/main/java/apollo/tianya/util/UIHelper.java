@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
+import apollo.tianya.bean.Notice;
 import apollo.tianya.ui.LoginActivity;
 import apollo.tianya.ui.MainActivity;
 import apollo.tianya.ui.DetailActivity;
@@ -54,5 +56,23 @@ public class UIHelper {
         Intent intent = new Intent(context, SimpleBackActivity.class);
         intent.putExtra(Constants.BUNDLE_KEY_PAGEINFO, (Parcelable)page);
         context.startActivity(intent);
+    }
+
+    /**
+     * 发送通知广播
+     *
+     * @param context
+     * @param notice
+     */
+    public static void sendBroadCast(Context context, Notice notice) {
+        if (!((AppContext) context.getApplicationContext()).isLogin()
+                || notice == null)
+            return;
+        Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
+        Bundle bundle = new Bundle();
+
+        bundle.putSerializable(Constants.BUNDLE_KEY_NOTICES, notice);
+        intent.putExtras(bundle);
+        context.sendBroadcast(intent);
     }
 }

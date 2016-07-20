@@ -25,6 +25,7 @@ import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.bean.Constants;
+import apollo.tianya.bean.Notice;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.fragment.CollectionViewPagerFragment;
 import apollo.tianya.fragment.NavigationDrawerFragment;
@@ -59,7 +60,9 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
-                TLog.log(TAG, "BroadcastReceiver:INTENT_ACTION_NOTICE");
+                Notice notice = (Notice) intent.getSerializableExtra(Constants.BUNDLE_KEY_NOTICES);
+
+
             } else if (intent.getAction().equals(Constants.INTENT_ACTION_LOGOUT)) {
                 TLog.log(TAG, "BroadcastReceiver:INTENT_ACTION_LOGOUT");
             }

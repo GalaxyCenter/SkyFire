@@ -15,10 +15,14 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import java.lang.ref.WeakReference;
 
+import apollo.tianya.AppContext;
+import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.bean.Constants;
+import apollo.tianya.bean.Notice;
 import apollo.tianya.broadcast.AlarmReceiver;
 import apollo.tianya.util.TLog;
+import apollo.tianya.util.UIHelper;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -30,7 +34,17 @@ public class NoticeService extends Service {
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String body = new String(responseBody);
+            Notice notice = null;
 
+            notice = TianyaParser.parseNotices(body);
+            if (notice != null) {
+                UIHelper.sendBroadCast(NoticeService.this, notice);
+                if (AppContext.getBool(Constants.KEY_NOTIFICATION_ACCEPT, true)) {
+                    notification(notice);
+                }
+                //mNotice = notice;
+            }
         }
 
         @Override
@@ -153,7 +167,7 @@ public class NoticeService extends Service {
      */
     private void requestNotice() {
         TLog.log(TAG, "requestNotice");
-        TianyaApi.getMessageCount(mGetNoticeHandler);
+        TianyaApi.getNotices(mGetNoticeHandler);
     }
 
     private void startRequestAlarm() {
@@ -167,5 +181,9 @@ public class NoticeService extends Service {
 
     private void cancelRequestAlarm() {
         mAlarmMgr.cancel(getOperationIntent());
+    }
+
+    private void notification(Notice notice) {
+
     }
 }
