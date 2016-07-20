@@ -1,6 +1,7 @@
 package apollo.tianya.service;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,15 +11,33 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import java.lang.ref.WeakReference;
 
+import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.bean.Constants;
+import apollo.tianya.broadcast.AlarmReceiver;
 import apollo.tianya.util.TLog;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Texel on 2016/7/19.
  */
 public class NoticeService extends Service {
+
+    private final AsyncHttpResponseHandler mGetNoticeHandler = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+        }
+    };
 
     private static class ServiceStub extends INoticeService.Stub {
         WeakReference<NoticeService> mService;
@@ -63,7 +82,7 @@ public class NoticeService extends Service {
     };
     private static final String TAG = "NoticeService";
 
-    private static final long INTERVAL = 1000 * 120;
+    private static final long INTERVAL = 1000 * 20;
     public static final String INTENT_ACTION_GET = "cn.tianya.service.GET_NOTICE";
     public static final String INTENT_ACTION_CLEAR = "cn.tianya.service.CLEAR_NOTICE";
     public static final String INTENT_ACTION_BROADCAST = "cn.tianya.service.BROADCAST";
@@ -111,6 +130,21 @@ public class NoticeService extends Service {
         super.onDestroy();
     }
 
+    /**
+     * 采用轮询方式实现消息推送<br>
+     * 每次被调用都去执行一次{@link #AlarmReceiver}onReceive()方法
+     *
+     * @return
+     */
+    private PendingIntent getOperationIntent() {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent operation = PendingIntent.getBroadcast(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        TLog.log(TAG, "getOperationIntent@onCreate");
+        return operation;
+    }
+
     private void clearNotice(int uid, int type) {
     }
 
@@ -118,11 +152,20 @@ public class NoticeService extends Service {
      * 请求是否有新通知
      */
     private void requestNotice() {
+        TLog.log(TAG, "requestNotice");
+        TianyaApi.getMessageCount(mGetNoticeHandler);
     }
 
     private void startRequestAlarm() {
+        cancelRequestAlarm();
+
+        // 从1秒后开始，每隔2分钟执行getOperationIntent()
+        mAlarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + 1000, INTERVAL,
+                getOperationIntent());
     }
 
     private void cancelRequestAlarm() {
+        mAlarmMgr.cancel(getOperationIntent());
     }
 }

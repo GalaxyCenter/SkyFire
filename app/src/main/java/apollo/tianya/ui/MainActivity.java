@@ -87,6 +87,16 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        NoticeUtils.unbindFromService(this);
+        unregisterReceiver(mReceiver);
+        mReceiver = null;
+        NoticeUtils.tryToShutDown(this);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {

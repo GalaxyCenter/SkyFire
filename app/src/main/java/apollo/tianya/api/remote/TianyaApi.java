@@ -303,4 +303,24 @@ public class TianyaApi {
 
         ApiHttpClient.post(url, headers, params, handler);
     }
+
+    public static void getNotices(AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserNoticeCount";
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    public static void getMessageCount(AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/tw?method=messagecount.ice.select";
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
 }

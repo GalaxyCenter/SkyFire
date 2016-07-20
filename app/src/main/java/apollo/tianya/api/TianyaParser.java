@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Entity;
+import apollo.tianya.bean.Notice;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.UserPostsFragment;
@@ -467,4 +468,23 @@ public class TianyaParser {
 
         return userId.equals("") ? 0 : Integer.parseInt(userId);
     }
+
+    public static Notice parseNotices(String source) {
+        Notice n = null;
+        JSONObject json = null;
+
+        try {
+            n = new Notice();
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+
+            n.comments = Integer.parseInt(json.getString("comment_notice_count"));
+            n.replies = Integer.parseInt(json.getString("reply_notice_coun"));
+            n.follows = Integer.parseInt(json.getString("attention_notice_count"));
+
+        } catch (JSONException e) {
+        }
+        return n;
+    }
+
 }

@@ -34,6 +34,8 @@
             android:name=".ui.SimpleBackActivity"
             android:windowSoftInputMode="adjustResize"/>
 
+        <receiver android:name=".broadcast.AlarmReceiver" />
+
         <service
             android:name=".service.NoticeService" />
 
