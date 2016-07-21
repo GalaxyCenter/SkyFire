@@ -517,7 +517,7 @@ public class TianyaParser {
     }
 
     public static boolean parseResult(String source) {
-        
+
     }
 
 }
