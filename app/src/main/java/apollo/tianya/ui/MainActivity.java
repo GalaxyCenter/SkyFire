@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTabHost;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -33,6 +35,7 @@ import apollo.tianya.service.NoticeService;
 import apollo.tianya.service.NoticeUtils;
 import apollo.tianya.util.TLog;
 import apollo.tianya.util.UIHelper;
+import apollo.tianya.widget.BadgeView;
 
 public class MainActivity extends BaseActivity {
 
@@ -61,8 +64,14 @@ public class MainActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
                 Notice notice = (Notice) intent.getSerializableExtra(Constants.BUNDLE_KEY_NOTICES);
+                int count = notice.comments + notice.replies + notice.follows;
 
-
+                if (count > 0) {
+                    mBadgView.setBadgeCount(count);
+                    mBadgView.setVisibility(View.VISIBLE);
+                } else {
+                    mBadgView.setVisibility(View.GONE);
+                }
             } else if (intent.getAction().equals(Constants.INTENT_ACTION_LOGOUT)) {
                 TLog.log(TAG, "BroadcastReceiver:INTENT_ACTION_LOGOUT");
             }
@@ -74,6 +83,7 @@ public class MainActivity extends BaseActivity {
     public FragmentTabHost mTabHost;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private BadgeView mBadgView;
 
     @Override
     protected int getLayoutId() {
@@ -111,19 +121,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -135,15 +140,6 @@ public class MainActivity extends BaseActivity {
     public void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -174,6 +170,15 @@ public class MainActivity extends BaseActivity {
             title.setText(getString(tab.resName));
 
             mTabHost.addTab(ts, tab.refer, null);
+
+            if (tab.equals(Tab.NOTIFICATIONS)) {
+                View nv = indicator.findViewById(R.id.tab_mes);
+                mBadgView = new BadgeView(this);
+                mBadgView.setVisibility(View.GONE);
+                mBadgView.setTargetView(nv);
+                mBadgView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                mBadgView.setGravity(Gravity.CENTER);
+            }
         }
     }
 }

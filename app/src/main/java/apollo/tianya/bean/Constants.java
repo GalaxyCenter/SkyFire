@@ -36,4 +36,6 @@ public class Constants {
     public static final String BUNDLE_KEY_PAGE_INDEX = "BUNDLE_KEY_PAGE_INDEX";
     public static final String BUNDLE_KEY_AUTHOR = "BUNDLE_KEY_AUTHOR";
     public static final String BUNDLE_KEY_NOTICES = "BUNDLE_KEY_NOTICES";
+
+    public static final String INTENT_KEY_NOTICE = "NOTICE";
 }

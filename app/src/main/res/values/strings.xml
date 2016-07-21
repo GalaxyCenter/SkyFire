@@ -82,4 +82,11 @@
     <string name="prefs_font_size_big">巨大</string>
     <string name="prefs_font_size_mid">偏大</string>
     <string name="prefs_font_size_small">正常</string>
+
+    <string name="notice_messages_content">你有%s条最新消息</string>
+    <string name="notice_follows">\@我(%s) </string>
+    <string name="notice_comments">评论(%s) </string>
+    <string name="notice_replies">回复(%s) </string>
+    <string name="notice_messages">私信(%s) </string>
+    <string name="notice_notifictions">通知(%s) </string>
 </resources>

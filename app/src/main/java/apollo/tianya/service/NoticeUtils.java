@@ -103,8 +103,7 @@ public class NoticeUtils {
     public static void clearNotice(int type) {
         if (sService != null) {
             try {
-                sService.clearNotice(AppContext.getInstance().getLoginUserId(),
-                        type);
+                sService.clearNotice(type);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

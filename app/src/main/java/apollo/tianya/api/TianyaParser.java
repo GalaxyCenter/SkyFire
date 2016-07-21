@@ -26,6 +26,7 @@ import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.UserPostsFragment;
 import apollo.tianya.util.CookieUtil;
 import apollo.tianya.util.DateTime;
+import apollo.tianya.util.TLog;
 import apollo.tianya.util.Transforms;
 import cz.msebera.android.httpclient.cookie.Cookie;
 
@@ -469,6 +470,11 @@ public class TianyaParser {
         return userId.equals("") ? 0 : Integer.parseInt(userId);
     }
 
+    /**
+     * 解析用户通知
+     * @param source
+     * @return
+     */
     public static Notice parseNotices(String source) {
         Notice n = null;
         JSONObject json = null;
@@ -479,12 +485,39 @@ public class TianyaParser {
             json = json.getJSONObject("data");
 
             n.comments = Integer.parseInt(json.getString("comment_notice_count"));
-            n.replies = Integer.parseInt(json.getString("reply_notice_coun"));
+            n.replies = Integer.parseInt(json.getString("reply_notice_count"));
             n.follows = Integer.parseInt(json.getString("attention_notice_count"));
+
+        } catch (JSONException e) {
+            TLog.error(e.getMessage());
+        }
+        return n;
+    }
+
+    /**
+     * 解析用户通知
+     * @param source
+     * @return
+     */
+    public static Notice parseNoticesEx(String source) {
+        Notice n = null;
+        JSONObject json = null;
+
+        try {
+            n = new Notice();
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+
+            n.messages = json.getInt("userCount");
+            n.notifictions = json.getInt("sysCount");
 
         } catch (JSONException e) {
         }
         return n;
+    }
+
+    public static boolean parseResult(String source) {
+        
     }
 
 }
