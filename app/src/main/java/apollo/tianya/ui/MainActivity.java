@@ -24,13 +24,16 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import apollo.tianya.R;
+import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
+import apollo.tianya.fragment.BookMarksFragment;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.fragment.CollectionViewPagerFragment;
 import apollo.tianya.fragment.NavigationDrawerFragment;
+import apollo.tianya.fragment.NoticeViewPagerFragment;
 import apollo.tianya.service.NoticeService;
 import apollo.tianya.service.NoticeUtils;
 import apollo.tianya.util.TLog;
@@ -206,10 +209,17 @@ public class MainActivity extends BaseActivity {
         if (fromWhich != null) {
             boolean fromNoticeBar = fromWhich.getBooleanExtra(Constants.INTENT_KEY_NOTICE, false);
             if (fromNoticeBar) {
-                Intent toMyInfor = new Intent(this, SimpleBackActivity.class);
-                //toMyInfor.putExtra(Constants.BUNDLE_KEY_PAGEINFO, SimpleBackPage.MY_MES.getValue());
-                //startActivity(toMyInfor);
+                String tag = null;
+
+                tag = getResources().getString(R.string.actionbar_title_notice);
+                UIHelper.showSimpleBack(this, new ViewPageInfo(tag, tag, NoticeViewPagerFragment.class, getBundle(tag)));
             }
         }
+    }
+
+    private Bundle getBundle(String type) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.BUNDLE_KEY_ARGS, type);
+        return bundle;
     }
 }

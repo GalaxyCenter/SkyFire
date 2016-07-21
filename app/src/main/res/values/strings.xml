@@ -49,6 +49,13 @@
 
     <string name="channel_user_threads">我的发表</string>
     <string name="channel_user_posts">我的回复</string>
+
+    <string name="channel_follows">\@我</string>
+    <string name="channel_comments">评论</string>
+    <string name="channel_replies">回复</string>
+    <string name="channel_messages">消息</string>
+    <string name="channel_notifications">通知</string>
+
     <!-- ThreadDetail -->
     <string name="post_floor_owner">楼主</string>
     <string name="post_floor">楼</string>
@@ -63,6 +70,7 @@
     <string name="actionbar_title_bookmarks">我的书签</string>
     <string name="actionbar_title_histories">阅读记录</string>
     <string name="actionbar_title_posts">我的帖子</string>
+    <string name="actionbar_title_notice">我的通知</string>
 
     <string name="nav_my_bookmarks">我的书签</string>
     <string name="nav_my_histories">阅读记录</string>

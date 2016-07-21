@@ -13,6 +13,7 @@ import apollo.tianya.AppConfig;
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.api.ApiHttpClient;
+import apollo.tianya.bean.DataSet;
 import apollo.tianya.util.DateTime;
 import cz.msebera.android.httpclient.Header;
 
@@ -331,7 +332,6 @@ public class TianyaApi {
      */
     public static void clearNotice(int type, AsyncHttpResponseHandler handler) {
         String url = "http://bbs.tianya.cn/api?method=bbs.api.clearUserNoticeCount&params.type=" + type;
-
         Header[] headers = null;
 
         headers = new Header[1];
@@ -340,4 +340,53 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    public static void getMessages(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/msg?method=messagenew.selectmessage&params.isAll=1&params.isFollow=0&params.pageSize=" + pageSize + "&params.pageNo=" + pageIndex;
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    public static void getNotifications(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/msg?method=messagesys.selectmessage&params.pageSize=" + pageSize + "&params.pageNo=" + pageIndex;
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    public static void getComments(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserReplyNoticeList&params.pageNum=" + pageIndex + "&params.pageSize=" + pageSize;
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    public static void getReplies(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserCommentNoticeList&params.pageNum=" + pageIndex + "&params.pageSize=" + pageSize;
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    public static void getFollows(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserAttentionNoticeList&params.pageNum=" + pageIndex + "&params.pageSize=" + pageSize;
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
 }

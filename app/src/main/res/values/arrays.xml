@@ -30,6 +30,14 @@
         <item>@string/channel_user_posts</item>
     </string-array>
 
+    <string-array name="notice_viewpage_arrays">
+        <item>@string/channel_follows</item>
+        <item>@string/channel_comments</item>
+        <item>@string/channel_replies</item>
+        <item>@string/channel_messages</item>
+        <item>@string/channel_notifications</item>
+    </string-array>
+
     <array name="font_size_entries">
         <item>@string/prefs_font_size_small</item>
         <item>@string/prefs_font_size_mid</item>
