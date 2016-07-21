@@ -138,7 +138,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = null;
+
+        handleIntent(getIntent());
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -154,6 +157,23 @@ public class MainActivity extends BaseActivity {
                 .findFragmentById(R.id.navigation_drawer);
 
         initTabs();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null)
+            return;
+        String action = intent.getAction();
+        if (action != null && action.equals(Intent.ACTION_VIEW)) {
+
+        } else if (intent.getBooleanExtra("NOTICE", false)) {
+            notifitcationBarClick(intent);
+        }
     }
 
     private void initTabs() {
@@ -178,6 +198,17 @@ public class MainActivity extends BaseActivity {
                 mBadgView.setTargetView(nv);
                 mBadgView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
                 mBadgView.setGravity(Gravity.CENTER);
+            }
+        }
+    }
+
+    private void notifitcationBarClick(Intent fromWhich) {
+        if (fromWhich != null) {
+            boolean fromNoticeBar = fromWhich.getBooleanExtra(Constants.INTENT_KEY_NOTICE, false);
+            if (fromNoticeBar) {
+                Intent toMyInfor = new Intent(this, SimpleBackActivity.class);
+                //toMyInfor.putExtra(Constants.BUNDLE_KEY_PAGEINFO, SimpleBackPage.MY_MES.getValue());
+                //startActivity(toMyInfor);
             }
         }
     }

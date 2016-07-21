@@ -79,12 +79,11 @@ public class NoticeService extends Service {
     private final AsyncHttpResponseHandler mClearNoticeHandler = new AsyncHttpResponseHandler() {
 
         @Override
-        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
         }
 
         @Override
-        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                               Throwable arg3) {}
     };
 
@@ -261,7 +260,7 @@ public class NoticeService extends Service {
         String title = null;
         String content = null;
         StringBuffer sb = new StringBuffer();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = null;
         PendingIntent pi = null;
         NotificationCompat.Builder nb = null;
         Notification notification = null;
@@ -294,9 +293,9 @@ public class NoticeService extends Service {
         title = res.getString(R.string.notice_messages_content, count);
         content = sb.toString();
 
+        intent = new Intent(this, MainActivity.class);
         intent.putExtra(Constants.INTENT_KEY_NOTICE, true);
-        pi = PendingIntent.getActivity(this, 1000, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        pi = PendingIntent.getActivity(this, 1000, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         nb = new NotificationCompat.Builder(
                 this).setTicker(title).setContentTitle(title)

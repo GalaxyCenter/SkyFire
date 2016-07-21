@@ -516,8 +516,16 @@ public class TianyaParser {
         return n;
     }
 
-    public static boolean parseResult(String source) {
+    public static boolean parseJsonResult(String source) {
+        JSONObject json = null;
+        int success = 0;
 
+        try {
+            json = new JSONObject(source);
+            success = Integer.parseInt(json.getString("success"));
+        } catch (JSONException e) {
+        }
+        return success == 1;
     }
 
 }
