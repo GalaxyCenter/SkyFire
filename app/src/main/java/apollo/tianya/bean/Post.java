@@ -19,6 +19,8 @@ public class Post extends Entity {
     private int authorId;
     private int replies;
     private int views;
+    private int floor;
+
     List<String> photos;
     List<Post> comment;
 
@@ -92,5 +94,13 @@ public class Post extends Entity {
 
     public void setPostDate(Date postDate) {
         this.postDate = postDate;
+    }
+
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
     }
 }

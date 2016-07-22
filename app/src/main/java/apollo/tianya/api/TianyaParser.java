@@ -524,8 +524,134 @@ public class TianyaParser {
             json = new JSONObject(source);
             success = Integer.parseInt(json.getString("success"));
         } catch (JSONException e) {
+            TLog.error(e.getMessage());
         }
         return success == 1;
     }
 
+    public static DataSet<Thread> parseUserReplies(String source) {
+        JSONObject json = null;
+        JSONArray jarr = null;
+        DataSet<Thread> datas = null;
+        List<Thread> posts = null;
+        Thread thread = null;
+        Post comment = null;
+
+        datas = new DataSet<Thread>();
+        posts = new ArrayList<Thread>();
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+            jarr = json.getJSONArray("rows");
+
+            for(int i=0; i<jarr.length(); i++) {
+                thread = new Thread();
+                json = jarr.getJSONObject(i);
+
+                thread.setSectionId(json.getString("item"));
+                thread.setId(Integer.parseInt(json.getString("article_id")));
+
+                thread.setTitle(json.getString("title"));
+
+
+                thread.setComment(new ArrayList<Post>());
+
+                comment = new Post();
+                comment.setId(Integer.parseInt(json.getString("reply_id")));
+                comment.setBody(json.getString("message"));
+                comment.setPostDate(DateTime.parse(json.getString("reply_time"), "yyyy-MM-dd HH:mm").getDate());
+                comment.setAuthor(json.getString("reply_user_name"));
+                comment.setFloor(Integer.parseInt(json.getString("floor")));
+                thread.getComment().add(comment);
+            }
+        } catch (JSONException e) {
+            TLog.error(e.getMessage());
+        }
+        return datas;
+    }
+
+    public static DataSet<Thread> parseUserComments(String source) {
+        JSONObject json = null;
+        JSONArray jarr = null;
+        DataSet<Thread> datas = null;
+        List<Thread> posts = null;
+        Thread thread = null;
+        Post comment = null;
+
+        datas = new DataSet<Thread>();
+        posts = new ArrayList<Thread>();
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+            jarr = json.getJSONArray("rows");
+
+            for(int i=0; i<jarr.length(); i++) {
+                thread = new Thread();
+                json = jarr.getJSONObject(i);
+
+                thread.setSectionId(json.getString("item"));
+                thread.setId(Integer.parseInt(json.getString("article_id")));
+
+                thread.setTitle(json.getString("title"));
+                thread.setBody(json.getString("source_message"));
+                thread.setAuthor(json.getString("reply_user_name"));
+                thread.setAuthorId(Integer.parseInt(json.getString("reply_user_id")));
+
+                thread.setComment(new ArrayList<Post>());
+
+                comment = new Post();
+                comment.setId(Integer.parseInt(json.getString("reply_id")));
+                comment.setBody(json.getString("message"));
+                comment.setPostDate(DateTime.parse(json.getString("reply_time"), "yyyy-MM-dd HH:mm").getDate());
+                comment.setAuthor(json.getString("comment_user_name"));
+                comment.setAuthorId(Integer.parseInt(json.getString("comment_user_id")));
+                comment.setFloor(Integer.parseInt(json.getString("floor")));
+                thread.getComment().add(comment);
+            }
+        } catch (JSONException e) {
+            TLog.error(e.getMessage());
+        }
+        return datas;
+    }
+
+    public static DataSet<Thread> parseUserFollows(String source) {
+        JSONObject json = null;
+        JSONArray jarr = null;
+        DataSet<Thread> datas = null;
+        List<Thread> posts = null;
+        Thread thread = null;
+        Post comment = null;
+
+        datas = new DataSet<Thread>();
+        posts = new ArrayList<Thread>();
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+            jarr = json.getJSONArray("rows");
+
+            for(int i=0; i<jarr.length(); i++) {
+                thread = new Thread();
+                json = jarr.getJSONObject(i);
+
+                thread.setSectionId(json.getString("item"));
+                thread.setId(Integer.parseInt(json.getString("article_id")));
+
+                thread.setTitle(json.getString("title"));
+
+                thread.setComment(new ArrayList<Post>());
+
+                comment = new Post();
+                comment.setId(Integer.parseInt(json.getString("reply_id")));
+                comment.setBody(json.getString("message"));
+                comment.setPostDate(DateTime.parse(json.getString("attention_time"), "yyyy-MM-dd HH:mm").getDate());
+                comment.setAuthor(json.getString("attention_user_name"));
+                comment.setAuthorId(Integer.parseInt(json.getString("attention_user_id")));
+                comment.setFloor(Integer.parseInt(json.getString("floor")));
+                thread.getComment().add(comment);
+            }
+        } catch (JSONException e) {
+            TLog.error(e.getMessage());
+        }
+        return datas;
+    }
 }
