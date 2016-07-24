@@ -2,6 +2,7 @@ package apollo.tianya.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -83,9 +84,11 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             if (mDisplayFloorHandle != null)
                 mDisplayFloorHandle.setFloor(vh.floor, post, position);
 
-            body = Transforms.formatPost(post.getBody());
-            span_body = new SpannableString(body);
-            vh.body.setText(span_body);
+            if (!TextUtils.isEmpty(post.getBody())) {
+                body = Transforms.formatPost(post.getBody());
+                span_body = new SpannableString(body);
+                vh.body.setText(span_body);
+            }
         }
     }
 

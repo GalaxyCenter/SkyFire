@@ -36,12 +36,6 @@ public class ChannelFragment extends BaseListFragment<Thread> {
             dataset = TianyaParser.parseBookmarks(body);
         else if (mCatalog.equals(getString(R.string.nav_my_histories)))
             dataset = TianyaParser.parseHistory(body);
-        else if (mCatalog.equals(getString(R.string.channel_follows)))
-            dataset = TianyaParser.parseUserFollows(body);
-        else if (mCatalog.equals(getString(R.string.channel_comments)))
-            dataset = TianyaParser.parseUserComments(body);
-        else if (mCatalog.equals(getString(R.string.channel_replies)))
-            dataset = TianyaParser.parseUserReplies(body);
         else
             dataset = TianyaParser.parseRecommendThread(body);
 
@@ -90,11 +84,5 @@ public class ChannelFragment extends BaseListFragment<Thread> {
         else if (mCatalog.equals(getString(R.string.nav_my_histories)))
             TianyaApi.getUserHistory(mHandler);
 
-        else if (mCatalog.equals(getString(R.string.channel_follows)))
-            TianyaApi.getFollows(mPageIndex, 20, mHandler);
-        else if (mCatalog.equals(getString(R.string.channel_comments)))
-            TianyaApi.getComments(mPageIndex, 20, mHandler);
-        else if (mCatalog.equals(getString(R.string.channel_replies)))
-            TianyaApi.getReplies(mPageIndex, 20, mHandler);
     }
 }
