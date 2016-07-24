@@ -17,9 +17,11 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         String[] titles = getResources().getStringArray(
                 R.array.notice_viewpage_arrays);
 
-        for(String title:titles) {
-            adapter.addTab(title, title, ChannelFragment.class,
-                    getBundle(title));
+        for(int i=0; i<titles.length; i++) {
+            if (i<3)
+                adapter.addTab(titles[i], titles[i], ChannelFragment.class, getBundle(titles[i]));
+            else
+                adapter.addTab(titles[i], titles[i], MessageFragment.class, getBundle(titles[i]));
         }
     }
 

@@ -139,7 +139,7 @@ public class NoticeService extends Service {
     };
     private static final String TAG = "NoticeService";
 
-    private static final long INTERVAL = 1000 * 20;
+    private static final long INTERVAL = 1000 * 120;
     public static final String INTENT_ACTION_GET = "cn.tianya.service.GET_NOTICE";
     public static final String INTENT_ACTION_CLEAR = "cn.tianya.service.CLEAR_NOTICE";
     public static final String INTENT_ACTION_BROADCAST = "cn.tianya.service.BROADCAST";

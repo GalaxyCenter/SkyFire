@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import apollo.tianya.bean.DataSet;
-import apollo.tianya.bean.Entity;
+import apollo.tianya.bean.Message;
 import apollo.tianya.bean.Notice;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
@@ -537,8 +537,9 @@ public class TianyaParser {
         Thread thread = null;
         Post comment = null;
 
-        datas = new DataSet<Thread>();
         posts = new ArrayList<Thread>();
+        datas = new DataSet<Thread>();
+        datas.setObjects(posts);
         try {
             json = new JSONObject(source);
             json = json.getJSONObject("data");
@@ -553,9 +554,7 @@ public class TianyaParser {
 
                 thread.setTitle(json.getString("title"));
 
-
                 thread.setComment(new ArrayList<Post>());
-
                 comment = new Post();
                 comment.setId(Integer.parseInt(json.getString("reply_id")));
                 comment.setBody(json.getString("message"));
@@ -563,6 +562,8 @@ public class TianyaParser {
                 comment.setAuthor(json.getString("reply_user_name"));
                 comment.setFloor(Integer.parseInt(json.getString("floor")));
                 thread.getComment().add(comment);
+
+                posts.add(thread);
             }
         } catch (JSONException e) {
             TLog.error(e.getMessage());
@@ -578,8 +579,9 @@ public class TianyaParser {
         Thread thread = null;
         Post comment = null;
 
-        datas = new DataSet<Thread>();
         posts = new ArrayList<Thread>();
+        datas = new DataSet<Thread>();
+        datas.setObjects(posts);
         try {
             json = new JSONObject(source);
             json = json.getJSONObject("data");
@@ -602,11 +604,13 @@ public class TianyaParser {
                 comment = new Post();
                 comment.setId(Integer.parseInt(json.getString("reply_id")));
                 comment.setBody(json.getString("message"));
-                comment.setPostDate(DateTime.parse(json.getString("reply_time"), "yyyy-MM-dd HH:mm").getDate());
+                comment.setPostDate(DateTime.parse(json.getString("comment_time"), "yyyy-MM-dd HH:mm").getDate());
                 comment.setAuthor(json.getString("comment_user_name"));
                 comment.setAuthorId(Integer.parseInt(json.getString("comment_user_id")));
                 comment.setFloor(Integer.parseInt(json.getString("floor")));
                 thread.getComment().add(comment);
+
+                posts.add(thread);
             }
         } catch (JSONException e) {
             TLog.error(e.getMessage());
@@ -622,8 +626,9 @@ public class TianyaParser {
         Thread thread = null;
         Post comment = null;
 
-        datas = new DataSet<Thread>();
         posts = new ArrayList<Thread>();
+        datas = new DataSet<Thread>();
+        datas.setObjects(posts);
         try {
             json = new JSONObject(source);
             json = json.getJSONObject("data");
@@ -648,6 +653,89 @@ public class TianyaParser {
                 comment.setAuthorId(Integer.parseInt(json.getString("attention_user_id")));
                 comment.setFloor(Integer.parseInt(json.getString("floor")));
                 thread.getComment().add(comment);
+
+                posts.add(thread);
+            }
+        } catch (JSONException e) {
+            TLog.error(e.getMessage());
+        }
+        return datas;
+    }
+
+    public static DataSet<Message> parseMessages(String source) {
+        JSONObject json = null;
+        JSONArray jarr = null;
+        DataSet<Message> datas = null;
+        List<Message> msgs = null;
+        Message msg = null;
+        Post comment = null;
+
+        msgs = new ArrayList<Message>();
+        datas = new DataSet<Message>();
+        datas.setObjects(msgs);
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+            datas.setTotalRecords(json.getInt("total"));
+            jarr = json.getJSONArray("list");
+
+            for(int i=0; i<jarr.length(); i++) {
+                msg = new Message();
+                json = jarr.getJSONObject(i);
+
+                msg.setGuid(json.getString("messageId"));
+                msg.setSenderId(json.getInt("otherUserId"));
+                msg.setSenderName(json.getString("otherUserName"));
+
+                msg.setReceiverId(json.getInt("userId"));
+                msg.setReceiverName(json.getString("userName"));
+
+                msg.setPostDate(DateTime.parse(json.getString("createDate"), "yyyy-MM-dd HH:mm").getDate());
+
+                msg.setValue(json.getString("content"));
+
+                msgs.add(msg);
+            }
+        } catch (JSONException e) {
+            TLog.error(e.getMessage());
+        }
+        return datas;
+    }
+
+    public static DataSet<Message> parseNotifications(String source) {
+        JSONObject json = null;
+        JSONArray jarr = null;
+        DataSet<Message> datas = null;
+        List<Message> msgs = null;
+        Message msg = null;
+        Post comment = null;
+
+        msgs = new ArrayList<Message>();
+        datas = new DataSet<Message>();
+        datas.setObjects(msgs);
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+            datas.setTotalRecords(json.getInt("total"));
+
+            jarr = json.getJSONArray("list");
+
+            for(int i=0; i<jarr.length(); i++) {
+                msg = new Message();
+                json = jarr.getJSONObject(i);
+
+                msg.setGuid(json.getString("id"));
+                msg.setSenderId(json.getInt("fromUserId"));
+                msg.setSenderName(json.getString("fromUserName"));
+
+                msg.setReceiverId(json.getInt("toUserId"));
+                msg.setReceiverName(json.getString("toUserName"));
+
+                msg.setPostDate(DateTime.parse(json.getString("createDate"), "yyyy-MM-dd HH:mm").getDate());
+
+                msg.setValue(json.getString("content"));
+
+                msgs.add(msg);
             }
         } catch (JSONException e) {
             TLog.error(e.getMessage());

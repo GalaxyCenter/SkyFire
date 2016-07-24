@@ -360,7 +360,7 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
-    public static void getComments(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+    public static void getReplies(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
         String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserReplyNoticeList&params.pageNum=" + pageIndex + "&params.pageSize=" + pageSize;
         Header[] headers = null;
 
@@ -370,7 +370,7 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
-    public static void getReplies(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+    public static void getComments(int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
         String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserCommentNoticeList&params.pageNum=" + pageIndex + "&params.pageSize=" + pageSize;
         Header[] headers = null;
 

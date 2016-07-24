@@ -37,7 +37,8 @@
         <receiver android:name=".broadcast.AlarmReceiver" />
 
         <service
-            android:name=".service.NoticeService" />
+            android:name=".service.NoticeService"
+            android:process=":notice"/>
 
     </application>
 

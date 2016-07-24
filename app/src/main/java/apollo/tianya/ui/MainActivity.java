@@ -45,8 +45,8 @@ public class MainActivity extends BaseActivity {
     enum Tab {
         Tab(0, R.string.main_tab_home, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
         COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_home_white_24dp, CollectionViewPagerFragment.class),
-        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
-        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class);
+        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_white_24dp, NoticeViewPagerFragment.class),
+        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_home_white_24dp, NoticeViewPagerFragment.class);
 
         int position;
         int resName;
