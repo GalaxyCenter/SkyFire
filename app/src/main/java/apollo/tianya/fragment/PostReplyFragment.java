@@ -3,7 +3,7 @@ package apollo.tianya.fragment;
 import android.view.View;
 
 import apollo.tianya.R;
-import apollo.tianya.adapter.PostAdapter;
+import apollo.tianya.adapter.PostReplyAdapter;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
@@ -18,7 +18,7 @@ public class PostReplyFragment extends BaseListFragment<Thread> {
 
     @Override
     protected RecyclerBaseAdapter getListAdapter() {
-        return new PostAdapter();
+        return new PostReplyAdapter();
     }
 
     @Override
