@@ -50,7 +50,7 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
 
     @Override
     public ViewHolder getViewHolder(ViewGroup viewGroup) {
-        View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_post, viewGroup, false);
+        View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_post_reply, viewGroup, false);
         return new NormalViewHolder(v);
     }
 
@@ -75,6 +75,7 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
             post = mItems.get(position);
             vh = (NormalViewHolder) holder;
 
+            vh.title.setText(post.getTitle());
             vh.author.setText(post.getAuthor());
             vh.time.setText(Formatter.friendlyTime(post.getPostDate()));
             vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
