@@ -174,7 +174,16 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     }
 
     protected void executeOnLoadDataSuccess(DataSet<T> ds) {
+        int state = RecyclerBaseAdapter.STATE_EMPTY_ITEM;
+
+        if (ds.getObjects().size() == 0) {
+            state = RecyclerBaseAdapter.STATE_NO_MORE;
+        } else {
+            state = RecyclerBaseAdapter.STATE_LOAD_MORE;
+        }
+        mAdapter.setState(state);
         mAdapter.addItems(ds.getObjects());
+        mAdapter.notifyDataSetChanged();
     }
 
     // 完成刷新

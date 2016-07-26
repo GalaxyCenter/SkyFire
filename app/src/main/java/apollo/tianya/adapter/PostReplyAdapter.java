@@ -78,6 +78,24 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
         if (itemType == TYPE_FOOTER) {
             FooterViewHolder vh = null;
 
+            vh = (FooterViewHolder) holder;
+            switch (state) {
+                case STATE_LOAD_MORE:
+                    vh.progress.setVisibility(View.VISIBLE);
+                    vh.text.setVisibility(View.VISIBLE);
+                    vh.text.setText(R.string.loading);
+                    break;
+
+                case STATE_NO_MORE:
+                    vh.progress.setVisibility(View.GONE);
+                    vh.text.setVisibility(View.VISIBLE);
+                    vh.text.setText(R.string.loading_nor_more);
+                    break;
+
+                default:
+                    vh.progress.setVisibility(View.GONE);
+                    vh.text.setVisibility(View.GONE);
+            }
         } else {
             Post post = null;
             Post comment = null;
