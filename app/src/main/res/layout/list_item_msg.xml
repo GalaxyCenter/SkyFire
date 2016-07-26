@@ -6,57 +6,52 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/layout_userface"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <apollo.tianya.widget.AvatarView
+            android:id="@+id/userface"
+            style="@style/thread_user_face_image" />
 
         <RelativeLayout
+            android:id="@+id/layout_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dip">
+            android:layout_alignParentStart="false"
+            android:layout_toEndOf="@+id/userface"
+            android:background="@drawable/chat_green_bg">
 
-            <RelativeLayout
-                android:id="@+id/layout_userface"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/app_name"/>
 
-                <apollo.tianya.widget.AvatarView
-                    android:id="@+id/userface"
-                    style="@style/thread_user_face_image" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/author"
-                    android:textStyle="bold"
-                    android:text="@string/app_name"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/userface"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8.0dip"
-                    />
-
-                <TextView
-                    android:id="@+id/time"
-                    android:text="@string/app_name"
-                    style="@style/list_text_info"
-                    android:layout_alignParentEnd="true" />
-
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/time"
+                android:text="@string/app_name"
+                style="@style/list_text_info"
+                android:layout_alignBaseline="@+id/author"
+                android:layout_alignBottom="@+id/author"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:id="@+id/body"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
                 android:text="@string/app_name"
-                android:layout_below="@id/layout_userface" />
-
+                android:layout_below="@id/author" />
 
         </RelativeLayout>
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </android.support.v7.widget.CardView>

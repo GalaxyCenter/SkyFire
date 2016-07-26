@@ -7,74 +7,65 @@
     android:layout_margin="4dp">
 
     <RelativeLayout
+        android:id="@+id/layout_userface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip">
+        android:padding="10dp">
+
+        <apollo.tianya.widget.AvatarView
+            android:id="@+id/userface"
+            style="@style/thread_user_face_image" />
 
         <RelativeLayout
-            android:id="@+id/layout_userface"
+            android:id="@+id/layout_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_toEndOf="@+id/userface"
+            android:background="@drawable/chat_green_bg">
 
-            <apollo.tianya.widget.AvatarView
-                android:id="@+id/userface"
-                style="@style/thread_user_face_image" />
-
-            <RelativeLayout
-                android:id="@+id/layout_content"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/reply"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="false"
-                android:layout_toEndOf="@+id/userface"
-                android:background="@drawable/chat_green_bg">
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/app_name"/>
 
-                <TextView
-                    android:id="@+id/reply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:text="@string/app_name"/>
+            <TextView
+                android:id="@+id/time"
+                android:text="@string/app_name"
+                style="@style/list_text_info"
+                android:layout_alignBaseline="@+id/reply"
+                android:layout_alignBottom="@+id/reply"
+                android:layout_alignParentEnd="true" />
 
-                <TextView
-                    android:id="@+id/time"
-                    android:text="@string/app_name"
-                    style="@style/list_text_info"
-                    android:layout_alignBaseline="@+id/reply"
-                    android:layout_alignBottom="@+id/reply"
-                    android:layout_alignParentEnd="true" />
-
-                <TextView
-                    android:id="@+id/body"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:text="@string/app_name"
-                    android:layout_below="@id/reply" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/layout_source"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/body"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/layout_content" android:layout_toEndOf="@+id/userface">
-
-                <TextView
-                    android:id="@+id/summary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:text="@string/app_name"/>
-
-            </RelativeLayout>
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:text="@string/app_name"
+                android:layout_below="@id/reply" />
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/layout_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_content" android:layout_toEndOf="@+id/userface">
 
+            <TextView
+                android:id="@+id/summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/app_name"/>
 
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -83,6 +83,7 @@ public class MessageAdapter extends RecyclerBaseAdapter<Message, MessageAdapter.
             vh.author.setText(msg.getSenderName());
             vh.time.setText(Formatter.friendlyTime(msg.getPostDate()));
             vh.face.setUserInfo(msg.getSenderId(), msg.getSenderName());
+            vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + msg.getSenderId());
 
             body = Transforms.formatPost(msg.getValue());
             span_body = new SpannableString(body);
