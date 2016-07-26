@@ -152,13 +152,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 }
 
                 if (mState == STATE_NONE && scrollEnd) {
-                    //if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
-                    //        || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
-                    //    mCurrentPage++;
-                    //    mState = STATE_LOADMORE;
-                    //    requestData(false);
-                    //    mAdapter.setFooterViewLoading();
-                    //}
+
                     mPageIndex++;
                     mState = STATE_LOADMORE;
                     requestData(false);
@@ -173,6 +167,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (mState == STATE_REFRESH)
             return;
 
+        setSwipeRefreshLoadingState();
         mState = STATE_REFRESH;
         mPageIndex = 1;
         requestData(true);

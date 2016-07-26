@@ -560,6 +560,7 @@ public class TianyaParser {
                 comment.setBody(json.getString("message"));
                 comment.setPostDate(DateTime.parse(json.getString("reply_time"), "yyyy-MM-dd HH:mm").getDate());
                 comment.setAuthor(json.getString("reply_user_name"));
+                comment.setAuthorId(Integer.parseInt(json.getString("reply_user_id")));
                 comment.setFloor(Integer.parseInt(json.getString("floor")));
                 thread.getComment().add(comment);
 

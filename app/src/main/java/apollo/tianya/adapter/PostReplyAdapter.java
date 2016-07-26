@@ -5,8 +5,10 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.bean.Post;
 import apollo.tianya.util.Formatter;
@@ -28,9 +30,9 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
 
     public static class NormalViewHolder extends ViewHolder {
 
-        @BindView(R.id.title) TextView title;
         @BindView(R.id.body) TextView body;
-        @BindView(R.id.author) TextView author;
+        @BindView(R.id.summary) TextView summary;
+        @BindView(R.id.reply) TextView reply;
         @BindView(R.id.time) TextView time;
         @BindView(R.id.userface) AvatarView face;
 
@@ -43,9 +45,18 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
 
     public static class FooterViewHolder extends ViewHolder {
 
+        @BindView(R.id.progressbar) ProgressBar progress;
+        @BindView(R.id.text) TextView text;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
+    }
+
+    protected boolean hasFooterView(){
+        return true;
     }
 
     @Override
@@ -65,27 +76,40 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
         int itemType = getItemViewType(position);
 
         if (itemType == TYPE_FOOTER) {
+            FooterViewHolder vh = null;
 
         } else {
             Post post = null;
+            Post comment = null;
             SpannableString span_body = null;
-            String body = null;
+            String summary = null;
             NormalViewHolder vh = null;
 
             post = mItems.get(position);
+            comment = post.getComment().get(0);
+
             vh = (NormalViewHolder) holder;
 
-            vh.title.setText(post.getTitle());
-            vh.author.setText(post.getAuthor());
-            vh.time.setText(Formatter.friendlyTime(post.getPostDate()));
-            vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
-            vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + post.getAuthorId());
-
-            if (!TextUtils.isEmpty(post.getBody())) {
-                body = Transforms.formatPost(post.getBody());
-                span_body = new SpannableString(body);
+            vh.reply.setText(comment.getAuthor());
+            vh.face.setUserInfo(comment.getAuthorId(), comment.getAuthor());
+            vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + comment.getAuthorId());
+            if (!TextUtils.isEmpty(comment.getBody())) {
+                summary = Transforms.formatPost(comment.getBody());
+                span_body = new SpannableString(summary);
                 vh.body.setText(span_body);
             }
+
+            summary = post.getBody();
+            if (!TextUtils.isEmpty(summary)) {
+                summary = Transforms.stripHtmlXmlTags(summary);
+                summary = AppContext.getInstance().getResources().getString(R.string.me)
+                        + ":" + summary.trim().replace("　", "") + "//" + post.getTitle();
+            } else {
+                summary = post.getTitle();
+            }
+            vh.summary.setText(summary);
+            vh.time.setText(Formatter.friendlyTime(comment.getPostDate()));
+
         }
     }
 }

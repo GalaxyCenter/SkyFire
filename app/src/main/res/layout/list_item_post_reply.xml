@@ -29,8 +29,8 @@
                 android:background="@drawable/chat_green_bg">
 
                 <TextView
-                    android:id="@+id/author"
-                    android:layout_width="match_parent"
+                    android:id="@+id/reply"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
@@ -40,16 +40,18 @@
                     android:id="@+id/time"
                     android:text="@string/app_name"
                     style="@style/list_text_info"
-                    android:layout_alignEnd="@+id/author" />
+                    android:layout_alignBaseline="@+id/reply"
+                    android:layout_alignBottom="@+id/reply"
+                    android:layout_alignParentEnd="true" />
 
                 <TextView
                     android:id="@+id/body"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:layout_marginBottom="6dp"
                     android:text="@string/app_name"
-                    android:layout_below="@id/author" />
+                    android:layout_below="@id/reply" />
 
             </RelativeLayout>
 
@@ -60,11 +62,11 @@
                 android:layout_below="@id/layout_content" android:layout_toEndOf="@+id/userface">
 
                 <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
+                    android:id="@+id/summary"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:text="@string/app_name"/>
 
             </RelativeLayout>

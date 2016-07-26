@@ -28,6 +28,15 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
         void setFloor(TextView view, T t, int position);
     }
 
+    public static final int STATE_EMPTY_ITEM = 0;
+    public static final int STATE_LOAD_MORE = 1;
+    public static final int STATE_NO_MORE = 2;
+    public static final int STATE_NO_DATA = 3;
+    public static final int STATE_LESS_ONE_PAGE = 4;
+    public static final int STATE_NETWORK_ERROR = 5;
+
+    protected int state = STATE_LESS_ONE_PAGE;
+
     public final static int TYPE_NORMAL = 0;
     public final static int TYPE_FOOTER = 1;
 
@@ -131,6 +140,14 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     public void clear() {
         mItems.clear();
         notifyDataSetChanged();
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getState() {
+        return this.state;
     }
 
     public T getItem(int position) {
