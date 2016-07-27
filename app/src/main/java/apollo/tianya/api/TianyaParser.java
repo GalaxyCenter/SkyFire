@@ -22,6 +22,7 @@ import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Message;
 import apollo.tianya.bean.Notice;
 import apollo.tianya.bean.Post;
+import apollo.tianya.bean.Section;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.UserPostsFragment;
 import apollo.tianya.util.CookieUtil;
@@ -201,6 +202,44 @@ public class TianyaParser {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
+        return datas;
+    }
+
+    /**
+     * 解析用户收藏的板块
+     * @param source
+     * @return
+     */
+    public static DataSet<Section> parseSectionBookMarks(String source) {
+        DataSet<Section> datas = null;
+        List<Section> list = null;
+        Section section = null;
+        JSONObject json = null;
+        JSONArray jarr = null;
+
+        list = new ArrayList<Section>();
+        datas = new DataSet<Section>();
+        datas.setObjects(list);
+
+        try {
+            json = new JSONObject(source);
+            json = json.getJSONObject("data");
+
+            datas.setTotalRecords(json.getInt("total"));
+
+            jarr = json.getJSONArray("items");
+            for(int i=0; i<jarr.length(); i++) {
+                json = jarr.getJSONObject(i);
+                section = new Section();
+
+                section.setGuid(json.getString("id"));
+                section.setName(json.getString("name"));
+                list.add(section);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
         return datas;
     }
 

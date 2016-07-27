@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
     enum Tab {
         Tab(0, R.string.main_tab_home, R.drawable.tab_btn_home, ChannelViewPagerFragment.class),
         COMMUITIES(0, R.string.main_tab_commuities, R.drawable.tab_btn_home, NoticeViewPagerFragment.class),
-        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.tab_btn_bookmark, BookMarksFragment.class),
+        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.tab_btn_bookmark, CollectionViewPagerFragment.class),
         NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.tab_btn_notifications, NoticeViewPagerFragment.class);
 
         int position;

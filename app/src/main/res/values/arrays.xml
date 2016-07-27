@@ -21,8 +21,8 @@
     </string-array>
 
     <string-array name="collection_viewpage_arrays">
-        <item>帖子</item>
-        <item>板块</item>
+        <item>@string/channel_user_section_bookmarks</item>
+        <item>@string/channel_user_thread_bookmarks</item>
     </string-array>
 
     <string-array name="user_posts_viewpage_arrays">

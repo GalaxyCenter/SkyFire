@@ -48,6 +48,9 @@
     <string name="channel_meitu">美图</string>
     <string name="channel_chengshi">城市</string>
 
+    <string name="channel_user_section_bookmarks">板块</string>
+    <string name="channel_user_thread_bookmarks">帖子</string>
+
     <string name="channel_user_threads">我的发表</string>
     <string name="channel_user_posts">我的回复</string>
 

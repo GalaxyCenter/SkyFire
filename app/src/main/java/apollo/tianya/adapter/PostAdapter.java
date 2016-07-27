@@ -41,13 +41,17 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         }
     }
 
-    public static class FooterViewHolder extends ViewHolder {
+    public static class HeaderViewHolder extends ViewHolder {
+        public HeaderViewHolder(View item) {
+            super(item);
+        }
+    }
 
+    public static class FooterViewHolder extends ViewHolder {
         public FooterViewHolder(View itemView) {
             super(itemView);
         }
     }
-
 
     @Override
     public PostAdapter.ViewHolder getViewHolder(ViewGroup viewGroup) {

@@ -188,6 +188,20 @@ public class TianyaApi {
     }
 
     /**
+     * 获取收藏的板块
+     * @param handler
+     */
+    public static void getSectionBookMarks(AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/tw?method=userblock.ice.selectItems";
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    /**
      * 获取用户发表的帖子
      * @param userId
      * @param publicNextId
@@ -389,4 +403,5 @@ public class TianyaApi {
 
         ApiHttpClient.get(url, headers, handler);
     }
+
 }

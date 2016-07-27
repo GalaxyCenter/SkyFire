@@ -18,10 +18,8 @@ public class CollectionViewPagerFragment extends BaseViewPagerFragment {
         String[] titles = getResources().getStringArray(
                 R.array.collection_viewpage_arrays);
 
-        for(String title:titles) {
-            adapter.addTab(title, title, ChannelFragment.class,
-                    getBundle(title));
-        }
+        adapter.addTab(titles[0], titles[0], ChannelFragment.class, getBundle(titles[0]));
+        adapter.addTab(titles[1], titles[1], ChannelFragment.class, getBundle(titles[1]));
     }
 
     private Bundle getBundle(String type) {

@@ -32,7 +32,8 @@ public class ChannelFragment extends BaseListFragment<Thread> {
 
         if (mCatalog.equals(getString(R.string.channel_hot)))
             dataset = TianyaParser.parseHotThread(body);
-        else if (mCatalog.equals(getString(R.string.nav_my_bookmarks)))
+        else if (mCatalog.equals(getString(R.string.nav_my_bookmarks))
+                || mCatalog.equals(getString(R.string.channel_user_thread_bookmarks)))
             dataset = TianyaParser.parseBookmarks(body);
         else if (mCatalog.equals(getString(R.string.nav_my_histories)))
             dataset = TianyaParser.parseHistory(body);
@@ -79,7 +80,8 @@ public class ChannelFragment extends BaseListFragment<Thread> {
         else if (mCatalog.equals(getString(R.string.channel_chengshi)))
             TianyaApi.getChannel("chengshi", mHandler);
 
-        else if (mCatalog.equals(getString(R.string.nav_my_bookmarks)))
+        else if (mCatalog.equals(getString(R.string.nav_my_bookmarks))
+                || mCatalog.equals(getString(R.string.channel_user_thread_bookmarks)))
             TianyaApi.getBookMarks(mPageIndex, mHandler);
         else if (mCatalog.equals(getString(R.string.nav_my_histories)))
             TianyaApi.getUserHistory(mHandler);
