@@ -40,13 +40,13 @@ import apollo.tianya.util.TLog;
 import apollo.tianya.util.UIHelper;
 import apollo.tianya.widget.BadgeView;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements TabHost.OnTabChangeListener {
 
     enum Tab {
-        Tab(0, R.string.main_tab_home, R.drawable.ic_home_white_24dp, ChannelViewPagerFragment.class),
-        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.ic_home_white_24dp, NoticeViewPagerFragment.class),
-        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.ic_bookmark_white_24dp, BookMarksFragment.class),
-        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.ic_notifications_white_24dp, NoticeViewPagerFragment.class);
+        Tab(0, R.string.main_tab_home, R.drawable.tab_btn_home, ChannelViewPagerFragment.class),
+        COMMUITIES(0, R.string.main_tab_commuities, R.drawable.tab_btn_home, NoticeViewPagerFragment.class),
+        COLLECTIONS(0, R.string.main_tab_collections, R.drawable.tab_btn_bookmark, BookMarksFragment.class),
+        NOTIFICATIONS(0, R.string.main_tab_notifications, R.drawable.tab_btn_notifications, NoticeViewPagerFragment.class);
 
         int position;
         int resName;
@@ -155,6 +155,7 @@ public class MainActivity extends BaseActivity {
 
         mTabHost = (FragmentTabHost) findViewById(R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+        mTabHost.setOnTabChangedListener(this);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navigation_drawer);
@@ -166,6 +167,25 @@ public class MainActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
+    }
+
+    @Override
+    public void onTabChanged(String tabId) {
+        int size = mTabHost.getTabWidget().getTabCount();
+        for (int i = 0; i < size; i++) {
+            View v = mTabHost.getTabWidget().getChildAt(i);
+            if (i == mTabHost.getCurrentTab()) {
+                v.setSelected(true);
+            } else {
+                v.setSelected(false);
+            }
+        }
+
+        if (tabId.equals(getString(Tab.NOTIFICATIONS.resName))) {
+            mBadgView.setText("");
+            mBadgView.setVisibility(View.GONE);
+        }
+        supportInvalidateOptionsMenu();
     }
 
     private void handleIntent(Intent intent) {
