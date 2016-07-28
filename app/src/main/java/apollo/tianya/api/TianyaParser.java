@@ -782,4 +782,20 @@ public class TianyaParser {
         }
         return datas;
     }
+
+    public static Thread parseThreadUrl(String url) {
+        Thread thread = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        pattern = Pattern.compile("post-(.*?)-(.*?)-");
+        matcher = pattern.matcher(url);
+        if (matcher.find()) {
+            thread = new Thread();
+
+            thread.setSectionId(matcher.group(1));
+            thread.setId(Integer.parseInt(matcher.group(2)));
+        }
+        return thread;
+    }
 }

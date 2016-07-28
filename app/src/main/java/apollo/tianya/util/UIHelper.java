@@ -75,4 +75,14 @@ public class UIHelper {
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
+
+    /**
+     * 显示一个URL内容
+     * @param context
+     * @param url
+     */
+    public static void showUrlRedirect(Context context, String url) {
+        if (url == null)
+            return;
+    }
 }

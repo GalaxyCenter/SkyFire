@@ -45,7 +45,9 @@ public class ChannelFragment extends BaseListFragment<Thread> {
 
     public void onItemClick(View view, int position) {
         Thread thread = mAdapter.getItem(position);
-        UIHelper.showPostDetail(view.getContext(), thread);
+
+        if (TianyaParser.parseThreadUrl(thread.getUrl()) != null)
+            UIHelper.showPostDetail(view.getContext(), thread);
     }
 
     @Override
