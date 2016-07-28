@@ -19,7 +19,7 @@ import apollo.tianya.bean.Section;
 public class SectionFragment extends BaseListFragment<Section> {
     @Override
     protected RecyclerBaseAdapter<Section, RecyclerView.ViewHolder> getListAdapter() {
-        return new SectionAdapter();
+        return null;
     }
 
     @Override

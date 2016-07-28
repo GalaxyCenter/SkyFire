@@ -3,6 +3,7 @@ package apollo.tianya.fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,10 +38,25 @@ public class NavigationDrawerFragment extends BaseFragment
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
+                mUser = AppContext.getInstance().getLoginUser();
                 fillUI();
             }
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+        filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
+        getActivity().registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(mReceiver);
+    }
 
     @Override
     protected int getLayoutId() {
