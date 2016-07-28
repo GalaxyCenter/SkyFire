@@ -69,29 +69,33 @@
             <LinearLayout
                 android:id="@+id/layout_photo"
                 android:layout_width="match_parent"
-                android:layout_height="200dip"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/summary"
                 android:clipChildren="false"
                 android:gravity="center_horizontal"
                 android:layerType="software"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/photos"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:clipChildren="false"/>
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/photos"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:layout_gravity="center"
+                    android:clipChildren="false"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_below="@+id/layout_photo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
                 <ImageButton
                     android:id="@+id/views_img"
+                    android:background="@drawable/ic_eye_red_16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -99,15 +103,18 @@
 
                 <TextView
                     android:id="@+id/views"
+                    android:text="0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/views_img" />
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/views_img"
+                    android:layout_marginStart="4dp" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/share"
+                    android:background="@drawable/ic_share_red_16dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true" />
 
@@ -116,15 +123,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/replies_img"
+                    android:background="@drawable/ic_comment_red_16dp"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/share" />
+                    android:layout_toStartOf="@+id/replies"
+                    />
 
                 <TextView
                     android:id="@+id/replies"
+                    android:text="0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/replies_img" />
+                    android:layout_toStartOf="@+id/share"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="8dp"/>
 
             </RelativeLayout>
 

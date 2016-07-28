@@ -66,7 +66,12 @@ public class PostReplyAdapter extends RecyclerBaseAdapter<Post, PostReplyAdapter
     }
 
     @Override
-    public ViewHolder getFootViewHolder(ViewGroup viewGroup) {
+    public ViewHolder getHeaderViewHolder(ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
+    public ViewHolder getFooterViewHolder(ViewGroup viewGroup) {
         View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_cell_footer, viewGroup, false);
         return new FooterViewHolder(v);
     }

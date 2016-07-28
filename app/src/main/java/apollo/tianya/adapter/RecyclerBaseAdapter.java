@@ -5,15 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import apollo.tianya.bean.Entity;
 
 /**
  * Created by Texel on 2016/6/2.
@@ -38,7 +34,8 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     protected int state = STATE_LESS_ONE_PAGE;
 
     public final static int TYPE_NORMAL = 0;
-    public final static int TYPE_FOOTER = 1;
+    public final static int TYPE_HEADER = 1;
+    public final static int TYPE_FOOTER = 2;
 
     protected List<T> mItems;
     private LayoutInflater mInflater;
@@ -48,7 +45,8 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     protected DisplayFloorHandle mDisplayFloorHandle;
 
     public abstract VH getViewHolder(ViewGroup viewGroup);
-    public abstract VH getFootViewHolder(ViewGroup viewGroup);
+    public abstract VH getHeaderViewHolder(ViewGroup viewGroup);
+    public abstract VH getFooterViewHolder(ViewGroup viewGroup);
 
     public RecyclerBaseAdapter() {
         mItems = new ArrayList<T>();
@@ -63,6 +61,9 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     public int getItemCount() {
         int count = mItems.size();
 
+        if (hasHeaderView())
+            count ++;
+
         if (hasFooterView())
             count ++;
 
@@ -72,8 +73,10 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType == TYPE_FOOTER) {
-            return getFootViewHolder(parent);
+        if (viewType == TYPE_HEADER) {
+            return getHeaderViewHolder(parent);
+        } else if (viewType == TYPE_FOOTER) {
+            return getFooterViewHolder(parent);
         } else {
             final VH vh = getViewHolder(parent);
             vh.itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,9 +95,11 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     public int getItemViewType(int position) {
         int type = TYPE_NORMAL;
 
-        if (position == getItemCount() - 1) {
+        if (hasHeaderView() && position == 0)
+            type = TYPE_HEADER;
+
+        if (hasFooterView() && position == getItemCount() - 1)
             type = TYPE_FOOTER;
-        }
 
         return type;
     }
@@ -108,6 +113,10 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
     }
 
     protected boolean hasFooterView(){
+        return false;
+    }
+
+    protected boolean hasHeaderView(){
         return false;
     }
 

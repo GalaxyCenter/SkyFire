@@ -356,7 +356,10 @@ public class TianyaParser {
             return null;
 
         for(Element elm:elms) {
-            post = new Post();
+            if (list.size() == 0)
+                post = new Thread();
+            else
+                post = new Post();
 
             bd = elm.select(".bd").first();
             if (bd == null)
@@ -418,6 +421,17 @@ public class TianyaParser {
         item = doc.select("i.icon-reply").first();
         replies = Integer.parseInt(item.text());
         post.setReplies(replies);
+
+        // 解析板块信息
+        Thread thread = (Thread)post;
+        String url = null;
+
+        item = doc.select("div.title a").first();
+        url = item.attr("href");
+        url.replace("list-", "").replace("-1.shtml", "");
+
+        thread.setSectionId(url);
+        thread.setSectionName(item.text());
 
         datas = new DataSet<Post>();
         datas.setObjects(list);

@@ -44,6 +44,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         @BindView(R.id.summary) TextView summary;
         @BindView(R.id.author) TextView author;
         @BindView(R.id.views) TextView views;
+        @BindView(R.id.replies) TextView replies;
         @BindView(R.id.time) TextView time;
         @BindView(R.id.userface) AvatarView face;
         @BindView(R.id.photos) ViewPager photos;
@@ -171,6 +172,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 vh.summary.setText(sub_summary);
 
                 vh.views.setText(Integer.toString(post.getViews()));
+                vh.replies.setText(Integer.toString(post.getReplies()));
                 vh.time.setText(DateTime.toString(post.getPostDate()));
                 if (TextUtils.isEmpty(vh.author.getText())) {
                     vh.author.setText(post.getAuthor());
@@ -179,7 +181,12 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
                 adapter = (PhotoAdapter)vh.photos.getAdapter();
                 adapter.removeAllItem();
-                adapter.addItems(post.getPhotos());
+                if (post.getPhotos().size() == 0) {
+                    vh.photos.setVisibility(View.GONE);
+                } else {
+                    vh.photos.setVisibility(View.VISIBLE);
+                    adapter.addItems(post.getPhotos());
+                }
             }
         }
     }
@@ -191,7 +198,12 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
     }
 
     @Override
-    public ViewHolder getFootViewHolder(ViewGroup viewGroup) {
+    public ViewHolder getHeaderViewHolder(ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
+    public ViewHolder getFooterViewHolder(ViewGroup viewGroup) {
         return null;
     }
 
@@ -203,11 +215,11 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         vh.title.setText(thread.getTitle());
         vh.author.setText(thread.getAuthor());
         vh.views.setText(Integer.toString(thread.getViews()));
+        vh.replies.setText(Integer.toString(thread.getReplies()));
         vh.time.setText(Formatter.friendlyTime(thread.getPostDate()));
         vh.face.setUserInfo(thread.getAuthorId(), thread.getAuthor());
         vh.summary.setText("");
         vh.time.setText("");
-        vh.views.setText("0");
 
         ((PhotoAdapter)vh.photos.getAdapter()).removeAllItem();
 

@@ -32,7 +32,12 @@ public class SectionAdapter extends RecyclerBaseAdapter<Section, SectionAdapter.
     }
 
     @Override
-    public ViewHolder getFootViewHolder(ViewGroup viewGroup) {
+    public ViewHolder getHeaderViewHolder(ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
+    public ViewHolder getFooterViewHolder(ViewGroup viewGroup) {
         return null;
     }
 

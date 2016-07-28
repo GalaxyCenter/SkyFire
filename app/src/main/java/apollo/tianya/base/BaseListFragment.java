@@ -159,6 +159,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 }
             }
         });
+        mState = STATE_LOADMORE;
         requestData(false);
     }
 

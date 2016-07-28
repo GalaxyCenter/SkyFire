@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import apollo.tianya.R;
 import apollo.tianya.bean.Post;
+import apollo.tianya.bean.Thread;
 import apollo.tianya.util.Formatter;
 import apollo.tianya.util.Transforms;
 import apollo.tianya.widget.AvatarView;
@@ -42,14 +43,24 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     }
 
     public static class HeaderViewHolder extends ViewHolder {
-        public HeaderViewHolder(View item) {
-            super(item);
+
+        @BindView(R.id.title) TextView title;
+        @BindView(R.id.section) TextView section;
+        @BindView(R.id.views) TextView views;
+        @BindView(R.id.replies) TextView replies;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
     }
 
     public static class FooterViewHolder extends ViewHolder {
         public FooterViewHolder(View itemView) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -60,7 +71,14 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     }
 
     @Override
-    public ViewHolder getFootViewHolder(ViewGroup viewGroup) {
+    public ViewHolder getHeaderViewHolder(ViewGroup viewGroup) {
+        View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_post_header, viewGroup, false);
+
+        return new HeaderViewHolder(v);
+    }
+
+    @Override
+    public ViewHolder getFooterViewHolder(ViewGroup viewGroup) {
         View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_cell_footer, viewGroup, false);
         return new FooterViewHolder(v);
     }
@@ -69,7 +87,22 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     public void onBindViewHolder(PostAdapter.ViewHolder holder, int position) {
         int itemType = getItemViewType(position);
 
-        if (itemType == TYPE_FOOTER) {
+        if (itemType == TYPE_HEADER) {
+            HeaderViewHolder vh = null;
+            Thread thread = null;
+
+            if (mItems.size() == 0)
+                return;
+
+            vh = (HeaderViewHolder) holder;
+            thread = (Thread) mItems.get(0);
+
+            vh.title.setText(thread.getTitle());
+            vh.views.setText(Integer.toString(thread.getViews()));
+            vh.replies.setText(Integer.toString(thread.getReplies()));
+            vh.section.setText(thread.getSectionName());
+
+        } else if (itemType == TYPE_FOOTER) {
 
         } else {
             Post post = null;
@@ -77,6 +110,7 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             String body = null;
             NormalViewHolder vh = null;
 
+            position = getRealPosition(holder);
             post = mItems.get(position);
             vh = (NormalViewHolder) holder;
 
@@ -96,7 +130,16 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         }
     }
 
+    public int getRealPosition(RecyclerView.ViewHolder holder) {
+        int position = holder.getLayoutPosition();
+        return hasHeaderView() ? position - 1 : position ;
+    }
+
     protected boolean hasFooterView(){
+        return true;
+    }
+
+    protected boolean hasHeaderView(){
         return true;
     }
 }
