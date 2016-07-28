@@ -40,6 +40,9 @@ public class NavigationDrawerFragment extends BaseFragment
             if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
                 mUser = AppContext.getInstance().getLoginUser();
                 fillUI();
+            } else if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
+                mUser = null;
+                fillUI();
             }
         }
     };
@@ -85,6 +88,11 @@ public class NavigationDrawerFragment extends BaseFragment
         int id = item.getItemId();
         String tag = null;
 
+        if (mUser == null) {
+            UIHelper.showLoginActivity(getActivity());
+            return true;
+        }
+
         if (id == R.id.nav_my_bookmarks) {
             tag = getResources().getString(R.string.actionbar_title_bookmarks);
 
@@ -129,13 +137,17 @@ public class NavigationDrawerFragment extends BaseFragment
     }
 
     private void fillUI() {
-        if (mUser == null)
-            return;
+        if (mUser == null) {
+            mAvatarView.setUserInfo(0, "");
+            mAvatarView.setImageResource(R.drawable.ic_account_circle_blue_37dp);
 
-        mAvatarView.setUserInfo(mUser.getId(), mUser.getName());
-        mAvatarView.setAvatarUrl("http://tx.tianyaui.com/logo/" + mUser.getId());
+            mNameView.setText("");
+        } else {
+            mAvatarView.setUserInfo(mUser.getId(), mUser.getName());
+            mAvatarView.setAvatarUrl("http://tx.tianyaui.com/logo/" + mUser.getId());
 
-        mNameView.setText(mUser.getName());
+            mNameView.setText(mUser.getName());
+        }
     }
 
 }
