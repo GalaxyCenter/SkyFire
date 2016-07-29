@@ -17,7 +17,7 @@ public abstract class BarBaseFragment extends BaseFragment {
     }
 
     public enum Action {
-        ACTION_CHANGE, ACTION_FLIGHT, ACTION_VIEW_COMMENT, ACTION_FAVORITE, ACTION_SHARE, ACTION_REPORT
+        ACTION_CHANGE, ACTION_FLIGHT, ACTION_BOOKMARK, ACTION_FAVORITE, ACTION_SHARE, ACTION_REPORT
     }
 
     public void addOnActionClickListener(OnActionClickListener lis) {

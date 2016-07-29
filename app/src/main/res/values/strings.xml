@@ -109,4 +109,7 @@
     <string name="post_opt_copy">复制</string>
     <string name="post_opt_quote">引用</string>
     <string name="post_opt_comment">评论</string>
+
+    <string name="add_bookmark_success">收藏成功,可以到收藏列表查看噢</string>
+    <string name="remove_bookmark_success">成功删除收藏,您还可以再次收藏噢</string>
 </resources>

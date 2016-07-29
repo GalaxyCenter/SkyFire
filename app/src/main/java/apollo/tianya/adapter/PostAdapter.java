@@ -26,8 +26,8 @@ import butterknife.OnClick;
  */
 public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolder> {
 
-    public interface PostOptionHandle {
-        void setOption(ViewHolder holder, Post post, int position);
+    public interface OptionHandle {
+        void handleOption(ViewHolder holder, Post post, int position);
     }
 
     public static abstract class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,10 +80,10 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         }
     }
 
-    private PostOptionHandle mPostOptionHandle;
+    private OptionHandle mOptionHandle;
 
-    public void setPostOptionHandle(PostOptionHandle callBack) {
-        mPostOptionHandle = callBack;
+    public void setPostOptionHandle(OptionHandle callBack) {
+        mOptionHandle = callBack;
     }
 
     @Override
@@ -145,8 +145,8 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             if (mDisplayFloorHandle != null)
                 mDisplayFloorHandle.setFloor(vh.floor, post, position);
 
-            if (mPostOptionHandle != null)
-                mPostOptionHandle.setOption(vh, post, position);
+            if (mOptionHandle != null)
+                mOptionHandle.handleOption(vh, post, position);
 
             if (!TextUtils.isEmpty(post.getBody())) {
                 body = Transforms.formatPost(post.getBody());

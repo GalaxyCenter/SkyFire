@@ -31,6 +31,7 @@ import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
+import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.InputFragment;
 import apollo.tianya.util.Transforms;
@@ -86,6 +87,75 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     private String mThreadId;
     private String mAuthor;
     private int mFloor;
+    private boolean isAddBookmark;
+
+    private final AsyncHttpResponseHandler mAddBookMarkHandle = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String body = null;
+
+            body = new String(responseBody); // {"message":"收藏帖子成功！","data":{},"code":"1","success":1}
+            String message = null;
+            JSONObject json = null;
+            boolean isSuccess = false;
+
+            try {
+                json = new JSONObject(body);
+                isSuccess = json.getInt("success") == 1;
+                message = json.getString("message");
+            } catch (JSONException ex) {
+            }
+
+            if (isSuccess == false) {
+                Snackbar.make(mListView, message, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else {
+                Snackbar.make(mListView, R.string.add_bookmark_success, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                isAddBookmark = true;
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+        }
+    };
+
+    private final AsyncHttpResponseHandler mRemoveBookMarkHandle = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String body = null;
+
+            body = new String(responseBody); // {"message":"收藏帖子成功！","data":{},"code":"1","success":1}
+            String message = null;
+            JSONObject json = null;
+            boolean isSuccess = false;
+
+            try {
+                json = new JSONObject(body);
+                isSuccess = json.getInt("success") == 1;
+                message = json.getString("message");
+            } catch (JSONException ex) {
+            }
+
+            if (isSuccess == false) {
+                Snackbar.make(mListView, message, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else {
+                Snackbar.make(mListView, R.string.remove_bookmark_success, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                isAddBookmark = false;
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+        }
+    };
 
     private final AsyncHttpResponseHandler mCreatePostHandler = new AsyncHttpResponseHandler() {
 
@@ -129,10 +199,17 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         super.initView(view);
 
         mAdapter.setDisplayFloor(this);
-        ((PostAdapter)(Object)mAdapter).setPostOptionHandle(new PostAdapter.PostOptionHandle() {
+        ((PostAdapter)(Object)mAdapter).setPostOptionHandle(new PostAdapter.OptionHandle() {
             @Override
-            public void setOption(PostAdapter.ViewHolder holder, final Post post, int position) {
+            public void handleOption(PostAdapter.ViewHolder holder, final Post post, int position) {
                 final PostAdapter.PostItemViewHolder vh = (PostAdapter.PostItemViewHolder) holder;
+
+                vh.filter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
 
                 vh.copy.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -142,6 +219,20 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
                         Snackbar.make(vh.copy, getActivity().getString(R.string.copy_data_success), Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
+                    }
+                });
+
+                vh.quote.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
+                vh.comment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
                     }
                 });
             }
@@ -202,6 +293,15 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         switch (action) {
             case ACTION_FLIGHT:
                 mFlightDialog.show(getActivity().getSupportFragmentManager(), "DD");
+                break;
+
+            case ACTION_BOOKMARK:
+                Thread thread = (Thread) (Object) mAdapter.getItem(0);
+
+                if (isAddBookmark)
+                    TianyaApi.removeBookmark(thread, mRemoveBookMarkHandle);
+                else
+                    TianyaApi.addBookmark(thread, mAddBookMarkHandle);
                 break;
         }
     }

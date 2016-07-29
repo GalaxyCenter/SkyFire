@@ -428,10 +428,23 @@ public class TianyaParser {
 
         item = doc.select("div.title a").first();
         url = item.attr("href");
-        url.replace("list-", "").replace("-1.shtml", "");
+        url = url.replace("list-", "").replace("-1.shtml", "");
 
         thread.setSectionId(url);
         thread.setSectionName(item.text());
+
+        // 解析帖子id
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        item = doc.select("#host_toolbox a.see-host-btn").first();
+        url = item.attr("href"); // post_author-lookout-473562-1.shtml
+
+        pattern = Pattern.compile("post_author-.*?-(.*?)-1.shtml");
+        matcher = pattern.matcher(url);
+        if (matcher.find()) {
+            thread.setId(Integer.parseInt(matcher.group(1)));
+        }
 
         datas = new DataSet<Post>();
         datas.setObjects(list);

@@ -21,6 +21,7 @@ public class ToolbarFragment extends BarBaseFragment implements View.OnClickList
     public void initView(View view) {
         view.findViewById(R.id.btn_change).setOnClickListener(this);
         view.findViewById(R.id.action_flight).setOnClickListener(this);
+        view.findViewById(R.id.action_bookmark).setOnClickListener(this);
     }
 
     @Override
@@ -31,6 +32,8 @@ public class ToolbarFragment extends BarBaseFragment implements View.OnClickList
             action = Action.ACTION_CHANGE;
         else if (id == R.id.action_flight)
             action = Action.ACTION_FLIGHT;
+        else if (id == R.id.action_bookmark)
+            action = Action.ACTION_BOOKMARK;
 
         if (mActionListeners != null) {
             for (int i = mActionListeners.size() - 1; i >= 0; i--) {

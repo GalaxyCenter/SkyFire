@@ -13,7 +13,7 @@ import apollo.tianya.AppConfig;
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.api.ApiHttpClient;
-import apollo.tianya.bean.DataSet;
+import apollo.tianya.bean.Thread;
 import apollo.tianya.util.DateTime;
 import cz.msebera.android.httpclient.Header;
 
@@ -404,4 +404,36 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    public static void addBookmark(Thread thread, AsyncHttpResponseHandler handler) {
+        String url = null;
+        Header[] headers = null;
+        int userId = 0;
+
+        userId = AppContext.getInstance().getLoginUserId();
+        url = "http://www.tianya.cn/api/tw?method=bbsArticleMark.insert&header.userId=" + userId
+                + "&params.blockId=" + thread.getSectionId()
+                + "&params.articleId=" + thread.getId()
+                + "&params.title=" + thread.getTitle()
+                + "&params.authorId=" + thread.getAuthorId() + "&params.authorName=" + thread.getAuthor() + "&params.markResId=0&params.markFloorId=0";
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    public static void removeBookmark(Thread thread, AsyncHttpResponseHandler handler) {
+        String url = null;
+        Header[] headers = null;
+        int userId = 0;
+        userId = AppContext.getInstance().getLoginUserId();
+        url = "http://www.tianya.cn/api/tw?method=bbsArticleMark.delete&header.userId=" + userId
+                + "&params.blockId=" + thread.getSectionId()
+                + "&params.articleId=" + thread.getId()
+                + "&params.title=" + thread.getTitle()
+                + "&params.authorId=" + thread.getAuthorId() + "&params.authorName=" + thread.getAuthor() + "&params.markResId=0&params.markFloorId=0";
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
 }

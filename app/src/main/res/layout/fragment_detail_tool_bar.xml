@@ -30,7 +30,7 @@
             android:layout_height="match_parent" />
 
         <FrameLayout
-            android:id="@+id/view_flight_layout"
+            android:id="@+id/flight_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0" >
@@ -43,15 +43,15 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/write_comment_layout"
+            android:id="@+id/bookmark_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0" >
 
             <ImageView
-                android:id="@+id/action_write_comment"
+                android:id="@+id/action_bookmark"
                 style="@style/toolbar_action"
-                android:src="@drawable/btn_opt_tools_to_text_selector" />
+                android:src="@drawable/btn_opt_bookmark_selector" />
         </FrameLayout>
 
         <FrameLayout
