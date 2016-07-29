@@ -26,12 +26,14 @@ public class DetailActivity extends BaseActivity implements
     private ToolbarFragment mToolFragment = new ToolbarFragment();
     private InputFragment mInputFragment = new InputFragment();
     private BarBaseFragment mNewFragment = null;
+
     private InputFragment.OnSendListener mSendListener = null;
+    private OnActionClickListener mActionClickListener = null;
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        BaseFragment fragment = null;
         FragmentTransaction trans = null;
+        BaseFragment fragment = null;
 
         fragment = new ThreadDetailFragment();
         trans = getSupportFragmentManager().beginTransaction();
@@ -40,6 +42,9 @@ public class DetailActivity extends BaseActivity implements
 
         if (fragment instanceof InputFragment.OnSendListener)
             mSendListener = (InputFragment.OnSendListener) fragment;
+
+        if (fragment instanceof OnActionClickListener)
+            mActionClickListener = (OnActionClickListener) fragment;
     }
 
     @Override
@@ -61,9 +66,11 @@ public class DetailActivity extends BaseActivity implements
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.emoji_keyboard, mToolFragment).commit();
-        mToolFragment.setOnActionClickListener(this);
-        mInputFragment.setOnActionClickListener(this);
+        mToolFragment.addOnActionClickListener(this);
+        mToolFragment.addOnActionClickListener(mActionClickListener);
+        mInputFragment.addOnActionClickListener(this);
         mInputFragment.setOnSendListener(this);
+
         mNewFragment = mInputFragment;
     }
 
@@ -71,7 +78,6 @@ public class DetailActivity extends BaseActivity implements
     public void onActionClick(Action action) {
         switch (action) {
             case ACTION_CHANGE:
-            case ACTION_WRITE_COMMENT:
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim.footer_menu_slide_in,
@@ -80,6 +86,9 @@ public class DetailActivity extends BaseActivity implements
                         .commit();
 
                 mNewFragment = mNewFragment == mInputFragment ? mToolFragment : mInputFragment;
+                break;
+
+            case ACTION_FLIGHT:
                 break;
         }
     }

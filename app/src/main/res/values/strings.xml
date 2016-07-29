@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">我的天涯</string>
+    <string name="ok">确定</string>
     <string name="cancel">取消</string>
-
+    <string name="skip_to">跳转到</string>
+    <string name="copy_data_success">成功复制</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -102,4 +104,9 @@
     <string name="notice_replies">回复(%s) </string>
     <string name="notice_messages">私信(%s) </string>
     <string name="notice_notifictions">通知(%s) </string>
+
+    <string name="post_opt_filter">只看ta</string>
+    <string name="post_opt_copy">复制</string>
+    <string name="post_opt_quote">引用</string>
+    <string name="post_opt_comment">评论</string>
 </resources>

@@ -2,14 +2,15 @@ package apollo.tianya.fragment.bar;
 
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import apollo.tianya.R;
 
 /**
  * Created by Texel on 2016/6/23.
  */
 public class ToolbarFragment extends BarBaseFragment implements View.OnClickListener {
-
-    private OnActionClickListener mActionListener;
 
     @Override
     protected int getLayoutId() {
@@ -19,6 +20,7 @@ public class ToolbarFragment extends BarBaseFragment implements View.OnClickList
     @Override
     public void initView(View view) {
         view.findViewById(R.id.btn_change).setOnClickListener(this);
+        view.findViewById(R.id.action_flight).setOnClickListener(this);
     }
 
     @Override
@@ -27,13 +29,13 @@ public class ToolbarFragment extends BarBaseFragment implements View.OnClickList
         Action action = null;
         if (id == R.id.btn_change)
             action = Action.ACTION_CHANGE;
+        else if (id == R.id.action_flight)
+            action = Action.ACTION_FLIGHT;
 
-        if (action != null && mActionListener != null) {
-            mActionListener.onActionClick(action);
+        if (mActionListeners != null) {
+            for (int i = mActionListeners.size() - 1; i >= 0; i--) {
+                mActionListeners.get(i).onActionClick(action);
+            }
         }
-    }
-
-    public void setOnActionClickListener(OnActionClickListener lis) {
-        mActionListener = lis;
     }
 }

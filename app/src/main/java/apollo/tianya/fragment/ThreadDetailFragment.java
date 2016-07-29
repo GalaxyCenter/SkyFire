@@ -1,9 +1,19 @@
 package apollo.tianya.fragment;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,8 +31,9 @@ import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
-import apollo.tianya.bean.Thread;
+import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.InputFragment;
+import apollo.tianya.util.Transforms;
 import apollo.tianya.util.UIHelper;
 import cz.msebera.android.httpclient.Header;
 
@@ -30,7 +41,46 @@ import cz.msebera.android.httpclient.Header;
  * Created by Texel on 2016/6/20.
  */
 public class ThreadDetailFragment extends BaseListFragment<Post> implements
-        RecyclerBaseAdapter.DisplayFloorHandle<Post>, InputFragment.OnSendListener {
+        RecyclerBaseAdapter.DisplayFloorHandle<Post>, InputFragment.OnSendListener,
+        BarBaseFragment.OnActionClickListener {
+
+    @SuppressLint("ValidFragment")
+    public class FlightDialogFragment extends DialogFragment {
+
+        private EditText mFloor;
+
+        public FlightDialogFragment() {}
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View view = inflater.inflate(R.layout.dlg_flight, null);
+
+            mFloor = (EditText) view.findViewById(R.id.floor);
+
+            builder.setView(view).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    String tmp = mFloor.getText().toString();
+
+                    if (!TextUtils.isEmpty(tmp)) {
+                        ThreadDetailFragment.this.skip2Floor(Integer.parseInt(tmp));
+                        FlightDialogFragment.this.dismiss();
+                    }
+                }
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener(){
+
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    FlightDialogFragment.this.dismiss();
+                }
+            });
+            return builder.create();
+        }
+
+    }
+
+    private FlightDialogFragment mFlightDialog = null;
 
     private String mSectionId;
     private String mThreadId;
@@ -60,8 +110,6 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
             } else {
                 Snackbar.make(mListView, R.string.post_reply_success, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-
             }
         }
 
@@ -81,6 +129,24 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         super.initView(view);
 
         mAdapter.setDisplayFloor(this);
+        ((PostAdapter)(Object)mAdapter).setPostOptionHandle(new PostAdapter.PostOptionHandle() {
+            @Override
+            public void setOption(PostAdapter.ViewHolder holder, final Post post, int position) {
+                final PostAdapter.PostItemViewHolder vh = (PostAdapter.PostItemViewHolder) holder;
+
+                vh.copy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ClipboardManager cbm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                        cbm.setText(Transforms.formatPost(post.getBody(), false));
+
+                        Snackbar.make(vh.copy, getActivity().getString(R.string.copy_data_success), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                });
+            }
+        });
+        mFlightDialog = new FlightDialogFragment();
     }
 
     @Override
@@ -130,4 +196,20 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
         TianyaApi.createPost(mSectionId, mThreadId, "", editor.toString(), mCreatePostHandler);
     }
+
+    @Override
+    public void onActionClick(BarBaseFragment.Action action) {
+        switch (action) {
+            case ACTION_FLIGHT:
+                mFlightDialog.show(getActivity().getSupportFragmentManager(), "DD");
+                break;
+        }
+    }
+
+    private void skip2Floor(int floor) {
+        Snackbar.make(mListView, "xxx", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
+    }
+
 }

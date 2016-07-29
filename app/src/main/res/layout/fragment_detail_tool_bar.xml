@@ -30,20 +30,16 @@
             android:layout_height="match_parent" />
 
         <FrameLayout
-            android:id="@+id/view_comment_layout"
+            android:id="@+id/view_flight_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0" >
 
             <ImageView
-                android:id="@+id/action_view_comment"
+                android:id="@+id/action_flight"
                 style="@style/toolbar_action"
-                android:src="@drawable/btn_opt_tools_to_text_selector" />
+                android:src="@drawable/btn_opt_flight_selector" />
 
-            <TextView
-                android:id="@+id/action_comment_count"
-                style="@style/toolbar_action_comment"
-                android:visibility="gone"/>
         </FrameLayout>
 
         <FrameLayout

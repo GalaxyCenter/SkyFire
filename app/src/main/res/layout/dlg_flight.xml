@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="15.0dip"
+    android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/skip_to"
+            android:textColor="#ff333333"
+            android:textSize="16.0sp" />
+
+        <EditText
+            android:id="@+id/floor"
+            android:layout_width="100.0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:gravity="center"
+            android:maxLength="7"
+            android:minWidth="60.0dip"
+            android:numeric="integer"
+            android:singleLine="true"
+            android:textColor="#ff333333"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/post_floor"
+            android:textColor="#ff333333"
+            android:textSize="16.0sp" />
+
+
+
+
+</LinearLayout>

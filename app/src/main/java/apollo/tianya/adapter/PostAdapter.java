@@ -1,5 +1,8 @@
 package apollo.tianya.adapter;
 
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -7,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
@@ -15,11 +19,16 @@ import apollo.tianya.util.Transforms;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Texel on 2016/6/20.
  */
 public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolder> {
+
+    public interface PostOptionHandle {
+        void setOption(ViewHolder holder, Post post, int position);
+    }
 
     public static abstract class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(View itemView) {
@@ -27,7 +36,9 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         }
     }
 
-    public static class NormalViewHolder extends ViewHolder {
+    public static class PostItemViewHolder extends ViewHolder {
+
+        Post post = null;
 
         @BindView(R.id.body) TextView body;
         @BindView(R.id.author) TextView author;
@@ -35,7 +46,12 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         @BindView(R.id.userface) AvatarView face;
         @BindView(R.id.floor) TextView floor;
 
-        public NormalViewHolder(View itemView) {
+        @BindView(R.id.opt_filter) public TextView filter;
+        @BindView(R.id.opt_comment) public TextView comment;
+        @BindView(R.id.opt_copy) public TextView copy;
+        @BindView(R.id.opt_quote) public TextView quote;
+
+        public PostItemViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
@@ -64,10 +80,16 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         }
     }
 
+    private PostOptionHandle mPostOptionHandle;
+
+    public void setPostOptionHandle(PostOptionHandle callBack) {
+        mPostOptionHandle = callBack;
+    }
+
     @Override
     public PostAdapter.ViewHolder getViewHolder(ViewGroup viewGroup) {
         View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_post, viewGroup, false);
-        return new NormalViewHolder(v);
+        return new PostItemViewHolder(v);
     }
 
     @Override
@@ -108,12 +130,13 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             Post post = null;
             SpannableString span_body = null;
             String body = null;
-            NormalViewHolder vh = null;
+            PostItemViewHolder vh = null;
 
             position = getRealPosition(holder);
             post = mItems.get(position);
-            vh = (NormalViewHolder) holder;
+            vh = (PostItemViewHolder) holder;
 
+            vh.post = post;
             vh.author.setText(post.getAuthor());
             vh.time.setText(Formatter.friendlyTime(post.getPostDate()));
             vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
@@ -121,6 +144,9 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
 
             if (mDisplayFloorHandle != null)
                 mDisplayFloorHandle.setFloor(vh.floor, post, position);
+
+            if (mPostOptionHandle != null)
+                mPostOptionHandle.setOption(vh, post, position);
 
             if (!TextUtils.isEmpty(post.getBody())) {
                 body = Transforms.formatPost(post.getBody());

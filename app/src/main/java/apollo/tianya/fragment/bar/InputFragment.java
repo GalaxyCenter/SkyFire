@@ -105,8 +105,6 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
         }
     };
 
-    private OnActionClickListener mActionListener;
-
     @BindView(R.id.editor)
     AppCompatEditText mEditor;
 
@@ -230,13 +228,11 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
         if (id == R.id.btn_change)
             action = Action.ACTION_CHANGE;
 
-        if (action != null && mActionListener != null) {
-            mActionListener.onActionClick(action);
+        if (mActionListeners != null) {
+            for (int i = mActionListeners.size() - 1; i >= 0; i--) {
+                mActionListeners.get(i).onActionClick(action);
+            }
         }
-    }
-
-    public void setOnActionClickListener(OnActionClickListener lis) {
-        mActionListener = lis;
     }
 
     public boolean isEmojiPanelShowing() {
