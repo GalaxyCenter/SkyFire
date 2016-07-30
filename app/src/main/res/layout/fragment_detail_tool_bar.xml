@@ -43,15 +43,15 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/bookmark_layout"
+            android:id="@+id/favorite_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0" >
 
             <ImageView
-                android:id="@+id/action_bookmark"
+                android:id="@+id/action_favorite"
                 style="@style/toolbar_action"
-                android:src="@drawable/btn_opt_bookmark_selector" />
+                android:src="@drawable/btn_opt_favorite_selector" />
         </FrameLayout>
 
         <FrameLayout
@@ -67,29 +67,17 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/repost_layout"
+            android:id="@+id/share_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
             android:layout_weight="1.0" >
 
             <ImageView
-                android:id="@+id/action_repost"
+                android:id="@+id/action_share"
                 style="@style/toolbar_action"
-                android:src="@drawable/btn_opt_tools_to_text_selector" />
+                android:src="@drawable/btn_opt_share_selector" />
         </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/report_layout"
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="1.0"
-            android:visibility="gone" >
-
-            <ImageView
-                android:id="@+id/action_report"
-                style="@style/toolbar_action"
-                android:src="@drawable/btn_opt_tools_to_text_selector" />
-        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

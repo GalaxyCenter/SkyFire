@@ -207,7 +207,8 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 vh.filter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }
                 });
 
@@ -225,14 +226,16 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 vh.quote.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }
                 });
 
                 vh.comment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }
                 });
             }
@@ -295,13 +298,17 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 mFlightDialog.show(getActivity().getSupportFragmentManager(), "DD");
                 break;
 
-            case ACTION_BOOKMARK:
+            case ACTION_FAVORITE:
                 Thread thread = (Thread) (Object) mAdapter.getItem(0);
 
                 if (isAddBookmark)
                     TianyaApi.removeBookmark(thread, mRemoveBookMarkHandle);
                 else
                     TianyaApi.addBookmark(thread, mAddBookMarkHandle);
+                break;
+
+            case ACTION_SHARE:
+
                 break;
         }
     }
