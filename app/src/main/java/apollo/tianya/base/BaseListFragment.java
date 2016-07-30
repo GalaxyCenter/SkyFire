@@ -1,5 +1,7 @@
 package apollo.tianya.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -7,15 +9,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 
 import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Entity;
+import apollo.tianya.cache.CacheManager;
+import apollo.tianya.util.CompatibleUtil;
+import apollo.tianya.util.TLog;
 import butterknife.BindView;
 import cz.msebera.android.httpclient.Header;
 
@@ -56,9 +63,51 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             if (parserError) {
 
             } else {
+                SaveCacheTask task = new SaveCacheTask();
+                task.execute(getActivity(), dataset, getCacheKey());
+
                 executeOnLoadDataSuccess(dataset);
                 executeOnLoadFinish();
             }
+        }
+    }
+
+    private class CacheTask extends AsyncTask<String, Void, DataSet<T>> {
+
+        private final WeakReference<Context> mContext;
+
+        private CacheTask(Context ctx) {
+            mContext = new WeakReference<Context>(ctx);
+        }
+
+        @Override
+        protected DataSet<T> doInBackground(String... params) {
+            Serializable seri = CacheManager.readObject(mContext.get(), params[0]);
+
+            return seri == null ? null : (DataSet<T>)seri;
+        }
+
+        @Override
+        protected void onPostExecute(DataSet<T> datas) {
+            if (datas != null) {
+                executeOnLoadDataSuccess(datas);
+            } else {
+                executeOnLoadDataError(null);
+            }
+            executeOnLoadFinish();
+        }
+    }
+
+    private class SaveCacheTask extends AsyncTask<Object, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            Context ctx = (Context) params[0];
+            Serializable seri = (Serializable) params[1];
+            String key = (String) params[2];
+
+            CacheManager.saveObject(ctx, seri, key);
+            return null;
         }
     }
 
@@ -93,6 +142,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
     private ParserTask mParserTask = null;
+    private AsyncTask<String, Void, DataSet<T>> mCacheTask;
 
     protected abstract RecyclerBaseAdapter<T, RecyclerView.ViewHolder> getListAdapter();
 
@@ -100,8 +150,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected abstract void sendRequestData();
 
-    protected void onRefreshNetworkSuccess() {
-    }
+    protected abstract String getCacheKeyPrefix();
+
+    protected void onRefreshNetworkSuccess() {}
 
     @Override
     protected int getLayoutId() {
@@ -193,6 +244,22 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         mState = STATE_NONE;
     }
 
+    protected void executeOnLoadDataError(String error) {
+        if (mPageIndex == 1
+                && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
+            //mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+        } else {
+
+            //在无网络时，滚动到底部时，mCurrentPage先自加了，然而在失败时却
+            //没有减回来，如果刻意在无网络的情况下上拉，可以出现漏页问题
+            mPageIndex--;
+
+            //mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mAdapter.setState(RecyclerBaseAdapter.STATE_NETWORK_ERROR);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
     /**
      * 设置顶部正在加载的状态
      */
@@ -204,8 +271,22 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     }
 
+    /**
+     * 获取数据
+     * @param refresh 是否刷新数据
+     */
     protected void requestData(boolean refresh) {
-        sendRequestData();
+        String key = getCacheKey();
+        if (isReadCacheData(refresh)) {
+            readCacheData(key);
+
+            TLog.log(TAG, "requestData cache:" + key);
+        } else {
+            // 取新的数据
+            sendRequestData();
+
+            TLog.log(TAG, "requestData network:" + key);
+        }
     }
 
     /**
@@ -218,6 +299,34 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     }
 
+    /**
+     * 判断是否需要读取缓存数据
+     * @param refresh
+     * @return
+     */
+    protected boolean isReadCacheData(boolean refresh) {
+        String key = getCacheKey();
+        Activity activity = getActivity();
+
+        // 没有网络的情况下
+        if (!CompatibleUtil.hasInternet())
+            return true;
+
+        // 当第一页不是主动刷新的情况下,优先读取缓存里面的数据
+        if (!refresh
+                && mPageIndex == 1
+                && CacheManager.isExistDataCache(activity, key))
+            return true;
+
+        // 其他页码在缓存未失效的情况下优先读取缓存数据
+        if (mPageIndex != 1
+                && CacheManager.isExistDataCache(activity, key)
+                && !CacheManager.isCacheDataFailure(activity, key))
+            return true;
+
+        return false;
+    }
+
     private void executeParserTask(byte[] data) {
         cancelParserTask();
         mParserTask = new ParserTask(data);
@@ -228,6 +337,23 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (mParserTask != null) {
             mParserTask.cancel(true);
             mParserTask = null;
+        }
+    }
+
+    private String getCacheKey() {
+        return new StringBuilder(getCacheKeyPrefix()).append("_")
+                .append(mPageIndex).toString();
+    }
+
+    private void readCacheData(String cacheKey) {
+        cancelReadCacheTask();
+        mCacheTask = new CacheTask(getActivity()).execute(cacheKey);
+    }
+
+    private void cancelReadCacheTask() {
+        if (mCacheTask != null) {
+            mCacheTask.cancel(true);
+            mCacheTask = null;
         }
     }
 }

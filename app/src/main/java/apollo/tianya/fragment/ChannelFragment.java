@@ -89,4 +89,9 @@ public class ChannelFragment extends BaseListFragment<Thread> {
             TianyaApi.getUserHistory(mHandler);
 
     }
+
+    @Override
+    protected String getCacheKeyPrefix() {
+        return "channel_" + mCatalog;
+    }
 }

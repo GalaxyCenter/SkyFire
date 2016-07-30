@@ -42,6 +42,11 @@ public class SectionFragment extends BaseListFragment<Section> {
     }
 
     @Override
+    protected String getCacheKeyPrefix() {
+        return "section_" + mCatalog;
+    }
+
+    @Override
     public void onItemClick(View view, int postion) {
 
     }

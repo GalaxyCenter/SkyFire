@@ -44,6 +44,11 @@ public class MessageFragment extends BaseListFragment<Message> {
     }
 
     @Override
+    protected String getCacheKeyPrefix() {
+        return "msg_" + mCatalog;
+    }
+
+    @Override
     public void onItemClick(View view, int postion) {
 
     }

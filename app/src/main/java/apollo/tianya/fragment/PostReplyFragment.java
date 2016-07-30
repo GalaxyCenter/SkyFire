@@ -49,6 +49,11 @@ public class PostReplyFragment extends BaseListFragment<Thread> {
     }
 
     @Override
+    protected String getCacheKeyPrefix() {
+        return "postreply_" + mCatalog;
+    }
+
+    @Override
     public void onItemClick(View view, int postion) {
 
     }

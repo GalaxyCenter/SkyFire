@@ -264,6 +264,11 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     }
 
     @Override
+    protected String getCacheKeyPrefix() {
+        return "thread_" + mSectionId + "_" + mThreadId + "_"  + mPageIndex;
+    }
+
+    @Override
     public void onItemClick(View view, int postion) {
     }
 
