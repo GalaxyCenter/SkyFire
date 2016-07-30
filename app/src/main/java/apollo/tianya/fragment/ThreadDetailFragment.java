@@ -314,7 +314,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     }
 
     private void skip2Floor(int floor) {
-        Snackbar.make(mListView, "xxx", Snackbar.LENGTH_LONG)
+        Snackbar.make(mListView, R.string.unsuport, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
 
     }

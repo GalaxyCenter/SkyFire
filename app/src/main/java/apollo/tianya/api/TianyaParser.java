@@ -437,11 +437,8 @@ public class TianyaParser {
         Pattern pattern = null;
         Matcher matcher = null;
 
-        item = doc.select("#host_toolbox a.see-host-btn").first();
-        url = item.attr("href"); // post_author-lookout-473562-1.shtml
-
-        pattern = Pattern.compile("post_author-.*?-(.*?)-1.shtml");
-        matcher = pattern.matcher(url);
+        pattern = Pattern.compile("\"funinfo-(.*?)\"");
+        matcher = pattern.matcher(source);
         if (matcher.find()) {
             thread.setId(Integer.parseInt(matcher.group(1)));
         }
