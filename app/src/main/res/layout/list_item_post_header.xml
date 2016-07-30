@@ -8,7 +8,6 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layout_userface"
         android:layout_marginTop="12dp"
         android:textStyle="bold"
         android:textSize="@dimen/space_20"
@@ -24,15 +23,13 @@
             android:id="@+id/views_img"
             android:background="@drawable/ic_eye_red_16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/views"
             android:text="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/views_img"
             android:layout_marginStart="4dp" />
 
@@ -57,7 +54,6 @@
             android:text="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/replies_img"
             android:layout_toEndOf="@+id/replies_img"
             android:layout_marginStart="4dp" />
 
