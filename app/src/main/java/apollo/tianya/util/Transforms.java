@@ -20,144 +20,45 @@ public class Transforms {
 
     public static String formatPost(String rawPostBody, boolean enableUBB) {
         String formattedPost = rawPostBody;
-        List<Map<String, Object>> list = null;
-        Map<String, Object> map = null;
-        String str = null;
-        String regex_str = null;
-        String img_src_regex = null;
+        String replacement = null;
 
         formattedPost = formattedPost.replaceAll("(?i)<[ |/]*br[ |/]*>", "\r\n");
         formattedPost = formattedPost.replaceAll("(?i)&nbsp;", " ");
+        formattedPost = formattedPost.replaceAll("\t", "");
+
         for (int idx = 0; idx < stripHtmlTags.length; idx++) {
             formattedPost = Transforms.stripHtmlTag(formattedPost, stripHtmlTags[idx]);
         }
         for (int idx = 0; idx < stripHtmlContentTags.length; idx++) {
             formattedPost = Transforms.stripTagContent(formattedPost, stripHtmlContentTags[idx]);
         }
+
         // trans iframe to link
-        regex_str = "(?i)<iframe[\\s][^>]*src\\s*=\\s*[\\\"\\']?([^\\\"\\'>\\s]*)[\\\"\\']?[^>]*></iframe>";
-        list = Regex.getStartAndEndIndex(formattedPost, Pattern.compile(regex_str));
+        if (enableUBB)
+            replacement = "[link=$1]$1[/link]";
+        else
+            replacement = "$1";
+        formattedPost = formattedPost.replaceAll("(?i)(?s)<iframe.*?href=\"(.*?)\".*?>(.*?)</iframe>", replacement);
 
-        for (int idx = list.size() - 1; idx >= 0; idx--) {
-            map = list.get(idx);
-            str = (String) map.get("str1");
-            //str = "<a href=\"" + str + "\">" + ApolloApplication.app().getString(R.string.web_url) + "</a>";
-
-            if (enableUBB)
-                str = "[link]" + str + "[/link]";
-
-            formattedPost = StringUtil.replace(formattedPost,
-                    (Integer) map.get("startIndex"),
-                    (Integer) map.get("endIndex"), str);
-        }
-
-        regex_str = "(?i)<a[\\s][^>]*href\\s*=\\s*[\\\"\\']?([^\\\"\\'>\\s]*)[\\\"\\']?[^>]*>(.*?)</a>";
-        list = Regex.getStartAndEndIndex(formattedPost, Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
-        String link_content = null;
-        String image = null;
-        for (int idx = list.size() - 1; idx >= 0; idx--) {
-            map = list.get(idx);
-            str = (String) map.get("str1");
-            link_content = (String) map.get("str2");
-
-            link_content = Regex.replace(link_content, "\n", "");
-            image = Transforms.formatImage(link_content);
-            link_content = Transforms.stripHtmlXmlTags(link_content);
-            image = image.replace(link_content, "");
-
-            if (link_content == "") {
-                link_content = "#link#";
-            }
-            //str = "<a href=\"" + str + "\">" + link_content + "</a>\r\n" + image;
-            if (enableUBB)
-                str = "[link]" + str + "[/link]" + image;
-
-            formattedPost = StringUtil.replace(formattedPost,
-                    (Integer) map.get("startIndex"),
-                    (Integer) map.get("endIndex"), str);
-        }
+        // pickup link
+        if (enableUBB)
+            replacement = "[url=$1]$2[/url]";
+        else
+            replacement = "$1 $2";
+        formattedPost = formattedPost.replaceAll("(?i)(?s)<a.*?href=\"(.*?)\".*?>(.*?)</a>", replacement);
 
         // pickup img
-        Pattern pattern = null;
-        Matcher matcher = null;
-        String img_src = null;
-        String img_orig = null;
-        String img_match = null;
+        if (enableUBB)
+            replacement = "[img]$1[/img]";
+        else
+            replacement = "$1";
+        formattedPost = formattedPost.replaceAll("(?s)<img.*?original=\"(.*?)\".*?[/]?>", replacement);
 
-        regex_str = "(?s)<[img|IMG].*?>";
-        img_src_regex = "(?s)(src|original)=[\'|\"](.*?)[\'|\"]";
-
-        list = Regex.getStartAndEndIndex(formattedPost, Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
-        for (int idx = list.size() - 1; idx >= 0; idx--) {
-            map = list.get(idx);
-            img_match = (String)map.get("match");
-
-            pattern = Pattern.compile(img_src_regex);
-            matcher = pattern.matcher(img_match);
-            while(matcher.find())
-                map.put(matcher.group(1), matcher.group(2));
-
-            img_src = (String)map.get("src");
-            img_orig = (String)map.get("original");
-
-            if (img_orig != null)
-                img_src = img_orig;
-            if (enableUBB)
-                img_src = "[img]" + img_src + "[/img]";
-
-            formattedPost = StringUtil.replace(formattedPost,
-                    (Integer) map.get("startIndex"),
-                    (Integer) map.get("endIndex"), img_src);
-        }
-        formattedPost = formattedPost.replaceAll("\t", "");
         return formattedPost;
     }
 
     public static String formatImage(String raw) {
-        Pattern pattern = null;
-        Matcher matcher = null;
-        String regex_img = null;
-        String str = null;
-        String regex_str = null;
-        String formatted = raw;
-        List<Map<String, Object>> list = null;
-        Map<String, Object> map = null;
-
-
-        //regex_str = "(?s)(?i)<img.*?>";
-        regex_str = "(?s)(?i)<img[^>]+";
-        regex_img = "(src|original)=[\'|\"](.*?(?:[.(jpg|bmp|jpeg|gif|png)]))[\'|\"].*?[/]?";
-        list = Regex.getStartAndEndIndex(formatted, Pattern.compile(regex_str));
-        for (int idx=0; idx<list.size(); idx++) {
-            map = list.get(idx);
-
-            str = (String)map.get("match");
-
-            pattern = Pattern.compile(regex_img);
-            matcher = pattern.matcher(str);
-            while(matcher.find()) {
-                map.put(matcher.group(1), matcher.group(2));
-            }
-        }
-        for (int idx = list.size() - 1; idx >= 0; idx--) {
-            map = list.get(idx);
-            str = (String)map.get("src");
-
-            //if (TextUtils.isEmpty(str) == true) {
-            if (str == "") {
-                str = (String)map.get("original");
-            }
-            //if (TextUtils.isEmpty(str) == true) {
-            if (str == "" || str == null) {
-                continue;
-            }
-            str = "<img src=\"" + str.trim() + "\"/>";
-            formatted = StringUtil.replace(formatted,
-                    (Integer) map.get("startIndex"),
-                    (Integer) map.get("endIndex"), str);
-        }
-
-        return formatted;
+        return raw.replaceAll("(?s)<img.*?original=\"(.*?)\".*?[/]?>", "<img src=\"$1\"/>");
     }
 
     public static String stripHtmlTag(String content, String tag) {
