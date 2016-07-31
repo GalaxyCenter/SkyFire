@@ -2,9 +2,11 @@ package apollo.tianya.api.remote;
 
 
 import android.text.TextUtils;
+import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -121,10 +123,10 @@ public class TianyaApi {
      * @param userId
      * @param handler
      */
-    public static void getAvatar(int userId, AsyncHttpResponseHandler handler) {
+    public static void displayAvatar(int userId, ImageView image) {
         String url = "http://tx.tianyaui.com/logo/" + userId;
 
-        getImage(url, handler);
+        displayImage(url, image);
     }
 
     /**
@@ -132,13 +134,15 @@ public class TianyaApi {
      * @param url
      * @param handler
      */
-    public static void getImage(String url, AsyncHttpResponseHandler handler) {
-        Header[] headers = null;
+    public static void displayImage(String url, ImageView image) {
+//        Header[] headers = null;
+//
+//        headers = new Header[1];
+//        headers[0] = new ApiHttpClient.HttpHeader("Referer", "https://www.tianya.cn");
+//
+//        ApiHttpClient.get(url, headers, handler);
 
-        headers = new Header[1];
-        headers[0] = new ApiHttpClient.HttpHeader("Referer", "https://www.tianya.cn");
-
-        ApiHttpClient.get(url, headers, handler);
+        ImageLoader.getInstance().displayImage(url, image);
     }
 
     /**

@@ -8,7 +8,14 @@ import android.os.Build;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import apollo.tianya.api.ApiHttpClient;
@@ -56,6 +63,25 @@ public class AppContext extends BaseApplication {
         ApiHttpClient.setHttpClient(client);
         ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
 
+        ImageLoaderConfiguration ilconfig = null;
+
+        ilconfig = new ImageLoaderConfiguration.Builder(this.getApplicationContext())
+                .imageDownloader(new BaseImageDownloader(this.getApplicationContext()){
+                    @Override
+                    protected HttpURLConnection createConnection(String url, Object extra) throws IOException {
+                        HttpURLConnection conn = super.createConnection(url, extra);
+                        Map<String, String> headers = (Map<String, String>) extra;
+                        if (headers != null) {
+                            for (Map.Entry<String, String> header : headers.entrySet()) {
+                                conn.setRequestProperty(header.getKey(), header.getValue());
+                            }
+                        }
+                        conn.setRequestProperty("Referer", "https://www.tianya.cn");
+                        return conn;
+                    }
+                })
+                .build();
+        ImageLoader.getInstance().init(ilconfig);
     }
 
     public String getProperty(String key) {

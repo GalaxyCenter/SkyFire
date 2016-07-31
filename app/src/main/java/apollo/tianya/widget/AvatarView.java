@@ -1,18 +1,11 @@
 package apollo.tianya.widget;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import apollo.tianya.R;
 import apollo.tianya.api.remote.TianyaApi;
-import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -45,7 +38,6 @@ public class AvatarView extends CircleImageView {
     }
 
     private void init(Context context) {
-
     }
 
     public void setUserInfo(int id, String name) {
@@ -59,22 +51,7 @@ public class AvatarView extends CircleImageView {
             return;
         }
 
-        TianyaApi.getImage(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                BitmapFactory.Options option = new BitmapFactory.Options();
-                Bitmap bitmap = null;
-
-                bitmap = BitmapFactory.decodeByteArray(responseBody, 0,
-                        responseBody.length, option);
-                setImageBitmap(bitmap);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.i(TAG, "ERROR");
-            }
-        });
+        TianyaApi.displayImage(url, this);
     }
 
     public static String getSmallAvatar(String source) {

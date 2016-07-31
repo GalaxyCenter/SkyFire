@@ -202,13 +202,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        mCaptchaImg = (ImageView) findViewById(R.id.captcha_img);
-//        mCaptchaImg.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showCaptcha();
-//            }
-//        });
         mCaptchaView = (EditText) findViewById(R.id.captcha);
 
         mRootLayout = findViewById(R.id.root_layout);
