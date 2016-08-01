@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
@@ -181,7 +183,7 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
                                 int end = spannable.getSpanEnd(span);
                                 spannable.removeSpan(span);
 
-                                BitmapDrawable draw = new BitmapDrawable(bmp);
+                                BitmapDrawable draw = new BitmapDrawable(AppContext.getInstance().getResources(), bmp);
                                 draw.setBounds(0, 0, draw.getIntrinsicWidth(), draw.getIntrinsicHeight());
                                 span = new ImageSpan(draw, url, ImageSpan.ALIGN_BOTTOM);
                                 spannable.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
