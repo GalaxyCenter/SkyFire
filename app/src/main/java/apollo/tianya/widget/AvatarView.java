@@ -1,8 +1,12 @@
 package apollo.tianya.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import apollo.tianya.R;
 import apollo.tianya.api.remote.TianyaApi;
@@ -38,6 +42,7 @@ public class AvatarView extends CircleImageView {
     }
 
     private void init(Context context) {
+
     }
 
     public void setUserInfo(int id, String name) {

@@ -1,25 +1,29 @@
 package apollo.tianya.adapter;
 
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.support.design.widget.Snackbar;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import apollo.tianya.AppContext;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
 import apollo.tianya.R;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.util.CompatibleUtil;
 import apollo.tianya.util.Formatter;
+import apollo.tianya.util.SpannableUtil;
 import apollo.tianya.util.Transforms;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Texel on 2016/6/20.
@@ -81,9 +85,24 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     }
 
     private OptionHandle mOptionHandle;
+    private int mMaxWidth;
+    private int mMaxHeight;
+    private DisplayImageOptions mOptions;
 
     public void setPostOptionHandle(OptionHandle callBack) {
         mOptionHandle = callBack;
+    }
+
+    public PostAdapter() {
+        mMaxWidth = CompatibleUtil.getDisplayMetrics().widthPixels;
+        mMaxHeight = CompatibleUtil.getDisplayMetrics().heightPixels;
+
+        mOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .displayer(new FadeInBitmapDisplayer(300))
+                .build();
     }
 
     @Override
@@ -130,15 +149,15 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             Post post = null;
             SpannableString span_body = null;
             String body = null;
-            PostItemViewHolder vh = null;
+            final PostItemViewHolder vh = (PostItemViewHolder) holder;
 
             position = getRealPosition(holder);
             post = mItems.get(position);
-            vh = (PostItemViewHolder) holder;
 
             vh.post = post;
             vh.author.setText(post.getAuthor());
             vh.time.setText(Formatter.friendlyTime(post.getPostDate()));
+            vh.face.setBackgroundResource(R.drawable.ic_account_circle_blue_37dp);
             vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
             vh.face.setAvatarUrl("http://tx.tianyaui.com/logo/" + post.getAuthorId());
 
@@ -151,6 +170,28 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             if (!TextUtils.isEmpty(post.getBody())) {
                 body = Transforms.formatPost(post.getBody());
                 span_body = new SpannableString(body);
+                SpannableUtil.drawImage(span_body, body, SpannableUtil.DRAWABLE_LOADING, mOptions, new SpannableUtil.ImageLoadedHandle() {
+                    @Override
+                    public void onImageLoaded(SpannableString spannable, String url, Bitmap bmp) {
+                        ImageSpan[] image_spans = spannable.getSpans(0, spannable.length(), ImageSpan.class);
+                        for (ImageSpan span : image_spans) {
+                            if ( span.getDrawable() == SpannableUtil.DRAWABLE_LOADING
+                                    && span.getSource().equals(url) ) {
+                                int start = spannable.getSpanStart(span);
+                                int end = spannable.getSpanEnd(span);
+                                spannable.removeSpan(span);
+
+                                BitmapDrawable draw = new BitmapDrawable(bmp);
+                                draw.setBounds(0, 0, draw.getIntrinsicWidth(), draw.getIntrinsicHeight());
+                                span = new ImageSpan(draw, url, ImageSpan.ALIGN_BOTTOM);
+                                spannable.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                vh.body.setText(spannable);
+                                break;
+                            }
+                        }
+                    }
+                });
                 vh.body.setText(span_body);
             }
         }

@@ -8,6 +8,8 @@ import android.os.Build;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
@@ -80,6 +82,12 @@ public class AppContext extends BaseApplication {
                         return conn;
                     }
                 })
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .memoryCacheSize(2 * 1024 * 1024)
+                .diskCacheSize(100 * 1024 * 1024)
+                .writeDebugLogs()
                 .build();
         ImageLoader.getInstance().init(ilconfig);
     }

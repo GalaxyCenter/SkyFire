@@ -1,12 +1,15 @@
 package apollo.tianya.api.remote;
 
 
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +29,12 @@ public class TianyaApi {
 
     private static String TAG = "TianyaApi";
 
+    private static DisplayImageOptions mOptions = new DisplayImageOptions.Builder()
+                                                        .cacheInMemory(true)
+                                                        .cacheOnDisk(true)
+                                                        .bitmapConfig(Bitmap.Config.RGB_565)
+                                                        .displayer(new FadeInBitmapDisplayer(300))
+                                                        .build();
     /**
      * 登录
      * @param username
@@ -142,7 +151,7 @@ public class TianyaApi {
 //
 //        ApiHttpClient.get(url, headers, handler);
 
-        ImageLoader.getInstance().displayImage(url, image);
+        ImageLoader.getInstance().displayImage(url, image, mOptions);
     }
 
     /**

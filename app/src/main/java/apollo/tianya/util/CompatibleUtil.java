@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.WindowManager;
 
 import apollo.tianya.AppContext;
 import apollo.tianya.base.BaseApplication;
@@ -110,5 +111,13 @@ public class CompatibleUtil {
             netType = NETTYPE_WIFI;
         }
         return netType;
+    }
+
+    public static DisplayMetrics getDisplayMetrics() {
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        ((WindowManager) BaseApplication.context().getSystemService(
+                Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(
+                displaymetrics);
+        return displaymetrics;
     }
 }

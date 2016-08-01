@@ -217,6 +217,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         vh.views.setText(Integer.toString(thread.getViews()));
         vh.replies.setText(Integer.toString(thread.getReplies()));
         vh.time.setText(Formatter.friendlyTime(thread.getPostDate()));
+        vh.face.setBackgroundResource(R.drawable.ic_account_circle_blue_37dp);
         vh.face.setUserInfo(thread.getAuthorId(), thread.getAuthor());
         vh.summary.setText("");
         vh.time.setText("");
