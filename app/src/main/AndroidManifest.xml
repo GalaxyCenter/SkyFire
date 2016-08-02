@@ -36,6 +36,11 @@
             android:name=".ui.SimpleBackActivity"
             android:windowSoftInputMode="adjustResize"/>
 
+        <activity
+            android:name=".ui.ImageActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".broadcast.AlarmReceiver" />
 
         <service

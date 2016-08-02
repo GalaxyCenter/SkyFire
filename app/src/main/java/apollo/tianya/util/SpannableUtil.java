@@ -29,6 +29,10 @@ public class SpannableUtil {
         public void onImageLoaded(SpannableString spannable, String url, Bitmap bmp);
     }
 
+    public interface OnImageClickListener {
+        public void onClick(View v, String url);
+    }
+
     static class SpannableImageLoadingListener extends SimpleImageLoadingListener {
 
         ImageLoadedHandle handle;
@@ -46,14 +50,14 @@ public class SpannableUtil {
 
     public static void drawImage(SpannableString spannable, String source,
                                  BitmapDrawable drawable, DisplayImageOptions options,
-                                 ImageLoadedHandle handle) {
+                                 ImageLoadedHandle handle,final OnImageClickListener listener) {
         Bitmap bmp = null;
         ImageSpan img_span = null;
         List<Map<String, Object>> list = null;
         Map<String,Object> map = null;
         String img_src = null;
         String img_regex = null;
-        SpannableImageLoadingListener listener;
+        SpannableImageLoadingListener loadingListener;
         int start = 0;
         int end = 0;
 
@@ -62,9 +66,9 @@ public class SpannableUtil {
         for (int idx=0; idx<list.size(); idx++) {
             map = list.get(idx);
             img_src = (String)map.get("str1");
-            listener = new SpannableImageLoadingListener();
-            listener.handle = handle;
-            listener.spannable = spannable;
+            loadingListener = new SpannableImageLoadingListener();
+            loadingListener.handle = handle;
+            loadingListener.spannable = spannable;
 
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             img_span = new ImageSpan(drawable, img_src, ImageSpan.ALIGN_BOTTOM);
@@ -72,15 +76,14 @@ public class SpannableUtil {
             end = (Integer) map.get("endIndex") + 1;
             spannable.setSpan(img_span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            ImageLoader.getInstance().loadImage(img_src, options, listener);
+            ImageLoader.getInstance().loadImage(img_src, options, loadingListener);
         }
 
         ImageSpan[] image_spans = spannable.getSpans(0, spannable.length(), ImageSpan.class);
+        ClickableSpan click_span = null;
+        ClickableSpan[] click_spans = null;
         for (ImageSpan span : image_spans) {
             final String image_src = span.getSource();
-            ClickableSpan click_span = null;
-            ClickableSpan[] click_spans = null;
-
             // clear clickspan
             start = spannable.getSpanStart(span);
             end = spannable.getSpanEnd(span);
@@ -92,7 +95,7 @@ public class SpannableUtil {
             click_span = new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
-
+                    listener.onClick(widget, image_src);
                 }
             };
             spannable.setSpan(click_span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

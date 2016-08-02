@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import apollo.tianya.api.remote.TianyaApi;
+import uk.co.senab.photoview.PhotoView;
 
 /**
  * Created by Texel on 2016/6/14.
@@ -48,6 +49,16 @@ public class PhotoAdapter extends PagerAdapter {
         }
     }
 
+    public void addItems(String[] items) {
+        if (items != null) {
+            for(String item:items) {
+                mItems.add(item);
+            }
+            notifyDataSetChanged();
+        }
+    }
+
+
     public void removeAllItem() {
         mItems.clear();
         notifyDataSetChanged();
@@ -61,7 +72,7 @@ public class PhotoAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         String url = mItems.get(position);
-        ImageView imageView = new ImageView(mActivity);
+        PhotoView imageView = new PhotoView(mActivity);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         container.addView(imageView);

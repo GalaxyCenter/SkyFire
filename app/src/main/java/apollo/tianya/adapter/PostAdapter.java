@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import apollo.tianya.util.CompatibleUtil;
 import apollo.tianya.util.Formatter;
 import apollo.tianya.util.SpannableUtil;
 import apollo.tianya.util.Transforms;
+import apollo.tianya.util.UIHelper;
 import apollo.tianya.widget.AvatarView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,29 +174,36 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
             if (!TextUtils.isEmpty(post.getBody())) {
                 body = Transforms.formatPost(post.getBody());
                 span_body = new SpannableString(body);
-                SpannableUtil.drawImage(span_body, body, SpannableUtil.DRAWABLE_LOADING, mOptions, new SpannableUtil.ImageLoadedHandle() {
-                    @Override
-                    public void onImageLoaded(SpannableString spannable, String url, Bitmap bmp) {
-                        ImageSpan[] image_spans = spannable.getSpans(0, spannable.length(), ImageSpan.class);
-                        for (ImageSpan span : image_spans) {
-                            if ( span.getDrawable() == SpannableUtil.DRAWABLE_LOADING
-                                    && span.getSource().equals(url) ) {
-                                int start = spannable.getSpanStart(span);
-                                int end = spannable.getSpanEnd(span);
-                                spannable.removeSpan(span);
+                SpannableUtil.drawImage(span_body, body, SpannableUtil.DRAWABLE_LOADING, mOptions,
+                        new SpannableUtil.ImageLoadedHandle() {
+                            @Override
+                            public void onImageLoaded(SpannableString spannable, String url, Bitmap bmp) {
+                                ImageSpan[] image_spans = spannable.getSpans(0, spannable.length(), ImageSpan.class);
+                                for (ImageSpan span : image_spans) {
+                                    if (span.getDrawable() == SpannableUtil.DRAWABLE_LOADING
+                                            && span.getSource().equals(url)) {
+                                        int start = spannable.getSpanStart(span);
+                                        int end = spannable.getSpanEnd(span);
+                                        spannable.removeSpan(span);
 
-                                BitmapDrawable draw = new BitmapDrawable(AppContext.getInstance().getResources(), bmp);
-                                draw.setBounds(0, 0, draw.getIntrinsicWidth(), draw.getIntrinsicHeight());
-                                span = new ImageSpan(draw, url, ImageSpan.ALIGN_BOTTOM);
-                                spannable.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                        BitmapDrawable draw = new BitmapDrawable(AppContext.getInstance().getResources(), bmp);
+                                        draw.setBounds(0, 0, draw.getIntrinsicWidth(), draw.getIntrinsicHeight());
+                                        span = new ImageSpan(draw, url, ImageSpan.ALIGN_BOTTOM);
+                                        spannable.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                                vh.body.setText(spannable);
-                                break;
+                                        vh.body.setText(spannable);
+                                        break;
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                        }, new SpannableUtil.OnImageClickListener() {
+                            @Override
+                            public void onClick(View v, String url) {
+                                UIHelper.showImageActivity(vh.body.getContext(), url);
+                            }
+                        });
                 vh.body.setText(span_body);
+                vh.body.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
     }

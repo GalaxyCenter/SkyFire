@@ -9,6 +9,7 @@ import apollo.tianya.AppContext;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
+import apollo.tianya.ui.ImageActivity;
 import apollo.tianya.ui.LoginActivity;
 import apollo.tianya.ui.MainActivity;
 import apollo.tianya.ui.DetailActivity;
@@ -84,5 +85,18 @@ public class UIHelper {
     public static void showUrlRedirect(Context context, String url) {
         if (url == null)
             return;
+    }
+
+    public static void showImageActivity(Context context, String image) {
+        String[] images = new String[]{ image };
+
+        showImageActivity(context, images);
+    }
+
+    public static void showImageActivity(Context context, String[] images) {
+        Intent intent = new Intent(context, ImageActivity.class);
+
+        intent.putExtra(Constants.BUNDLE_KEY_IMAGES, images);
+        context.startActivity(intent);
     }
 }
