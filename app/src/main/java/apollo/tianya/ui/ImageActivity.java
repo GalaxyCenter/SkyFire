@@ -1,6 +1,7 @@
 package apollo.tianya.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,8 @@ public class ImageActivity extends BaseActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setBackgroundColor(Color.argb(0, 0, 0, 0));
 
         ButterKnife.bind(this);
         mAdapter = new PhotoAdapter(this);
