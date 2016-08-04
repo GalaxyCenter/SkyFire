@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@color/black">
 
-    <include layout="@layout/item_toolbar" />
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
@@ -11,4 +11,6 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true">
     </android.support.v4.view.ViewPager>
+
+    <include layout="@layout/item_toolbar" />
 </RelativeLayout>

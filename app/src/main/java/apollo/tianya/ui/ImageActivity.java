@@ -46,7 +46,7 @@ public class ImageActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        toolbar.setBackgroundColor(Color.argb(0, 0, 0, 0));
+        toolbar.setBackgroundColor(Color.argb(100, 0, 0, 0));
 
         ButterKnife.bind(this);
         mAdapter = new PhotoAdapter(this);
