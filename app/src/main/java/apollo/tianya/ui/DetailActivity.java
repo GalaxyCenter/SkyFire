@@ -7,8 +7,10 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import apollo.tianya.R;
+import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.fragment.ThreadDetailFragment;
@@ -29,6 +31,7 @@ public class DetailActivity extends BaseActivity implements
     private InputFragment mInputFragment = new InputFragment();
     private BarBaseFragment mNewFragment = null;
     private AppBarLayout mAppBar;
+    private ImageView mCover;
 
     private InputFragment.OnSendListener mSendListener = null;
     private OnActionClickListener mActionClickListener = null;
@@ -68,6 +71,8 @@ public class DetailActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+        mCover = (ImageView) findViewById(R.id.cover);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.emoji_keyboard, mToolFragment).commit();
         mToolFragment.addOnActionClickListener(this);
@@ -111,6 +116,10 @@ public class DetailActivity extends BaseActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setCover(String img) {
+        TianyaApi.displayImage(img, mCover);
     }
 
     public void setExpanded(boolean expanded) {

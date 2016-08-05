@@ -241,7 +241,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             state = RecyclerBaseAdapter.STATE_LOAD_MORE;
         }
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        
+
         mAdapter.setState(state);
         mAdapter.addItems(ds.getObjects());
         mAdapter.notifyDataSetChanged();

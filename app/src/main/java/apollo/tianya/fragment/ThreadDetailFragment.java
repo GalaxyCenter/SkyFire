@@ -21,6 +21,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.adapter.PostAdapter;
@@ -34,6 +38,8 @@ import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.InputFragment;
+import apollo.tianya.ui.DetailActivity;
+import apollo.tianya.util.Regex;
 import apollo.tianya.util.Transforms;
 import apollo.tianya.util.UIHelper;
 import cz.msebera.android.httpclient.Header;
@@ -256,6 +262,32 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         body = new String(datas);
         dataset = TianyaParser.parsePosts(body);
         return dataset;
+    }
+
+    @Override
+    protected void executeOnLoadDataSuccess(DataSet<Post> data) {
+        if (mPageIndex == 1 && data != null && data.getObjects().size() != 0) {
+            Post p = data.getObjects().get(0);
+            String regex_str = "(?s)<img.*?original=\"(.*?)\".*?[/]?>";
+            List<Map<String,Object>> list = null;
+            Map<String,Object> map = null;
+            String img_src = null;
+
+            list = Regex.getStartAndEndIndex(p.getBody(), Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
+            for(int i=0; i<list.size(); i++) {
+                map = list.get(i);
+                img_src = (String) map.get("str1");
+                break;
+            }
+
+            if (!TextUtils.isEmpty(img_src)) {
+                DetailActivity activity = (DetailActivity) getActivity();
+
+                activity.setCover(img_src);
+                activity.setExpanded(true);
+            }
+        }
+        super.executeOnLoadDataSuccess(data);
     }
 
     @Override
