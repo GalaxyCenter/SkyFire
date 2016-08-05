@@ -1,7 +1,9 @@
 package apollo.tianya.ui;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.MenuItem;
@@ -9,12 +11,12 @@ import android.view.MenuItem;
 import apollo.tianya.R;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
-import apollo.tianya.fragment.bar.BarBaseFragment;
-import apollo.tianya.fragment.bar.InputFragment;
-import apollo.tianya.fragment.bar.ToolbarFragment;
 import apollo.tianya.fragment.ThreadDetailFragment;
+import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.BarBaseFragment.Action;
 import apollo.tianya.fragment.bar.BarBaseFragment.OnActionClickListener;
+import apollo.tianya.fragment.bar.InputFragment;
+import apollo.tianya.fragment.bar.ToolbarFragment;
 
 /**
  * 帖子详情Activity
@@ -26,6 +28,7 @@ public class DetailActivity extends BaseActivity implements
     private ToolbarFragment mToolFragment = new ToolbarFragment();
     private InputFragment mInputFragment = new InputFragment();
     private BarBaseFragment mNewFragment = null;
+    private AppBarLayout mAppBar;
 
     private InputFragment.OnSendListener mSendListener = null;
     private OnActionClickListener mActionClickListener = null;
@@ -64,6 +67,7 @@ public class DetailActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.emoji_keyboard, mToolFragment).commit();
         mToolFragment.addOnActionClickListener(this);
@@ -107,5 +111,13 @@ public class DetailActivity extends BaseActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setExpanded(boolean expanded) {
+        setExpanded(expanded, ViewCompat.isLaidOut(mAppBar));
+    }
+
+    public void setExpanded(boolean expanded, boolean animate) {
+        mAppBar.setExpanded(expanded, animate);
     }
 }

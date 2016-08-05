@@ -23,6 +23,7 @@ import apollo.tianya.bean.Entity;
 import apollo.tianya.cache.CacheManager;
 import apollo.tianya.util.CompatibleUtil;
 import apollo.tianya.util.TLog;
+import apollo.tianya.widget.EmptyLayout;
 import butterknife.BindView;
 import cz.msebera.android.httpclient.Header;
 
@@ -137,6 +138,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     @BindView(R.id.swiperefreshlayout)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
+    @BindView(R.id.error_layout)
+    protected EmptyLayout mErrorLayout;
+
     protected String mCatalog = null;
     protected int mPageIndex = 1;
 
@@ -175,12 +179,13 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
         if (mAdapter == null) {
             mAdapter = getListAdapter();
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         }
         mAdapter.setOnItemClickListener(this);
 
-
         final LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+
         mListView.setLayoutManager(llm);
         mListView.setAdapter(mAdapter);
         mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -203,13 +208,15 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 }
 
                 if (mState == STATE_NONE && scrollEnd) {
-
                     mPageIndex++;
+
+                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     mState = STATE_LOADMORE;
                     requestData(false);
                 }
             }
         });
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         mState = STATE_LOADMORE;
         requestData(false);
     }
@@ -233,6 +240,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         } else {
             state = RecyclerBaseAdapter.STATE_LOAD_MORE;
         }
+        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+        
         mAdapter.setState(state);
         mAdapter.addItems(ds.getObjects());
         mAdapter.notifyDataSetChanged();
@@ -247,14 +256,14 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     protected void executeOnLoadDataError(String error) {
         if (mPageIndex == 1
                 && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
-            //mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         } else {
 
             //在无网络时，滚动到底部时，mCurrentPage先自加了，然而在失败时却
             //没有减回来，如果刻意在无网络的情况下上拉，可以出现漏页问题
             mPageIndex--;
 
-            //mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mAdapter.setState(RecyclerBaseAdapter.STATE_NETWORK_ERROR);
             mAdapter.notifyDataSetChanged();
         }
