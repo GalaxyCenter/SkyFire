@@ -278,6 +278,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
             List<Map<String,Object>> list = null;
             Map<String,Object> map = null;
             String img_src = null;
+            DetailActivity activity = (DetailActivity) getActivity();
 
             list = Regex.getStartAndEndIndex(p.getBody(), Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
             for(int i=0; i<list.size(); i++) {
@@ -287,19 +288,14 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
             }
 
             if (!TextUtils.isEmpty(img_src)) {
-                DetailActivity activity = (DetailActivity) getActivity();
-
                 activity.setCover(img_src);
                 activity.setExpanded(true);
             }
+            activity.setTitle(p.getTitle());
         }
         if (!TextUtils.isEmpty(mFilterAuthor)) {
             List<Post> raws = data.getObjects();
             List<Post> filted = new ArrayList<Post>();
-
-            if (mPageIndex == 1) {
-                filted.add(raws.get(0));
-            }
 
             for(int i=1; i<raws.size(); i++) {
                 if (mFilterAuthor.equals(raws.get(i).getAuthor())) {

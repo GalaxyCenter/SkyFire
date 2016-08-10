@@ -191,7 +191,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (mAdapter == null || mAdapter.getItemCount() == 0) {
+                if (mAdapter == null || mAdapter.getRawItemCount() == 0) {
                     return;
                 }
                 // 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件

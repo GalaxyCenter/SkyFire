@@ -2,6 +2,7 @@ package apollo.tianya.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,8 @@ public class DetailActivity extends BaseActivity implements
     private BarBaseFragment mNewFragment = null;
     private AppBarLayout mAppBar;
     private ImageView mCover;
+    private Toolbar mToolbar = null;
+    private CollapsingToolbarLayout mToolbarLayout = null;
 
     private InputFragment.OnSendListener mSendListener = null;
     private OnActionClickListener mActionClickListener = null;
@@ -60,16 +63,17 @@ public class DetailActivity extends BaseActivity implements
 
     @Override
     protected void initView() {
-        Toolbar toolbar = null;
         int actionBarTitle = 0;
 
         actionBarTitle = R.string.actionbar_title_detail;
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(actionBarTitle);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(actionBarTitle);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        mToolbarLayout.setTitle("SEGA");
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         mCover = (ImageView) findViewById(R.id.cover);
 
@@ -116,6 +120,10 @@ public class DetailActivity extends BaseActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setTitle(String title) {
+        mToolbarLayout.setTitle(title);
     }
 
     public void setCover(String img) {

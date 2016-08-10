@@ -70,6 +70,10 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
         return count;
     }
 
+    public int getRawItemCount() {
+        return mItems.size();
+    }
+
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
 
