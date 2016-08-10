@@ -209,8 +209,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
                 if (mState == STATE_NONE && scrollEnd) {
                     mPageIndex++;
-
-                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     mState = STATE_LOADMORE;
                     requestData(false);
                 }

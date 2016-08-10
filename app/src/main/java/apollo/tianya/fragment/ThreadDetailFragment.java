@@ -21,6 +21,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -92,6 +93,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     private String mSectionId;
     private String mThreadId;
     private String mAuthor;
+    private String mFilterAuthor;
     private int mFloor;
     private boolean isAddBookmark;
 
@@ -213,8 +215,12 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 vh.filter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        //Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                        //        .setAction("Action", null).show();
+                        mFilterAuthor = post.getAuthor();
+                        mPageIndex = 1;
+                        mAdapter.clear();
+                        requestData(false);
                     }
                 });
 
@@ -287,6 +293,22 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 activity.setExpanded(true);
             }
         }
+        if (!TextUtils.isEmpty(mFilterAuthor)) {
+            List<Post> raws = data.getObjects();
+            List<Post> filted = new ArrayList<Post>();
+
+            if (mPageIndex == 1) {
+                filted.add(raws.get(0));
+            }
+
+            for(int i=1; i<raws.size(); i++) {
+                if (mFilterAuthor.equals(raws.get(i).getAuthor())) {
+                    filted.add(raws.get(i));
+                }
+            }
+
+            data.setObjects(filted);
+        }
         super.executeOnLoadDataSuccess(data);
     }
 
@@ -297,7 +319,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     @Override
     protected String getCacheKeyPrefix() {
-        return "thread_" + mSectionId + "_" + mThreadId + "_"  + mPageIndex;
+        return "thread_" + mSectionId + "_" + mThreadId;
     }
 
     @Override
