@@ -12,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -198,6 +200,12 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     };
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void initView(View view) {
         mSectionId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_SECTION_ID);
         mThreadId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_THREAD_ID);
@@ -319,6 +327,12 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     @Override
     public void onItemClick(View view, int postion) {
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.thread_detail_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

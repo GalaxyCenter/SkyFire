@@ -120,4 +120,8 @@
     <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     <string name="tip_network_error">没有可用的网络</string>
+
+    <string name="manu_thread_detail_mark">马克</string>
+    <string name="manu_thread_detail_fav">收藏</string>
+    <string name="manu_thread_detail_jump">跳楼</string>
 </resources>
