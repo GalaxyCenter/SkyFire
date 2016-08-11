@@ -291,7 +291,6 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 activity.setCover(img_src);
                 activity.setExpanded(true);
             }
-            activity.setTitle(p.getTitle());
         }
         if (!TextUtils.isEmpty(mFilterAuthor)) {
             List<Post> raws = data.getObjects();

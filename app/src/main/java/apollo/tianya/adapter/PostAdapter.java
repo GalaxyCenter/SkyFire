@@ -133,19 +133,19 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
         int itemType = getItemViewType(position);
 
         if (itemType == TYPE_HEADER) {
-//            HeaderViewHolder vh = null;
-//            Thread thread = null;
-//
-//            if (mItems.size() == 0)
-//                return;
-//
-//            vh = (HeaderViewHolder) holder;
-//            thread = (Thread) mItems.get(0);
-//
-//            vh.title.setText(thread.getTitle());
-//            vh.views.setText(Integer.toString(thread.getViews()));
-//            vh.replies.setText(Integer.toString(thread.getReplies()));
-//            vh.section.setText(thread.getSectionName());
+            HeaderViewHolder vh = null;
+            Thread thread = null;
+
+            if (mItems.size() == 0)
+                return;
+
+            vh = (HeaderViewHolder) holder;
+            thread = (Thread) mItems.get(0);
+
+            vh.title.setText(thread.getTitle());
+            vh.views.setText(Integer.toString(thread.getViews()));
+            vh.replies.setText(Integer.toString(thread.getReplies()));
+            vh.section.setText(thread.getSectionName());
 
         } else if (itemType == TYPE_FOOTER) {
 
