@@ -41,7 +41,7 @@ import butterknife.OnTextChanged;
 /**
  * Created by kuibo on 2016/6/27.
  */
-public class InputFragment extends BarBaseFragment implements View.OnClickListener {
+public class InputFragment extends BarBaseFragment {
 
     public static interface OnSendListener {
         void onSend(Editable editor);
@@ -193,7 +193,6 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
             }
         });
 
-        view.findViewById(R.id.btn_change).setOnClickListener(this);
         ((CheckBox)view.findViewById(R.id.btn_face_change)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -221,19 +220,6 @@ public class InputFragment extends BarBaseFragment implements View.OnClickListen
         getActivity().addContentView(frameLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        Action action = null;
-        if (id == R.id.btn_change)
-            action = Action.ACTION_CHANGE;
-
-        if (mActionListeners != null) {
-            for (int i = mActionListeners.size() - 1; i >= 0; i--) {
-                mActionListeners.get(i).onActionClick(action);
-            }
-        }
-    }
 
     public boolean isEmojiPanelShowing() {
         return mGridView.getVisibility() == View.VISIBLE;
