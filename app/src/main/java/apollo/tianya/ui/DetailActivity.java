@@ -28,7 +28,6 @@ import apollo.tianya.fragment.bar.ToolbarFragment;
 public class DetailActivity extends BaseActivity implements
         OnActionClickListener, InputFragment.OnSendListener {
 
-    private ToolbarFragment mToolFragment = new ToolbarFragment();
     private InputFragment mInputFragment = new InputFragment();
     private BarBaseFragment mNewFragment = null;
     private AppBarLayout mAppBar;
@@ -65,22 +64,19 @@ public class DetailActivity extends BaseActivity implements
     protected void initView() {
         int actionBarTitle = 0;
 
-        actionBarTitle = R.string.actionbar_title_detail;
+        //actionBarTitle = R.string.actionbar_title_detail;
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(actionBarTitle);
+        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
-        mToolbarLayout.setTitle("SEGA");
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
         mCover = (ImageView) findViewById(R.id.cover);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.emoji_keyboard, mToolFragment).commit();
-        mToolFragment.addOnActionClickListener(this);
-        mToolFragment.addOnActionClickListener(mActionClickListener);
+                .replace(R.id.emoji_keyboard, mInputFragment).commit();
         mInputFragment.addOnActionClickListener(this);
         mInputFragment.setOnSendListener(this);
 
@@ -91,14 +87,7 @@ public class DetailActivity extends BaseActivity implements
     public void onActionClick(Action action) {
         switch (action) {
             case ACTION_CHANGE:
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.footer_menu_slide_in,
-                                R.anim.footer_menu_slide_out)
-                        .replace(R.id.emoji_keyboard, mNewFragment)
-                        .commit();
 
-                mNewFragment = mNewFragment == mInputFragment ? mToolFragment : mInputFragment;
                 break;
 
             case ACTION_FLIGHT:
