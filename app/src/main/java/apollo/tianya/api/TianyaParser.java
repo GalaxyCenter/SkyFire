@@ -156,6 +156,7 @@ public class TianyaParser {
             item = elm.select("a").first();
 
             url = item.attr("href");
+            thread.setUrl(url);
             pattern = Pattern.compile("/m/post-(.*?)-(.*?)-1.shtml");
             matcher = pattern.matcher(url);
             if (matcher.find()) {

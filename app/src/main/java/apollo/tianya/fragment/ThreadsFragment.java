@@ -13,6 +13,7 @@ import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.ui.DetailActivity;
+import apollo.tianya.util.UIHelper;
 
 /**
  * Created by Texel on 2016/8/12.
@@ -64,8 +65,11 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     }
 
     @Override
-    public void onItemClick(View view, int postion) {
+    public void onItemClick(View view, int position) {
+        Thread thread = mAdapter.getItem(position);
 
+        if (TianyaParser.parseThreadUrl(thread.getUrl()) != null)
+            UIHelper.showPostDetail(view.getContext(), thread);
     }
 
     @Override
