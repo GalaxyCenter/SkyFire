@@ -69,7 +69,7 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     public static class HeaderViewHolder extends ViewHolder {
 
         @BindView(R.id.title) TextView title;
-        @BindView(R.id.section) TextView section;
+        @BindView(R.id.section) public TextView section;
         @BindView(R.id.views) TextView views;
         @BindView(R.id.replies) TextView replies;
 
@@ -148,6 +148,9 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
                 vh.views.setText(Integer.toString(thread.getViews()));
                 vh.replies.setText(Integer.toString(thread.getReplies()));
                 vh.section.setText(thread.getSectionName());
+
+                if (mOptionHandle != null)
+                    mOptionHandle.handleOption(vh, post, position);
             }
         } else if (itemType == TYPE_FOOTER) {
 

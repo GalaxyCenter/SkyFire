@@ -219,46 +219,60 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         ((PostAdapter)(Object)mAdapter).setPostOptionHandle(new PostAdapter.OptionHandle() {
             @Override
             public void handleOption(PostAdapter.ViewHolder holder, final Post post, int position) {
-                final PostAdapter.PostItemViewHolder vh = (PostAdapter.PostItemViewHolder) holder;
 
-                vh.filter.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
-                        //        .setAction("Action", null).show();
-                        mFilterAuthor = post.getAuthor();
-                        mPageIndex = 1;
-                        mAdapter.clear();
-                        requestData(false);
-                    }
-                });
+                if (holder instanceof PostAdapter.PostItemViewHolder) {
+                    final PostAdapter.PostItemViewHolder vh = (PostAdapter.PostItemViewHolder) holder;
 
-                vh.copy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ClipboardManager cbm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                        cbm.setText(Transforms.formatPost(post.getBody(), false));
+                    vh.filter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                            //        .setAction("Action", null).show();
+                            mFilterAuthor = post.getAuthor();
+                            mPageIndex = 1;
+                            mAdapter.clear();
+                            requestData(false);
+                        }
+                    });
 
-                        Snackbar.make(vh.copy, getActivity().getString(R.string.copy_data_success), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
+                    vh.copy.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ClipboardManager cbm = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            cbm.setText(Transforms.formatPost(post.getBody(), false));
 
-                vh.quote.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
+                            Snackbar.make(vh.copy, getActivity().getString(R.string.copy_data_success), Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    });
 
-                vh.comment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
+                    vh.quote.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    });
+
+                    vh.comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    });
+                } else if (holder instanceof PostAdapter.HeaderViewHolder) {
+                    final PostAdapter.HeaderViewHolder vh = (PostAdapter.HeaderViewHolder) holder;
+
+                    vh.section.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Thread thread = (Thread) post;
+                            UIHelper.showThreadsActivity(getContext(), thread.getSectionId());
+                        }
+                    });
+                }
+
             }
         });
         mFlightDialog = new FlightDialogFragment();

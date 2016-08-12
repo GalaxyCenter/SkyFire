@@ -449,4 +449,11 @@ public class TianyaApi {
 
         ApiHttpClient.get(url, headers, handler);
     }
+
+    public static void getThreads(String section, long nextId, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/m/list.jsp?item=" + section + "&nextid=" + nextId;
+
+        ApiHttpClient.get(url, handler);
+    }
+
 }

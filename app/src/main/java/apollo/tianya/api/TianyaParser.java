@@ -122,6 +122,62 @@ public class TianyaParser {
         return datas;
     }
 
+    public static DataSet<Thread> parseThreads(String source) {
+        DataSet<Thread> datas = null;
+        Document doc = null;
+        Elements elms = null;
+        Element item = null;
+        List<Thread> list = null;
+        Thread thread = null;
+        String url = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+        String sectionName = null;
+
+        datas = new DataSet<Thread>();
+        list = new ArrayList<Thread>();
+        datas.setObjects(list);
+        datas.setTotalRecords(Integer.MAX_VALUE);
+
+        doc = Jsoup.parse(source);
+        elms = doc.select("ul.post-list li");
+        if (elms == null || elms.size() ==0)
+            return null;
+
+        item = doc.select("div.forum-name h1").first();
+        sectionName = item.html();
+        for(Element elm:elms) {
+            // 当含有广告的css时,不解析
+            if (elm.hasClass("gg"))
+                continue;
+            thread = new Thread();
+            thread.setSectionName(sectionName);
+
+            item = elm.select("a").first();
+
+            url = item.attr("href");
+            pattern = Pattern.compile("/m/post-(.*?)-(.*?)-1.shtml");
+            matcher = pattern.matcher(url);
+            if (matcher.find()) {
+                thread.setSectionId(matcher.group(1));
+                thread.setId(Integer.parseInt(matcher.group(2)));
+            }
+
+            item = elm.select("div.p-title").first();
+            thread.setTitle(item.html());
+
+            item = elm.select(".author").first();
+            thread.setAuthor(item.html());
+
+            item = elm.select(".t-view").first();
+            thread.setViews(Integer.parseInt(item.html()));
+
+            list.add(thread);
+        }
+
+        return datas;
+    }
+
     public static DataSet<Thread> parseHotThread(String source) {
         DataSet<Thread> datas = null;
         List<Thread> list = null;
@@ -822,4 +878,5 @@ public class TianyaParser {
         }
         return thread;
     }
+
 }

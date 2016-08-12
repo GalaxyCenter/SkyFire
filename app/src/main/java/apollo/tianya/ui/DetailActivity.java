@@ -1,5 +1,6 @@
 package apollo.tianya.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,12 +15,14 @@ import apollo.tianya.R;
 import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
+import apollo.tianya.bean.Constants;
 import apollo.tianya.fragment.ThreadDetailFragment;
 import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.BarBaseFragment.Action;
 import apollo.tianya.fragment.bar.BarBaseFragment.OnActionClickListener;
 import apollo.tianya.fragment.bar.InputFragment;
 import apollo.tianya.fragment.bar.ToolbarFragment;
+import apollo.tianya.util.TLog;
 
 /**
  * 帖子详情Activity
@@ -27,6 +30,8 @@ import apollo.tianya.fragment.bar.ToolbarFragment;
  */
 public class DetailActivity extends BaseActivity implements
         OnActionClickListener, InputFragment.OnSendListener {
+
+    private String TAG = "DetailActivity";
 
     private InputFragment mInputFragment = new InputFragment();
     private BarBaseFragment mNewFragment = null;
@@ -42,8 +47,17 @@ public class DetailActivity extends BaseActivity implements
     protected void init(Bundle savedInstanceState) {
         FragmentTransaction trans = null;
         BaseFragment fragment = null;
+        Intent intent = null;
+        Class<? extends BaseFragment> clazz = null;
 
-        fragment = new ThreadDetailFragment();
+        intent = getIntent();
+        clazz = (Class<? extends BaseFragment>) intent.getSerializableExtra(Constants.BUNDLE_KEY_FRAGMENT);
+
+        try {
+            fragment = clazz.newInstance();// new ThreadDetailFragment();
+        } catch (Exception ex) {
+            TLog.error(ex.getMessage());
+        }
         trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.container, fragment);
         trans.commitAllowingStateLoss();
@@ -113,6 +127,9 @@ public class DetailActivity extends BaseActivity implements
 
     public void setTitle(String title) {
         mToolbarLayout.setTitle(title);
+
+        mToolbar.setTitle(title);
+        setSupportActionBar(mToolbar);
     }
 
     public void setCover(String img) {

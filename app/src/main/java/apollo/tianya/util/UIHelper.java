@@ -9,6 +9,8 @@ import apollo.tianya.AppContext;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
+import apollo.tianya.fragment.ThreadDetailFragment;
+import apollo.tianya.fragment.ThreadsFragment;
 import apollo.tianya.ui.ImageActivity;
 import apollo.tianya.ui.LoginActivity;
 import apollo.tianya.ui.MainActivity;
@@ -49,6 +51,7 @@ public class UIHelper {
         intent.putExtra(Constants.BUNDLE_KEY_THREAD_ID, thread.getGuid());
         intent.putExtra(Constants.BUNDLE_KEY_PAGE_INDEX, 1);
         intent.putExtra(Constants.BUNDLE_KEY_AUTHOR, thread.getAuthor());
+        intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, ThreadDetailFragment.class);
 
         context.startActivity(intent);
     }
@@ -97,6 +100,14 @@ public class UIHelper {
         Intent intent = new Intent(context, ImageActivity.class);
 
         intent.putExtra(Constants.BUNDLE_KEY_IMAGES, images);
+        context.startActivity(intent);
+    }
+
+    public static void showThreadsActivity(Context context, String section) {
+        Intent intent = new Intent(context, DetailActivity.class);
+
+        intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, section);
+        intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, ThreadsFragment.class);
         context.startActivity(intent);
     }
 }
