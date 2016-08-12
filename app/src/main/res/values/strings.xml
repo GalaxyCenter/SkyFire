@@ -74,6 +74,7 @@
 
     <string name="post_reply_success">赞,回帖成功!+3分</string>
     <string name="post_content_tail">\r\n\r\n--来自最有情怀可以 #发表情# 的天涯客户端--</string>
+    <string name="post_content_mark">马克一下</string>
 
     <string name="actionbar_title_detail">帖子详情</string>
     <string name="actionbar_title_bookmarks">我的书签</string>
@@ -124,4 +125,5 @@
     <string name="manu_thread_detail_mark">马克</string>
     <string name="manu_thread_detail_fav">收藏</string>
     <string name="manu_thread_detail_jump">跳楼</string>
+    <string name="manu_thread_detail_share">分享</string>
 </resources>

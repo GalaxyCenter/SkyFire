@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -333,6 +334,35 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.thread_detail_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_fav:
+                Thread thread = (Thread) (Object) mAdapter.getItem(0);
+
+                if (isAddBookmark)
+                    TianyaApi.removeBookmark(thread, mRemoveBookMarkHandle);
+                else
+                    TianyaApi.addBookmark(thread, mAddBookMarkHandle);
+                break;
+
+            case R.id.menu_jump:
+                mFlightDialog.show(getActivity().getSupportFragmentManager(), "DD");
+                break;
+
+            case R.id.menu_share:
+                Snackbar.make(mListView, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                break;
+
+            case R.id.menu_mark:
+                String content = getResources().getString(R.string.post_content_mark);
+                TianyaApi.createPost(mSectionId, mThreadId, "", content, mCreatePostHandler);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
