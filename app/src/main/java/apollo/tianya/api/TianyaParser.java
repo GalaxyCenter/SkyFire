@@ -60,7 +60,6 @@ public class TianyaParser {
         while (matcher.find()) {
             item = matcher.group(1);
             thread = new Thread();
-            list.add(thread);
 
             // 解析URL
             pattern = Pattern.compile("(?s)<a href=\"(.*?)\"[^>]*>");
@@ -68,6 +67,20 @@ public class TianyaParser {
             if (sub_matcher.find()) {
                 match_content = sub_matcher.group(1);
                 thread.setUrl(match_content);
+            }
+
+            // 解析板块id和帖子id
+            pattern = Pattern.compile("/post-(.*?)-(.*?)-");
+            sub_matcher = pattern.matcher(thread.getUrl());
+            if (sub_matcher.find()) {
+                match_content = sub_matcher.group(1);
+                thread.setSectionId(match_content);
+
+                match_content = sub_matcher.group(2);
+                thread.setGuid(match_content);
+            } else {
+                // 当推送的是广告链接时不解析
+                continue;
             }
 
             // 解析标题
@@ -95,17 +108,6 @@ public class TianyaParser {
                 thread.setSectionName(match_content);
             }
 
-            // 解析板块id和帖子id
-            pattern = Pattern.compile("/post-(.*?)-(.*?)-");
-            sub_matcher = pattern.matcher(thread.getUrl());
-            if (sub_matcher.find()) {
-                match_content = sub_matcher.group(1);
-                thread.setSectionId(match_content);
-
-                match_content = sub_matcher.group(2);
-                thread.setGuid(match_content);
-            }
-
             // 解析访问量
             pattern = Pattern.compile("<span class=\"look-v-num\">(.*?)</span>");
             sub_matcher = pattern.matcher(item);
@@ -115,6 +117,7 @@ public class TianyaParser {
                 if (!TextUtils.isEmpty(match_content))
                     thread.setViews(Integer.parseInt(match_content));
             }
+            list.add(thread);
         }
         datas = new DataSet<Thread>();
         datas.setObjects(list);

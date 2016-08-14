@@ -285,7 +285,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
      */
     protected void requestData(boolean refresh) {
         String key = getCacheKey();
-        if (isReadCacheData(refresh)) {
+        if (!refresh && isReadCacheData()) {
             readCacheData(key);
 
             TLog.log(TAG, "requestData cache:" + key);
@@ -309,17 +309,17 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /**
      * 判断是否需要读取缓存数据
-     * @param refresh
      * @return
      */
-    protected boolean isReadCacheData(boolean refresh) {
+    protected boolean isReadCacheData() {
         String key = getCacheKey();
         Activity activity = getActivity();
 
-        // 没有网络的情况下
+        // 没有网络的情况下 读取缓存数据
         if (!CompatibleUtil.hasInternet())
             return true;
 
+        // 缓存没失效 读取缓存数据
         if (!CacheManager.isCacheDataFailure(activity, key))
             return true;
 

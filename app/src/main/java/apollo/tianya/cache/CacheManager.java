@@ -50,9 +50,8 @@ public class CacheManager {
      */
     public static boolean isCacheDataFailure(Context context, String cachefile) {
         File data = context.getFileStreamPath(cachefile);
-        if (!data.exists()) {
-            return false;
-        }
+        if (!data.exists())
+            return true;
 
         long existTime = System.currentTimeMillis() - data.lastModified();
         boolean failure = false;
