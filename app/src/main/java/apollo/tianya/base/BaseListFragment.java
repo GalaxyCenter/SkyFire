@@ -320,16 +320,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (!CompatibleUtil.hasInternet())
             return true;
 
-        // 当第一页不是主动刷新的情况下,优先读取缓存里面的数据
-        if (!refresh
-                && mPageIndex == 1
-                && CacheManager.isExistDataCache(activity, key))
-            return true;
-
-        // 其他页码在缓存未失效的情况下优先读取缓存数据
-        if (mPageIndex != 1
-                && CacheManager.isExistDataCache(activity, key)
-                && !CacheManager.isCacheDataFailure(activity, key))
+        if (!CacheManager.isCacheDataFailure(activity, key))
             return true;
 
         return false;

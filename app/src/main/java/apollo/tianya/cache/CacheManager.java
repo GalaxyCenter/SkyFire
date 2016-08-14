@@ -21,10 +21,10 @@ import apollo.tianya.util.CompatibleUtil;
  */
 public class CacheManager {
 
-    // wifi缓存时间为5分钟
-    private static long wifi_cache_time = 5 * 60 * 1000;
-    // 其他网络环境为1小时
-    private static long other_cache_time = 60 * 60 * 1000;
+    // wifi缓存时间为20分钟
+    private static long wifi_cache_time = 20 * 60 * 1000;
+    // 其他网络环境为2小时
+    private static long other_cache_time = 120 * 60 * 1000;
 
     /**
      * 判断缓存是否存在
