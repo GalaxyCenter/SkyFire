@@ -124,58 +124,67 @@ public class TianyaParser {
 
     public static DataSet<Thread> parseThreads(String source) {
         DataSet<Thread> datas = null;
-        Document doc = null;
-        Elements elms = null;
-        Element item = null;
-        List<Thread> list = null;
         Thread thread = null;
-        String url = null;
+        Section section = null;
+        ArrayList<Thread> threads = null;
+        int idx = 0;
+        //String url = null;
         Pattern pattern = null;
         Matcher matcher = null;
-        String sectionName = null;
+        Matcher sub_matcher = null;
+        String td_cnt = null;
 
+        pattern = Pattern.compile("(?s)[\\<]td.*?[\\>](.*?)</td>");
+        matcher = pattern.matcher(source);
+        threads = new ArrayList<Thread>(80);
         datas = new DataSet<Thread>();
-        list = new ArrayList<Thread>();
-        datas.setObjects(list);
-        datas.setTotalRecords(Integer.MAX_VALUE);
+        datas.setObjects(threads);
+        while (matcher.find()) {
+            td_cnt = matcher.group(1);
 
-        doc = Jsoup.parse(source);
-        elms = doc.select("ul.post-list li");
-        if (elms == null || elms.size() ==0)
-            return null;
+            if (idx % 5 == 0) {
+                thread = new Thread();
 
-        item = doc.select("div.forum-name h1").first();
-        sectionName = item.html();
-        for(Element elm:elms) {
-            // 当含有广告的css时,不解析
-            if (elm.hasClass("gg"))
-                continue;
-            thread = new Thread();
-            thread.setSectionName(sectionName);
+                pattern = Pattern.compile("(?s)<a\\s.*?href=\"([^\"]+)\"[^>]*>(.*?)</a>");
+                sub_matcher = pattern.matcher(td_cnt);
+                if (sub_matcher.find()) {
+                    String subject = null;
+                    thread.setUrl(sub_matcher.group(1));
 
-            item = elm.select("a").first();
+                    subject = Transforms.stripHtmlXmlTags(sub_matcher.group(2).replaceAll("\t", ""));
+                    subject = subject.replaceAll("\r\n", "").replaceAll("\t", "");
+                    thread.setTitle(subject);
+                }
 
-            url = item.attr("href");
-            thread.setUrl(url);
-            pattern = Pattern.compile("/m/post-(.*?)-(.*?)-1.shtml");
-            matcher = pattern.matcher(url);
-            if (matcher.find()) {
-                thread.setSectionId(matcher.group(1));
-                thread.setId(Integer.parseInt(matcher.group(2)));
+                pattern = Pattern.compile("post-(.*?)-(.*?)-1");
+                sub_matcher = pattern.matcher(thread.getUrl());
+                if (sub_matcher.find()) {
+                    thread.setSectionId(sub_matcher.group(1));
+                    thread.setId(Integer.parseInt(sub_matcher.group(2)));
+                    thread.setGuid(sub_matcher.group(2));
+                }
+            } else if (idx % 5 == 1) {
+                pattern = Pattern.compile("<a\\s.*?href=\"http://www.tianya.cn/([^\"]+)\"[^>]*>(.*?)</a>");
+                sub_matcher = pattern.matcher(td_cnt);
+                if (sub_matcher.find()) {
+                    thread.setAuthorId(Integer.parseInt(sub_matcher.group(1)));
+                    thread.setAuthor(sub_matcher.group(2));
+                }
+            } else if (idx % 5 == 2) {
+                thread.setViews(Integer.parseInt(td_cnt));
+            } else if (idx % 5 == 3) {
+                thread.setReplies(Integer.parseInt(td_cnt));
+            } else if (idx % 5 == 4) {
+                td_cnt = matcher.group(0);
+                pattern = Pattern.compile("<td\\s.*?title=\"([^\"]+)\"[^>]*>.*?</td>");
+                sub_matcher = pattern.matcher(td_cnt);
+                if (sub_matcher.find()) {
+                    thread.setPostDate(DateTime.parse(sub_matcher.group(1), "yyyy-MM-dd HH:mm").getDate());
+                    threads.add(thread);
+                }
             }
-
-            item = elm.select("div.p-title").first();
-            thread.setTitle(item.html());
-
-            item = elm.select(".author").first();
-            thread.setAuthor(item.html());
-
-            item = elm.select(".t-view").first();
-            thread.setViews(Integer.parseInt(item.html()));
-
-            list.add(thread);
+            idx ++;
         }
-
         return datas;
     }
 

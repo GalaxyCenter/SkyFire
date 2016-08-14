@@ -42,7 +42,7 @@ import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.InputFragment;
-import apollo.tianya.ui.DetailActivity;
+import apollo.tianya.ui.CollapsedDetailActivity;
 import apollo.tianya.util.Regex;
 import apollo.tianya.util.Transforms;
 import apollo.tianya.util.UIHelper;
@@ -301,7 +301,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
             List<Map<String,Object>> list = null;
             Map<String,Object> map = null;
             String img_src = null;
-            DetailActivity activity = (DetailActivity) getActivity();
+            CollapsedDetailActivity activity = (CollapsedDetailActivity) getActivity();
 
             list = Regex.getStartAndEndIndex(p.getBody(), Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
             for(int i=0; i<list.size(); i++) {

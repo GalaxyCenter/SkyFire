@@ -44,7 +44,7 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
             List<Thread> list = datas.getObjects();
             Thread thread = list.get(list.size() - 1);
 
-            mNextId = thread.getId();
+            mNextId = thread.getPostDate().getTime();
 
             DetailActivity activity = (DetailActivity) getActivity();
             activity.setTitle(thread.getSectionName());
@@ -53,6 +53,17 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
         super.executeOnLoadDataSuccess(datas);
     }
 
+    @Override
+    public void onRefresh() {
+        if (mState == STATE_REFRESH)
+            return;
+
+        setSwipeRefreshLoadingState();
+        mState = STATE_REFRESH;
+        mNextId = 0;
+        mAdapter.clear();
+        requestData(true);
+    }
 
     @Override
     protected void sendRequestData() {

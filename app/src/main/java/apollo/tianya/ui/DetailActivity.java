@@ -33,13 +33,7 @@ public class DetailActivity extends BaseActivity implements
 
     private String TAG = "DetailActivity";
 
-    private InputFragment mInputFragment = new InputFragment();
-    private BarBaseFragment mNewFragment = null;
-    private AppBarLayout mAppBar;
-    private ImageView mCover;
     private Toolbar mToolbar = null;
-    private CollapsingToolbarLayout mToolbarLayout = null;
-
     private InputFragment.OnSendListener mSendListener = null;
     private OnActionClickListener mActionClickListener = null;
 
@@ -84,17 +78,6 @@ public class DetailActivity extends BaseActivity implements
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
-        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
-        mCover = (ImageView) findViewById(R.id.cover);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.emoji_keyboard, mInputFragment).commit();
-        mInputFragment.addOnActionClickListener(this);
-        mInputFragment.setOnSendListener(this);
-
-        mNewFragment = mInputFragment;
     }
 
     @Override
@@ -126,21 +109,7 @@ public class DetailActivity extends BaseActivity implements
     }
 
     public void setTitle(String title) {
-        mToolbarLayout.setTitle(title);
-
         mToolbar.setTitle(title);
         setSupportActionBar(mToolbar);
-    }
-
-    public void setCover(String img) {
-        TianyaApi.displayImage(img, mCover);
-    }
-
-    public void setExpanded(boolean expanded) {
-        setExpanded(expanded, ViewCompat.isLaidOut(mAppBar));
-    }
-
-    public void setExpanded(boolean expanded, boolean animate) {
-        mAppBar.setExpanded(expanded, animate);
     }
 }

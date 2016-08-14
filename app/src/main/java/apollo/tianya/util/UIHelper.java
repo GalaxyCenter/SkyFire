@@ -9,13 +9,14 @@ import apollo.tianya.AppContext;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
+import apollo.tianya.bean.Thread;
 import apollo.tianya.fragment.ThreadDetailFragment;
 import apollo.tianya.fragment.ThreadsFragment;
+import apollo.tianya.ui.CollapsedDetailActivity;
+import apollo.tianya.ui.DetailActivity;
 import apollo.tianya.ui.ImageActivity;
 import apollo.tianya.ui.LoginActivity;
 import apollo.tianya.ui.MainActivity;
-import apollo.tianya.ui.DetailActivity;
-import apollo.tianya.bean.Thread;
 import apollo.tianya.ui.SimpleBackActivity;
 
 /**
@@ -45,7 +46,7 @@ public class UIHelper {
      * @param thread
      */
     public static void showPostDetail(Context context, Thread thread) {
-        Intent intent = new Intent(context, DetailActivity.class);
+        Intent intent = new Intent(context, CollapsedDetailActivity.class);
 
         intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, thread.getSectionId());
         intent.putExtra(Constants.BUNDLE_KEY_THREAD_ID, thread.getGuid());
