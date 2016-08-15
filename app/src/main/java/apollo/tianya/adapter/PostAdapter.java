@@ -118,7 +118,6 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     @Override
     public ViewHolder getHeaderViewHolder(ViewGroup viewGroup) {
         View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_post_header, viewGroup, false);
-
         return new HeaderViewHolder(v);
     }
 

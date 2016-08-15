@@ -97,7 +97,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     private String mThreadId;
     private String mAuthor;
     private String mFilterAuthor;
-    private int mFloor;
+    private int mCurFloor;
     private boolean isAddBookmark;
 
     private final AsyncHttpResponseHandler mAddBookMarkHandle = new AsyncHttpResponseHandler() {
@@ -395,7 +395,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
             view.setBackgroundResource(R.drawable.post_floor_owner);
             view.setTextColor(getResources().getColor(R.color.post_floor_owner));
         } else {
-            view.setText(Integer.toString(mFloor + position)
+            view.setText(Integer.toString(mCurFloor + position)
                     + getResources().getText(R.string.post_floor));
             view.setBackgroundResource(R.drawable.post_floor);
             view.setTextColor(getResources().getColor(R.color.post_floor));
@@ -435,9 +435,18 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     }
 
     private void skip2Floor(int floor) {
-        Snackbar.make(mListView, R.string.unsuport, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        int pi = floor / 20;
 
+        if (floor % 20 > 0)
+            pi ++;
+
+        mPageIndex = pi;
+        mCurFloor = (pi - 1) * 20;
+        setSwipeRefreshLoadingState();
+        mState = STATE_REFRESH;
+        mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
+        mAdapter.clear();
+        requestData(true);
     }
 
 }
