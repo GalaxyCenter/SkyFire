@@ -210,6 +210,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 if (mState == STATE_NONE && scrollEnd) {
                     mPageIndex++;
                     mState = STATE_LOADMORE;
+                    mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
                     requestData(false);
                 }
             }
@@ -233,7 +234,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     }
 
     protected void executeOnLoadDataSuccess(DataSet<T> ds) {
-        int state = RecyclerBaseAdapter.STATE_EMPTY_ITEM;
+        int state;
 
         if (ds.getObjects().size() == 0) {
             state = RecyclerBaseAdapter.STATE_NO_MORE;

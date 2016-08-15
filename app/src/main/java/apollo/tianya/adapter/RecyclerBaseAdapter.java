@@ -159,6 +159,7 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public void setState(int state) {
         this.state = state;
+        notifyDataSetChanged();
     }
 
     public int getState() {
