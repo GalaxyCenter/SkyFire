@@ -51,6 +51,17 @@ public class ChannelFragment extends BaseListFragment<Thread> {
     }
 
     @Override
+    protected void requestData(boolean refresh) {
+        if (mPageIndex != 1) {
+            mState = STATE_NOMORE;
+            mAdapter.setState(RecyclerBaseAdapter.STATE_NO_MORE);
+            return;
+        }
+
+        super.requestData(refresh);
+    }
+
+    @Override
     protected void sendRequestData() {
         if (mCatalog.equals(getString(R.string.channel_recommend)))
             TianyaApi.getRecommendThread(mHandler);

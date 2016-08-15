@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -38,7 +39,13 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
     private static String TAG = "ThreadAdapter";
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static abstract class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public static class ThreadItemViewHolder extends ViewHolder {
 
         @BindView(R.id.title) TextView title;
         @BindView(R.id.summary) TextView summary;
@@ -53,7 +60,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         AsyncUserIdHttpResponseHandler userIdHandle = null;
         ParserTask task = null;
 
-        public ViewHolder(View itemView, ViewGroup parent) {
+        public ThreadItemViewHolder(View itemView, ViewGroup parent) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
@@ -74,9 +81,21 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
         }
     }
 
+    public static class FooterViewHolder extends ViewHolder {
+
+        @BindView(R.id.text) TextView text;
+        @BindView(R.id.progressbar) ProgressBar progress;
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
     static class AsyncPostHttpResponseHandler extends AsyncHttpResponseHandler {
 
-        public ViewHolder vh;
+        public ThreadItemViewHolder vh;
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -96,7 +115,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
     static class AsyncUserIdHttpResponseHandler extends AsyncHttpResponseHandler {
 
-        public ViewHolder vh;
+        public ThreadItemViewHolder vh;
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -117,7 +136,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
         private final byte[] responseData;
         private boolean parserError;
-        public ViewHolder vh;
+        public ThreadItemViewHolder vh;
 
         public ParserTask(byte[] data) {
             this.responseData = data;
@@ -194,7 +213,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
     @Override
     public ViewHolder getViewHolder(ViewGroup viewGroup) {
         View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_item_thread, null);
-        return new ViewHolder(v, viewGroup);
+        return new ThreadItemViewHolder(v, viewGroup);
     }
 
     @Override
@@ -204,30 +223,59 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
     @Override
     public ViewHolder getFooterViewHolder(ViewGroup viewGroup) {
-        return null;
+        View v = getLayoutInflater(viewGroup.getContext()).inflate(R.layout.list_cell_footer, viewGroup, false);
+        return new FooterViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder vh, int position) {
-        Thread thread;
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
-        thread = mItems.get(position);
-        vh.title.setText(thread.getTitle());
-        vh.author.setText(thread.getAuthor());
-        vh.views.setText(Integer.toString(thread.getViews()));
-        vh.replies.setText(Integer.toString(thread.getReplies()));
-        vh.time.setText(Formatter.friendlyTime(thread.getPostDate()));
-        vh.face.setBackgroundResource(R.drawable.ic_account_circle_blue_37dp);
-        vh.face.setUserInfo(thread.getAuthorId(), thread.getAuthor());
-        vh.summary.setText("");
-        vh.time.setText("");
+        int itemType = getItemViewType(position);
 
-        ((PhotoAdapter)vh.photos.getAdapter()).removeAllItem();
+        if (itemType == TYPE_HEADER) {
 
-        vh.postHandle.vh = vh;
-        TianyaApi.getPosts(thread.getUrl(), vh.postHandle);
+        } else if (itemType == TYPE_FOOTER) {
+            FooterViewHolder vh = (FooterViewHolder) holder;
 
-        if(!TextUtils.isEmpty(thread.getAuthor()))
-            TianyaApi.getUserId(thread.getAuthor(), vh.userIdHandle);
+            switch (getState()) {
+                case STATE_LOAD_MORE:
+                    vh.progress.setVisibility(View.VISIBLE);
+                    vh.text.setText(R.string.loading);
+                    break;
+
+                case STATE_NO_MORE:
+                    vh.progress.setVisibility(View.GONE);
+                    vh.text.setText(R.string.loading_nor_more);
+                    break;
+            }
+        } else {
+            Thread thread;
+            ThreadItemViewHolder vh;
+
+            vh = (ThreadItemViewHolder) holder;
+            thread = mItems.get(position);
+            vh.title.setText(thread.getTitle());
+            vh.author.setText(thread.getAuthor());
+            vh.views.setText(Integer.toString(thread.getViews()));
+            vh.replies.setText(Integer.toString(thread.getReplies()));
+            vh.time.setText(Formatter.friendlyTime(thread.getPostDate()));
+            vh.face.setBackgroundResource(R.drawable.ic_account_circle_blue_37dp);
+            vh.face.setUserInfo(thread.getAuthorId(), thread.getAuthor());
+            vh.summary.setText("");
+            vh.time.setText("");
+
+            ((PhotoAdapter)vh.photos.getAdapter()).removeAllItem();
+
+            vh.postHandle.vh = vh;
+            TianyaApi.getPosts(thread.getUrl(), vh.postHandle);
+
+            if(!TextUtils.isEmpty(thread.getAuthor()))
+                TianyaApi.getUserId(thread.getAuthor(), vh.userIdHandle);
+        }
+    }
+
+    @Override
+    protected boolean hasFooterView(){
+        return true;
     }
 }

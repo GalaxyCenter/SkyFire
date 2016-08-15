@@ -131,11 +131,18 @@ public class TianyaParser {
         Section section = null;
         ArrayList<Thread> threads = null;
         int idx = 0;
-        //String url = null;
         Pattern pattern = null;
         Matcher matcher = null;
         Matcher sub_matcher = null;
         String td_cnt = null;
+        String sectionName = null;
+
+
+        pattern = Pattern.compile("(?s)<title>(.*?)_天涯论坛</title>");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            sectionName = matcher.group(1);
+        }
 
         pattern = Pattern.compile("(?s)[\\<]td.*?[\\>](.*?)</td>");
         matcher = pattern.matcher(source);
@@ -147,6 +154,7 @@ public class TianyaParser {
 
             if (idx % 5 == 0) {
                 thread = new Thread();
+                thread.setSectionName(sectionName);
 
                 pattern = Pattern.compile("(?s)<a\\s.*?href=\"([^\"]+)\"[^>]*>(.*?)</a>");
                 sub_matcher = pattern.matcher(td_cnt);

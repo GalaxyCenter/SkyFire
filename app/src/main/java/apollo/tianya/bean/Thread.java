@@ -28,7 +28,7 @@ public class Thread extends Post {
     }
 
     public String getUrl() {
-        if (TextUtils.isEmpty(url))
+        if (TextUtils.isEmpty(url) || url.indexOf("http") != 0)
             url = "http://bbs.tianya.cn/m/post-" + sectionId + "-" + getId() + "-1.shtml";
 
         return url;
