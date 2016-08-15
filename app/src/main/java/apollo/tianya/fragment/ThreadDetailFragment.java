@@ -226,14 +226,22 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                     vh.filter.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //Snackbar.make(vh.copy, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
-                            //        .setAction("Action", null).show();
-                            mFilterAuthor = post.getAuthor();
+
+                            if (vh.filter.getText().equals(getString(R.string.post_opt_filter)))
+                                mFilterAuthor = post.getAuthor();
+                            else
+                                mFilterAuthor = null;
+
                             mPageIndex = 1;
                             mAdapter.clear();
                             requestData(false);
                         }
                     });
+
+                    if (mFilterAuthor == null)
+                        vh.filter.setText(R.string.post_opt_filter);
+                    else
+                        vh.filter.setText(R.string.post_opt_unfilter);
 
                     vh.copy.setOnClickListener(new View.OnClickListener() {
                         @Override
