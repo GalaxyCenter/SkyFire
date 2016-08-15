@@ -26,10 +26,12 @@ public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder>
 
     public static final int STATE_EMPTY_ITEM = 0;
     public static final int STATE_LOAD_MORE = 1;
-    public static final int STATE_NO_MORE = 2;
-    public static final int STATE_NO_DATA = 3;
-    public static final int STATE_LESS_ONE_PAGE = 4;
-    public static final int STATE_NETWORK_ERROR = 5;
+    public static final int STATE_PULL = 2;
+    public static final int STATE_NO_MORE = 3;
+    public static final int STATE_NO_DATA = 4;
+    public static final int STATE_LESS_ONE_PAGE = 5;
+    public static final int STATE_NETWORK_ERROR = 6;
+
 
     protected int state = STATE_LESS_ONE_PAGE;
 

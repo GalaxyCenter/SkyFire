@@ -227,7 +227,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         setSwipeRefreshLoadingState();
         mState = STATE_REFRESH;
         mPageIndex = 1;
-        mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
+        mAdapter.setState(RecyclerBaseAdapter.STATE_PULL);
         mAdapter.clear();
         requestData(true);
     }

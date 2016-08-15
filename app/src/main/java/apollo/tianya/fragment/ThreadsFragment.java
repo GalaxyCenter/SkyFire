@@ -79,8 +79,7 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     public void onItemClick(View view, int position) {
         Thread thread = mAdapter.getItem(position);
 
-        if (TianyaParser.parseThreadUrl(thread.getUrl()) != null)
-            UIHelper.showPostDetail(view.getContext(), thread);
+        UIHelper.showPostDetail(view.getContext(), thread);
     }
 
     @Override

@@ -226,6 +226,13 @@ public class TianyaParser {
                 thread.setUrl(match_content);
             }
 
+            pattern = Pattern.compile("post-(.*?)-(.*?)-");
+            sub_matcher = pattern.matcher(thread.getUrl());
+            if (sub_matcher.find()) {
+                thread.setSectionId(sub_matcher.group(1));
+                thread.setGuid(sub_matcher.group(2));
+            }
+
             // 解析标题
             pattern = Pattern.compile("<p class=\"title\">(.*?)</p>");
             sub_matcher = pattern.matcher(item);

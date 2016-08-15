@@ -247,6 +247,11 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                     vh.progress.setVisibility(View.GONE);
                     vh.text.setText(R.string.loading_nor_more);
                     break;
+
+                case STATE_PULL:
+                    vh.progress.setVisibility(View.GONE);
+                    vh.text.setText("");
+                    break;
             }
         } else {
             Thread thread;
