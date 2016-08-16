@@ -125,7 +125,8 @@
     <string name="tip_network_error">没有可用的网络</string>
 
     <string name="manu_thread_detail_mark">马克</string>
-    <string name="manu_thread_detail_fav">收藏</string>
-    <string name="manu_thread_detail_skip">跳楼</string>
-    <string name="manu_thread_detail_share">分享</string>
+    <string name="manu_thread_skip">跳楼</string>
+    <string name="manu_share">分享</string>
+    <string name="manu_fav">收藏</string>
+    <string name="manu_search">搜索</string>
 </resources>

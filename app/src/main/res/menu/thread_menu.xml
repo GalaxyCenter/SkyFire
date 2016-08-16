@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_fav"
@@ -17,15 +16,10 @@
         android:visible="true"/>
 
     <item
-        android:id="@+id/menu_jump"
-        app:showAsAction="never"
-        android:icon="@drawable/btn_opt_flight_selector"
-        android:title="@string/manu_thread_skip"
+        android:id="@+id/menu_search"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/btn_opt_search_selector"
+        android:title="@string/manu_search"
         android:visible="true"/>
 
-    <item
-        android:id="@+id/menu_mark"
-        app:showAsAction="never"
-        android:title="@string/manu_thread_detail_mark"
-        android:visible="true"/>
 </menu>
