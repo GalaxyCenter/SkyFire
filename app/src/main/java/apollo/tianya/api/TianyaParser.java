@@ -62,24 +62,12 @@ public class TianyaParser {
             thread = new Thread();
 
             // 解析URL
-            pattern = Pattern.compile("(?s)<a href=\"(.*?)\"[^>]*>");
+            pattern = Pattern.compile("(?s)<a href=\"(http://bbs.tianya.cn/m/post-.*?-.*?-1.shtml)\"[^>]*>");
             sub_matcher = pattern.matcher(item);
             if (sub_matcher.find()) {
                 match_content = sub_matcher.group(1);
                 thread.setUrl(match_content);
-            }
-
-            // 解析板块id和帖子id
-            pattern = Pattern.compile("/post-(.*?)-(.*?)-");
-            sub_matcher = pattern.matcher(thread.getUrl());
-            if (sub_matcher.find()) {
-                match_content = sub_matcher.group(1);
-                thread.setSectionId(match_content);
-
-                match_content = sub_matcher.group(2);
-                thread.setGuid(match_content);
             } else {
-                // 当推送的是广告链接时不解析
                 continue;
             }
 
@@ -165,14 +153,6 @@ public class TianyaParser {
                     subject = Transforms.stripHtmlXmlTags(sub_matcher.group(2).replaceAll("\t", ""));
                     subject = subject.replaceAll("\r\n", "").replaceAll("\t", "");
                     thread.setTitle(subject);
-                }
-
-                pattern = Pattern.compile("post-(.*?)-(.*?)-1");
-                sub_matcher = pattern.matcher(thread.getUrl());
-                if (sub_matcher.find()) {
-                    thread.setSectionId(sub_matcher.group(1));
-                    thread.setId(Integer.parseInt(sub_matcher.group(2)));
-                    thread.setGuid(sub_matcher.group(2));
                 }
             } else if (idx % 5 == 1) {
                 pattern = Pattern.compile("<a\\s.*?href=\"http://www.tianya.cn/([^\"]+)\"[^>]*>(.*?)</a>");

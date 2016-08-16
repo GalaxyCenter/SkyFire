@@ -1,6 +1,7 @@
 package apollo.tianya.bean;
 
-import android.text.TextUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Texel on 2016/6/2.
@@ -28,13 +29,21 @@ public class Thread extends Post {
     }
 
     public String getUrl() {
-        if (TextUtils.isEmpty(url) || url.indexOf("http") != 0)
-            url = "http://bbs.tianya.cn/m/post-" + sectionId + "-" + getId() + "-1.shtml";
-
         return url;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        pattern = Pattern.compile("post-(.*?)-(.*?)-1");
+        matcher = pattern.matcher(url);
+        if (matcher.find()) {
+            setSectionId(matcher.group(1));
+            setId(Integer.parseInt(matcher.group(2)));
+            setGuid(matcher.group(2));
+
+            this.url = "http://bbs.tianya.cn/m/post-" + sectionId + "-" + getId() + "-1.shtml";
+        }
     }
 }
