@@ -145,6 +145,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     protected int mPageIndex = 1;
 
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
+    protected LinearLayoutManager mLinearLayoutManager;
+
     private ParserTask mParserTask = null;
     private AsyncTask<String, Void, DataSet<T>> mCacheTask;
 
@@ -183,10 +185,10 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
         mAdapter.setOnItemClickListener(this);
 
-        final LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        mLinearLayoutManager = new LinearLayoutManager(this.getActivity());
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        mListView.setLayoutManager(llm);
+        mListView.setLayoutManager(mLinearLayoutManager);
         mListView.setAdapter(mAdapter);
         mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -201,7 +203,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 // 判断是否滚动到底部
                 boolean scrollEnd = false;
                 try {
-                    if (llm.findLastVisibleItemPosition() == llm.getItemCount() - 1)
+                    if (mLinearLayoutManager.findLastVisibleItemPosition() == mLinearLayoutManager.getItemCount() - 1)
                         scrollEnd = true;
                 } catch (Exception e) {
                     scrollEnd = false;
@@ -245,7 +247,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
         mAdapter.setState(state);
         mAdapter.addItems(ds.getObjects());
-        mAdapter.notifyDataSetChanged();
     }
 
     // 完成刷新

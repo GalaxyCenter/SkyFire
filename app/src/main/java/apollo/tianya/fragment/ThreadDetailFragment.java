@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,7 +77,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                     String tmp = mFloor.getText().toString();
 
                     if (!TextUtils.isEmpty(tmp)) {
-                        ThreadDetailFragment.this.skip2Floor(Integer.parseInt(tmp));
+                        ThreadDetailFragment.this.moveToFloor(Integer.parseInt(tmp));
                         FlightDialogFragment.this.dismiss();
                     }
                 }
@@ -91,6 +93,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     }
 
+    private static String TAG = "ThreadDetailFragment";
     private FlightDialogFragment mFlightDialog = null;
 
     private String mSectionId;
@@ -284,7 +287,26 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
             }
         });
         mFlightDialog = new FlightDialogFragment();
+
+        mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (mMove) {
+                    mMove = false;
+
+                    int n = mPosition - mLinearLayoutManager.findFirstVisibleItemPosition();
+                    if (0 <= n && n < mListView.getChildCount()) {
+                        int top = mListView.getChildAt(n).getTop();
+
+                        mListView.scrollBy(0, top);
+                    }
+                }
+            }
+        });
     }
+
 
     @Override
     protected RecyclerBaseAdapter getListAdapter() {
@@ -338,6 +360,13 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         }
         super.executeOnLoadDataSuccess(data);
     }
+
+    @Override
+    protected void executeOnLoadFinish() {
+        super.executeOnLoadFinish();
+        moveToPosition(mPosition);
+    }
+
 
     @Override
     protected void sendRequestData() {
@@ -434,14 +463,31 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         }
     }
 
-    private void skip2Floor(int floor) {
-        int pi = floor / 20;
+    private int mPosition = 0;
+    private boolean mMove = false;
 
-        if (floor % 20 > 0)
+    private void moveToFloor(int floor) {
+        int base = 0;
+        int pi = 0;
+        int pos = 0;
+
+        base = mPageIndex == 1 ? 21 : 20;
+        pi = floor / base;
+
+        if (floor % base > 0)
             pi ++;
 
+        base = pi == 1 ? 21 : 20;
+        pos = floor % base;
+
+        mPosition = pos;
+        if (pi == mPageIndex) {
+            moveToPosition(pos);
+            return;
+        }
+
         mPageIndex = pi;
-        mCurFloor = (pi - 1) * 20;
+        mCurFloor = (pi - 1) * 20 + 1;
         setSwipeRefreshLoadingState();
         mState = STATE_REFRESH;
         mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
@@ -449,4 +495,23 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         requestData(true);
     }
 
+    private void moveToPosition(int position) {
+        int curStartPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+        int curEndPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+
+        if (mPageIndex == 1)
+            mPosition = position + 1;
+        else
+            mPosition = position;
+
+        if (position <= curStartPosition) {
+            mListView.scrollToPosition(mPosition);
+        } else if (position <= curEndPosition) {
+            int top = mListView.getChildAt(position - curStartPosition).getTop();
+            mListView.scrollBy(0, top);
+        } else {
+            mListView.scrollToPosition(mPosition);
+            mMove = true;
+        }
+    }
 }
