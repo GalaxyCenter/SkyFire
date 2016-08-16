@@ -123,10 +123,12 @@ public class AppContext extends BaseApplication {
     }
 
     private void initLogin() {
-        User user = getLoginUser();
-        if (null != user && user.getId() > 0) {
+        int userId = 0;
+
+        userId = StringUtil.toInt(getProperty("user.uid"), 0);
+        if (userId > 0) {
             mLogin = true;
-            mLoginUserId = user.getId();
+            mLoginUserId = userId;
         } else {
             this.cleanLoginInfo();
         }
@@ -155,14 +157,19 @@ public class AppContext extends BaseApplication {
     }
 
     public User getLoginUser() {
-        User user = new User();
-        user.setId(StringUtil.toInt(getProperty("user.uid"), 0));
-        user.setName(getProperty("user.name"));
+        User user = null;
+
+        if (mLoginUserId != 0) {
+            user = new User();
+            user.setId(StringUtil.toInt(getProperty("user.uid"), 0));
+            user.setName(getProperty("user.name"));
+        }
         return user;
     }
 
     public void saveUserInfo(final User user) {
         mLogin = true;
+        mLoginUserId = user.getId();
         setProperties(new Properties() {
             {
                 setProperty("user.uid", String.valueOf(user.getId()));

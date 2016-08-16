@@ -276,6 +276,16 @@ public class TianyaApi {
     }
 
     /**
+     * 读取某一个主题的帖子
+     * @param thread
+     * @param handler
+     */
+    public static void getPosts(Thread thread, AsyncHttpResponseHandler handler) {
+        String post_url = "http://bbs.tianya.cn/m/post-" + thread.getSectionId() + "-" + thread.getGuid() + "-1.shtml";
+
+        getPosts(post_url, handler);
+    }
+    /**
      * 获取一个主题的所有帖子
      * @param post_url 主题的URL
      * @param handler

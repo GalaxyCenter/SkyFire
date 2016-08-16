@@ -258,6 +258,7 @@ public class TianyaParser {
                 thread.setTitle(json.getString("title"));
                 thread.setSectionId(json.getString("blockId"));
                 thread.setId(json.getInt("articleId"));
+                thread.setGuid(Integer.toString(json.getInt("articleId")));
                 thread.setAuthor(json.getString("authorName"));
                 thread.setAuthorId(json.getInt("authorId"));
 

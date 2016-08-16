@@ -1,9 +1,15 @@
 package apollo.tianya.fragment;
 
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.List;
 
+import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.adapter.ThreadAdapter;
 import apollo.tianya.api.TianyaParser;
@@ -83,10 +89,42 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void initView(View view) {
         mSectionId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_SECTION_ID);
 
         super.initView(view);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.thread_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_fav:
+                Snackbar.make(mListView, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                break;
+
+            case R.id.menu_share:
+                Snackbar.make(mListView, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                break;
+
+            case R.id.menu_search:
+                Snackbar.make(mListView, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

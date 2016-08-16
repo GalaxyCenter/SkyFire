@@ -272,7 +272,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
             ((PhotoAdapter)vh.photos.getAdapter()).removeAllItem();
 
             vh.postHandle.vh = vh;
-            TianyaApi.getPosts(thread.getUrl(), vh.postHandle);
+            TianyaApi.getPosts(thread, vh.postHandle);
 
             if(!TextUtils.isEmpty(thread.getAuthor()))
                 TianyaApi.getUserId(thread.getAuthor(), vh.userIdHandle);
