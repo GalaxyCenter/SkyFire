@@ -20,7 +20,7 @@
         android:id="@+id/menu_jump"
         app:showAsAction="never"
         android:icon="@drawable/btn_opt_flight_selector"
-        android:title="@string/manu_thread_detail_jump"
+        android:title="@string/manu_thread_detail_skip"
         android:visible="true"/>
 
     <item

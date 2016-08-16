@@ -51,7 +51,6 @@ public class UIHelper {
         intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, thread.getSectionId());
         intent.putExtra(Constants.BUNDLE_KEY_THREAD_ID, thread.getGuid());
         intent.putExtra(Constants.BUNDLE_KEY_PAGE_INDEX, 1);
-        intent.putExtra(Constants.BUNDLE_KEY_AUTHOR, thread.getAuthor());
         intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, ThreadDetailFragment.class);
 
         context.startActivity(intent);

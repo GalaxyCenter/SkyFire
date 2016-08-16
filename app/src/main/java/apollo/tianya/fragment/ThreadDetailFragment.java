@@ -77,7 +77,16 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                     String tmp = mFloor.getText().toString();
 
                     if (!TextUtils.isEmpty(tmp)) {
-                        ThreadDetailFragment.this.moveToFloor(Integer.parseInt(tmp));
+                        int floor = Integer.parseInt(tmp);
+
+                        if (floor > mThread.getReplies()) {
+                            String msg = getString(R.string.skip_out_of_range, mThread.getReplies());
+
+                            Snackbar.make(mListView, msg, Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            return;
+                        }
+                        ThreadDetailFragment.this.moveToFloor(floor);
                         FlightDialogFragment.this.dismiss();
                     }
                 }
@@ -96,12 +105,15 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     private static String TAG = "ThreadDetailFragment";
     private FlightDialogFragment mFlightDialog = null;
 
+    private Thread mThread;
     private String mSectionId;
     private String mThreadId;
     private String mAuthor;
     private String mFilterAuthor;
     private int mCurFloor;
+    private int mPosition = 0;
     private boolean isAddBookmark;
+    private boolean mMove = false;
 
     private final AsyncHttpResponseHandler mAddBookMarkHandle = new AsyncHttpResponseHandler() {
 
@@ -213,7 +225,6 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     public void initView(View view) {
         mSectionId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_SECTION_ID);
         mThreadId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_THREAD_ID);
-        mAuthor = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_AUTHOR);
         mPageIndex = getActivity().getIntent().getIntExtra(Constants.BUNDLE_KEY_PAGE_INDEX, 1);
 
         super.initView(view);
@@ -302,6 +313,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
                         mListView.scrollBy(0, top);
                     }
+                    mPosition = 0;
                 }
             }
         });
@@ -326,14 +338,14 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     @Override
     protected void executeOnLoadDataSuccess(DataSet<Post> data) {
         if (mPageIndex == 1 && data != null && data.getObjects().size() != 0) {
-            Post p = data.getObjects().get(0);
             String regex_str = "(?s)<img.*?original=\"(.*?)\".*?[/]?>";
             List<Map<String,Object>> list = null;
             Map<String,Object> map = null;
             String img_src = null;
             CollapsedDetailActivity activity = (CollapsedDetailActivity) getActivity();
 
-            list = Regex.getStartAndEndIndex(p.getBody(), Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
+            mThread = (Thread) data.getObjects().get(0);
+            list = Regex.getStartAndEndIndex(mThread.getBody(), Pattern.compile(regex_str, Pattern.DOTALL | Pattern.CASE_INSENSITIVE));
             for(int i=0; i<list.size(); i++) {
                 map = list.get(i);
                 img_src = (String) map.get("str1");
@@ -344,7 +356,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 activity.setCover(img_src);
                 activity.setExpanded(true);
             }
-            mAuthor = p.getAuthor();
+            mAuthor = mThread.getAuthor();
         }
         if (!TextUtils.isEmpty(mFilterAuthor)) {
             List<Post> raws = data.getObjects();
@@ -364,7 +376,9 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     @Override
     protected void executeOnLoadFinish() {
         super.executeOnLoadFinish();
-        moveToPosition(mPosition);
+
+        if (mPosition != 0)
+            moveToPosition(mPosition);
     }
 
 
@@ -463,20 +477,18 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         }
     }
 
-    private int mPosition = 0;
-    private boolean mMove = false;
-
     private void moveToFloor(int floor) {
         int base = 0;
         int pi = 0;
         int pos = 0;
 
-        base = mPageIndex == 1 ? 21 : 20;
-        pi = floor / base;
-
+        // 默认每页20的计算分页,当目标页码是第一页时基数为21
+        pi = floor / 20;
+        base = pi == 1 ? 21 : 20;
         if (floor % base > 0)
             pi ++;
 
+        // 目标页面是非第一页的时候重新设置base值
         base = pi == 1 ? 21 : 20;
         pos = floor % base;
 
@@ -506,9 +518,11 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
         if (position <= curStartPosition) {
             mListView.scrollToPosition(mPosition);
+            mPosition = 0;
         } else if (position <= curEndPosition) {
             int top = mListView.getChildAt(position - curStartPosition).getTop();
             mListView.scrollBy(0, top);
+            mPosition = 0;
         } else {
             mListView.scrollToPosition(mPosition);
             mMove = true;
