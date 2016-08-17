@@ -116,9 +116,9 @@ public class TianyaParser {
     public static DataSet<Thread> parseThreads(String source) {
         DataSet<Thread> datas = null;
         Thread thread = null;
-        Section section = null;
         ArrayList<Thread> threads = null;
         int idx = 0;
+        boolean isFav = false;
         Pattern pattern = null;
         Matcher matcher = null;
         Matcher sub_matcher = null;
@@ -132,6 +132,12 @@ public class TianyaParser {
             sectionName = matcher.group(1);
         }
 
+        pattern = Pattern.compile("(?s)<i class=\"collected\"></i>");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            isFav = true;
+        }
+
         pattern = Pattern.compile("(?s)[\\<]td.*?[\\>](.*?)</td>");
         matcher = pattern.matcher(source);
         threads = new ArrayList<Thread>(80);
@@ -143,6 +149,7 @@ public class TianyaParser {
             if (idx % 5 == 0) {
                 thread = new Thread();
                 thread.setSectionName(sectionName);
+                thread.getSection().setFav(isFav);
 
                 pattern = Pattern.compile("(?s)<a\\s.*?href=\"([^\"]+)\"[^>]*>(.*?)</a>");
                 sub_matcher = pattern.matcher(td_cnt);
@@ -886,6 +893,38 @@ public class TianyaParser {
             thread.setId(Integer.parseInt(matcher.group(2)));
         }
         return thread;
+    }
+
+    /**
+     * 解析板块信息
+     * @param source
+     * @return
+     */
+    public static Section parseSection(String source) {
+        Section section = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        pattern = Pattern.compile("(?s)<title>(.*?)_天涯论坛</title>");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            section.setName(matcher.group(1));
+        }
+
+        pattern = Pattern.compile("(?s)<link.*?href=\"http://bbs.tianya.cn/list-(.*?)-1.shtml\"[^>]*>");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            section.setGuid(matcher.group(1));
+        }
+
+        pattern = Pattern.compile("(?s)<i class=\"collected\"></i>");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            section.setFav(true);
+        } else {
+            section.setFav(false);
+        }
+        return section;
     }
 
 }

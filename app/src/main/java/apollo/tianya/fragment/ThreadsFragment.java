@@ -7,6 +7,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import apollo.tianya.R;
@@ -17,17 +22,58 @@ import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.DataSet;
+import apollo.tianya.bean.Section;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.ui.DetailActivity;
 import apollo.tianya.util.UIHelper;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Texel on 2016/8/12.
  */
 public class ThreadsFragment extends BaseListFragment<Thread> {
 
+    private final AsyncHttpResponseHandler mAddRemoveBookMarkHandler = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            String body = null;
+
+            body = new String(responseBody);
+            String message = null;
+            JSONObject json = null;
+            boolean isSuccess = false;
+
+            try {
+                json = new JSONObject(body);
+                isSuccess = json.getInt("success") == 1;
+                message = json.getString("message");
+            } catch (JSONException ex) {
+            }
+
+            if (isSuccess == false) {
+                Snackbar.make(mListView, message, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else {
+                if ("用户加入版块成功！".equals(message)) {
+                    Snackbar.make(mListView, R.string.add_bookmark_success, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Snackbar.make(mListView, R.string.remove_bookmark_success, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+        }
+    };
+
     private String mSectionId;
     private long mNextId;
+    private Section mSection;
 
     @Override
     protected RecyclerBaseAdapter getListAdapter() {
@@ -50,11 +96,15 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
             List<Thread> list = datas.getObjects();
             Thread thread = list.get(list.size() - 1);
 
+            if (mNextId == 0)
+                mSection = thread.getSection();
+
             mNextId = thread.getPostDate().getTime();
 
             DetailActivity activity = (DetailActivity) getActivity();
             activity.setTitle(thread.getSectionName());
         }
+
 
         super.executeOnLoadDataSuccess(datas);
     }
@@ -111,8 +161,13 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_fav:
-                Snackbar.make(mListView, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (!mSection.isFav()) {
+                    TianyaApi.addBookmark(mSection, mAddRemoveBookMarkHandler);
+                    mSection.setFav(true);
+                } else {
+                    TianyaApi.removeBookmark(mSection, mAddRemoveBookMarkHandler);
+                    mSection.setFav(false);
+                }
                 break;
 
             case R.id.menu_share:

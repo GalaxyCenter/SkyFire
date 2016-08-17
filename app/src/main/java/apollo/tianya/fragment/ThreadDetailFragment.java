@@ -115,7 +115,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
     private boolean isAddBookmark;
     private boolean mMove = false;
 
-    private final AsyncHttpResponseHandler mAddBookMarkHandle = new AsyncHttpResponseHandler() {
+    private final AsyncHttpResponseHandler mAddBookMarkHandler = new AsyncHttpResponseHandler() {
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -149,7 +149,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
         }
     };
 
-    private final AsyncHttpResponseHandler mRemoveBookMarkHandle = new AsyncHttpResponseHandler() {
+    private final AsyncHttpResponseHandler mRemoveBookMarkHandler = new AsyncHttpResponseHandler() {
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -409,9 +409,9 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                 Thread thread = (Thread) (Object) mAdapter.getItem(0);
 
                 if (isAddBookmark)
-                    TianyaApi.removeBookmark(thread, mRemoveBookMarkHandle);
+                    TianyaApi.removeBookmark(thread, mRemoveBookMarkHandler);
                 else
-                    TianyaApi.addBookmark(thread, mAddBookMarkHandle);
+                    TianyaApi.addBookmark(thread, mAddBookMarkHandler);
                 break;
 
             case R.id.menu_jump:
@@ -457,24 +457,6 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     @Override
     public void onActionClick(BarBaseFragment.Action action) {
-        switch (action) {
-            case ACTION_FLIGHT:
-                mFlightDialog.show(getActivity().getSupportFragmentManager(), "DD");
-                break;
-
-            case ACTION_FAVORITE:
-                Thread thread = (Thread) (Object) mAdapter.getItem(0);
-
-                if (isAddBookmark)
-                    TianyaApi.removeBookmark(thread, mRemoveBookMarkHandle);
-                else
-                    TianyaApi.addBookmark(thread, mAddBookMarkHandle);
-                break;
-
-            case ACTION_SHARE:
-
-                break;
-        }
     }
 
     private void moveToFloor(int floor) {

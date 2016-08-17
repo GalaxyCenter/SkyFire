@@ -18,6 +18,7 @@ import apollo.tianya.AppConfig;
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.api.ApiHttpClient;
+import apollo.tianya.bean.Section;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.util.DateTime;
 import cz.msebera.android.httpclient.Header;
@@ -427,6 +428,11 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    /**
+     * 将帖子加入到书签
+     * @param thread
+     * @param handler
+     */
     public static void addBookmark(Thread thread, AsyncHttpResponseHandler handler) {
         String url = null;
         Header[] headers = null;
@@ -444,6 +450,11 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    /**
+     * 将帖子移除书签
+     * @param thread
+     * @param handler
+     */
     public static void removeBookmark(Thread thread, AsyncHttpResponseHandler handler) {
         String url = null;
         Header[] headers = null;
@@ -460,10 +471,50 @@ public class TianyaApi {
         ApiHttpClient.get(url, headers, handler);
     }
 
+    /**
+     * 将板块加入书签
+     * @param section
+     * @param handler
+     */
+    public static void addBookmark(Section section, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/tw?method=userBlock.ice.addWeilun&params.blockId=" + section.getGuid();
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
+    /**
+     * 将板块移出书签
+     * @param section
+     * @param handler
+     */
+    public static void removeBookmark(Section section, AsyncHttpResponseHandler handler) {
+        String url = "http://www.tianya.cn/api/tw?method=userBlock.ice.quitWeilun&params.blockId=" + section.getGuid();
+        Header[] headers = null;
+
+        headers = new Header[1];
+        headers[0] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        ApiHttpClient.get(url, headers, handler);
+    }
+
     public static void getThreads(String section, long nextId, AsyncHttpResponseHandler handler) {
         String url = "http://bbs.tianya.cn/list.jsp?item=" + section + "&nextid=" + nextId;
 
         ApiHttpClient.get(url, handler);
     }
 
+    /**
+     * 获取板块信息
+     * @param sectionId
+     * @param handler
+     */
+    public static void getSection(int sectionId, AsyncHttpResponseHandler handler) {
+        String url = "http://bbs.tianya.cn/m/list-" + sectionId + "-1.shtml";
+
+        ApiHttpClient.get(url, handler);
+    }
 }
