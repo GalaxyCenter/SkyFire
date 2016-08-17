@@ -8,24 +8,27 @@ import java.util.regex.Pattern;
  */
 public class Thread extends Post {
 
-    private String sectionName;
-    private String sectionId;
+    private Section section = new Section();
     private String url;
 
     public String getSectionId() {
-        return sectionId;
+        return section.getGuid();
     }
 
     public void setSectionId(String sectionId) {
-        this.sectionId = sectionId;
+        this.section.setGuid(sectionId);
     }
 
     public String getSectionName() {
-        return sectionName;
+        return section.getName();
     }
 
     public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
+        this.section.setName(sectionName);
+    }
+
+    public Section getSection() {
+        return section;
     }
 
     public String getUrl() {
@@ -43,7 +46,7 @@ public class Thread extends Post {
             setId(Integer.parseInt(matcher.group(2)));
             setGuid(matcher.group(2));
 
-            this.url = "http://bbs.tianya.cn/m/post-" + sectionId + "-" + getId() + "-1.shtml";
+            this.url = "http://bbs.tianya.cn/m/post-" + getSectionId() + "-" + getId() + "-1.shtml";
         }
     }
 }
