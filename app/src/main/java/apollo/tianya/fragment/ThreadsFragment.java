@@ -103,6 +103,8 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
 
             DetailActivity activity = (DetailActivity) getActivity();
             activity.setTitle(thread.getSectionName());
+
+            activity.invalidateOptionsMenu();
         }
 
 
@@ -155,6 +157,11 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.thread_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
+        if (mSection != null && mSection.isFav())
+            menu.findItem(R.id.menu_fav).setIcon(R.drawable.ic_bookmark_selected_24dp);
+        else
+            menu.findItem(R.id.menu_fav).setIcon(R.drawable.ic_bookmark_normal_24dp);
     }
 
     @Override
@@ -164,9 +171,11 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
                 if (!mSection.isFav()) {
                     TianyaApi.addBookmark(mSection, mAddRemoveBookMarkHandler);
                     mSection.setFav(true);
+                    item.setIcon(R.drawable.ic_bookmark_selected_24dp);
                 } else {
                     TianyaApi.removeBookmark(mSection, mAddRemoveBookMarkHandler);
                     mSection.setFav(false);
+                    item.setIcon(R.drawable.ic_bookmark_normal_24dp);
                 }
                 break;
 
