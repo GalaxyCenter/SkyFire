@@ -4,10 +4,12 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import java.util.concurrent.CountDownLatch;
 
+import apollo.tianya.api.ApiHttpClient;
 import apollo.tianya.api.remote.TianyaApi;
 import cz.msebera.android.httpclient.Header;
 
@@ -23,8 +25,9 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testLogin() throws Exception {
         final CountDownLatch latch = new CountDownLatch(1);
-
-        TianyaApi.login("kuibobo", "333", null, null, new AsyncHttpResponseHandler(){
+        AsyncHttpClient client = new AsyncHttpClient();
+        ApiHttpClient.setHttpClient(client);
+        TianyaApi.searchThreads("sega", 1, new AsyncHttpResponseHandler(){
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {

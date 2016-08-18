@@ -1,5 +1,9 @@
 package apollo.tianya;
 
+import android.util.Log;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,14 +13,17 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.util.DateTime;
 import apollo.tianya.util.Transforms;
+import cz.msebera.android.httpclient.Header;
 
 import static org.junit.Assert.*;
 
@@ -167,4 +174,25 @@ public class ExampleUnitTest {
         }
     }
 
+    @Test
+    public void testSearch() throws Exception {
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        TianyaApi.searchThreads("sega", 1, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String body = new String(responseBody);
+
+                System.out.print(body);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                String body = new String(responseBody);
+
+                System.out.print("ERROR" + statusCode);
+            }
+        });
+        latch.await();
+    }
 }
