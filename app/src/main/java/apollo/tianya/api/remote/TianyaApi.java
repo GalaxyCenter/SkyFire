@@ -517,4 +517,10 @@ public class TianyaApi {
 
         ApiHttpClient.get(url, handler);
     }
+
+    public static void searchThreads(String word, int pageIndex, AsyncHttpResponseHandler handler) {
+        String url = "http://search.tianya.cn/bbs?q=" + word + "&pn=" + pageIndex;
+
+        ApiHttpClient.get(url, handler);
+    }
 }

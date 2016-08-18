@@ -9,8 +9,12 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Post;
+import apollo.tianya.bean.Thread;
 import apollo.tianya.util.DateTime;
 import apollo.tianya.util.Transforms;
 
@@ -88,100 +92,79 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void formatPost() {
-        String source = "<br><img src=\"http://static.tianyaui.com/global/m/touch/images/loading.gif\"  original=\"http://img3.laibafile.cn/p/mh/255257041.jpg\" /><br>\n" +
-                "                        \t\n" +
-                "\t\t\t                    <div class=\"comments u-arrow\" data-total = \"6\">\n" +
-                "\t\t\t                    \t<ul class=\"u-list-comment\">\n" +
-                "\t\t\t                    \t    \n" +
-                "\t                                    <li>\n" +
-                "\t                                        <a href=\"http://www.tianya.cn/m/home.jsp?uid=111249560\" class=\"author fc-blue\" data-id=\"111249560\">八个中文不可修改 </a>\n" +
-                "\t                                                                     \n" +
-                "\t                                       \n" +
-                "\t                                        <span class=\"time fc-gray\">2016-07-28 19:42</span>\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t <p class=\"cnt\">@会哭的小马甲 这个标题起的好尴尬啊</p>\n" +
-                "\t                                    </li>\n" +
-                "\t                                    \n" +
-                "\t                                    <li>\n" +
-                "\t                                        <a href=\"http://www.tianya.cn/m/home.jsp?uid=106048791\" class=\"author fc-blue\" data-id=\"106048791\">gdlt2015 </a>\n" +
-                "\t                                                                     \n" +
-                "\t                                       \n" +
-                "\t                                        <span class=\"time fc-gray\">2016-07-29 13:12</span>\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t <p class=\"cnt\">呀这图好灵动，赶快下波多解解渴</p>\n" +
-                "\t                                    </li>\n" +
-                "\t                                    \n" +
-                "\t                                    <li>\n" +
-                "\t                                        <a href=\"http://www.tianya.cn/m/home.jsp?uid=22726007\" class=\"author fc-blue\" data-id=\"22726007\">抹不去的相思 </a>\n" +
-                "\t                                                                     \n" +
-                "\t                                       \n" +
-                "\t                                        <span class=\"time fc-gray\">2016-07-29 19:42</span>\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t <p class=\"cnt\">评论 <a href=\"http://www.tianya.cn/n/gdlt2015\">gdlt2015</a>：层主亮银枪，波多也解衣。</p>\n" +
-                "\t                                    </li>\n" +
-                "\t                                    \n" +
-                "\t                                    <li>\n" +
-                "\t                                        <a href=\"http://www.tianya.cn/m/home.jsp?uid=116060598\" class=\"author fc-blue\" data-id=\"116060598\">卖公主的青蛙 </a>\n" +
-                "\t                                                                     \n" +
-                "\t                                       \n" +
-                "\t                                        <span class=\"time fc-gray\">2016-07-29 20:58</span>\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t <p class=\"cnt\">现在的单身汪真多……</p>\n" +
-                "\t                                    </li>\n" +
-                "\t                                    \n" +
-                "\t                                    <li>\n" +
-                "\t                                        <a href=\"http://www.tianya.cn/m/home.jsp?uid=107687057\" class=\"author fc-blue\" data-id=\"107687057\">喝死拉倒 </a>\n" +
-                "\t                                                                     \n" +
-                "\t                                       \n" +
-                "\t                                        <span class=\"time fc-gray\">2016-07-30 07:31</span>\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t <p class=\"cnt\">一脸蒙圈.avi</p>\n" +
-                "\t                                    </li>\n" +
-                "\t                                    \n" +
-                "\t                                    <li>\n" +
-                "\t                                        <a href=\"http://www.tianya.cn/m/home.jsp?uid=107131327\" class=\"author fc-blue\" data-id=\"107131327\">天剑无名2015 </a>\n" +
-                "\t                                                                     \n" +
-                "\t                                       \n" +
-                "\t                                        <span class=\"time fc-gray\">2016-07-30 11:38</span>\n" +
-                "\t\t\t\t\t\t\t\t\t\t\t <p class=\"cnt\">这张感觉有点像波多夜老师呀。</p>\n" +
-                "\t                                    </li>\n" +
-                "\t                                    \n" +
-                "\t                                </ul>\n" +
-                "\t                            </div>\n" +
-                "\t                            \n" +
-                "                        </div>\n" +
-                "                        <div class=\"ft\">\n" +
-                "                            <div class=\"toolbox\">\n" +
-                "\t\t\t\t\t\t\t\t<a href=\"javascript:;\" class=\"at-btn\">@TA</a>\n" +
-                "                                <a href=\"javascript:\" class=\"reply-btn\">评论</a>\n" +
-                "                                <a href=\"post_author-funinfo-7015058-1.shtml#1\" class=\"see-ta-btn see-host-btn\">只看楼主</a>\n" +
-                "\t\t\t\t                </a>\n" +
-                "                            </div>\n" +
-                "                        </div>\n" +
-                "                    </div>\n" +
-                "                    \t\n" +
-                "                    \n" +
-                "                \n" +
-                "                    \n" +
-                "                    <div class=\"item item-ht item-lz\" data-replyid=\"261403738\" data-user=\"会哭的小马甲\" data-time=\"2016-07-27 23:12\" data-id=\"2\">\n" +
-                "                        <div class=\"hd f-cf\">\n" +
-                "                            <a class=\"info\" href=\"http://www.tianya.cn/m/home.jsp?uid=86114152\">\n" +
-                "                            \t<h4 class=\"author\" data-id=\"86114152\">会哭的小马甲\n" +
-                "                            \t\n" +
-                "\t\t\t\t                    <span class=\"u-badge\">楼主</span>\n" +
-                "\t\t\t\t                \n" +
-                "                            \t</h4>\n" +
-                "                            \t<p class=\"time fc-gray\">2016-07-27 23:12</p>\n" +
-                "                            </a>\n" +
-                "                            <span class=\"floor fc-gray\">2楼</span>                     \n" +
-                "                        </div>\n" +
-                "                        <div class=\"bd\">\n" +
-                "                        \t<br><img src=\"http://static.tianyaui.com/global/m/touch/images/loading.gif\"  original=\"http://img3.laibafile.cn/p/mh/255257067.jpg\" /><br>\n" +
-                "                        \t\n" +
-                "\t\t\t                    <div class=\"comments u-arrow\" data-total = \"17\">\n" +
-                "\t\t\t                    \t<ul class=\"u-list-comment\">\n" +
-                "\t\t\t                    \t    \n" +
-                "\t                                    <li>";
+    public void parseSerachThreadResult() throws Exception {
+        DataSet<Thread> datas = null;
+        List<Thread> list = null;
+        Thread thread = null;
+        Document doc = null;
+        Elements elms = null;
+        Elements comment_elms = null;
+        Element bd = null;
+        Element item = null;
+        String temp = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
 
-        source = Transforms.formatPost(source);
+        doc = Jsoup.connect("http://search.tianya.cn/bbs?q=ABC&pn=2").timeout(10000).get();
+        elms = doc.select("div.searchListOne ul li");
+        if (elms == null || elms.size() ==0)
+            return;
 
-        System.out.print(source);
+        list = new ArrayList<>();
+        datas = new DataSet<Thread>();
+        datas.setObjects(list);
+        for(Element elm:elms) {
+            thread = new Thread();
+
+            // 解析标题
+            item = elm.select("div h3 a").first();
+            if (item == null)
+                continue;
+
+            thread.setTitle(item.text());
+
+            // 解析摘要内容
+            item = elm.select("p.source a").first();
+            thread.setBody(item.text());
+
+            // 解析板块内容
+            item = elm.select("p.source a").get(0);
+            temp = item.attr("href");
+            thread.setSectionName(item.text());
+
+            pattern = Pattern.compile("http://bbs.tianya.cn/list-(.*?)-1.shtml");
+            matcher = pattern.matcher(temp);
+            if (matcher.find()) {
+                thread.setSectionId(matcher.group(1));
+            }
+
+            // 解析作者
+            item = elm.select("p.source a").get(1);
+            thread.setAuthor(item.text());
+
+            temp = item.attr("href");
+            pattern = Pattern.compile("http://www.tianya.cn/(\\d+)");
+            matcher = pattern.matcher(temp);
+            if (matcher.find()) {
+                thread.setAuthorId(Integer.parseInt(matcher.group(1)));
+            }
+
+            // 解析发帖时间
+            item = elm.select("p.source span").get(0);
+            thread.setPostDate(DateTime.parse(item.text(), "yyyy-MM-dd HH:mm").getDate());
+
+            item = elm.select("p.source span").get(1);
+            thread.setReplies(Integer.parseInt(item.text()));
+
+            list.add(thread);
+        }
+
+        item = doc.select("div.long-pages em").first();
+        pattern = Pattern.compile("共有(.*?) 条内容");
+        matcher = pattern.matcher(item.text());
+        if (matcher.find()) {
+            datas.setTotalRecords(Integer.parseInt(matcher.group(1)));
+        }
     }
 
 }

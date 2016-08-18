@@ -927,4 +927,85 @@ public class TianyaParser {
         return section;
     }
 
+    /**
+     * 解析搜索结果
+     * @param source
+     * @return
+     */
+    public static DataSet<Thread> parseSearchThreads(String source) {
+        DataSet<Thread> datas = null;
+        List<Thread> list = null;
+        Thread thread = null;
+        Document doc = null;
+        Elements elms = null;
+        Elements comment_elms = null;
+        Element bd = null;
+        Element item = null;
+        String temp = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        doc = Jsoup.parse(source);
+        elms = doc.select("div.searchListOne ul li");
+        if (elms == null || elms.size() ==0)
+            return null;
+
+        list = new ArrayList<>();
+        datas = new DataSet<Thread>();
+        datas.setObjects(list);
+        for(Element elm:elms) {
+            thread = new Thread();
+
+            // 解析标题
+            item = elm.select("div h3 a").first();
+            if (item == null)
+                continue;
+
+            thread.setTitle(item.text());
+
+            // 解析摘要内容
+            item = elm.select("p.source a").first();
+            thread.setBody(item.text());
+
+            // 解析板块内容
+            item = elm.select("p.source a").get(0);
+            temp = item.attr("href");
+            thread.setSectionName(item.text());
+
+            pattern = Pattern.compile("http://bbs.tianya.cn/list-(.*?)-1.shtml");
+            matcher = pattern.matcher(temp);
+            if (matcher.find()) {
+                thread.setSectionId(matcher.group(1));
+            }
+
+            // 解析作者
+            item = elm.select("p.source a").get(1);
+            thread.setAuthor(item.text());
+
+            temp = item.attr("href");
+            pattern = Pattern.compile("http://www.tianya.cn/(\\d+)");
+            matcher = pattern.matcher(temp);
+            if (matcher.find()) {
+                thread.setAuthorId(Integer.parseInt(matcher.group(1)));
+            }
+
+            // 解析发帖时间
+            item = elm.select("p.source span").get(0);
+            thread.setPostDate(DateTime.parse(item.text(), "yyyy-MM-dd HH:mm").getDate());
+
+            item = elm.select("p.source span").get(1);
+            thread.setReplies(Integer.parseInt(item.text()));
+
+            list.add(thread);
+        }
+
+        item = doc.select("div.long-pages em").first();
+        pattern = Pattern.compile("共有(.*?) 条内容");
+        matcher = pattern.matcher(item.text());
+        if (matcher.find()) {
+            datas.setTotalRecords(Integer.parseInt(matcher.group(1)));
+        }
+        return datas;
+    }
+
 }

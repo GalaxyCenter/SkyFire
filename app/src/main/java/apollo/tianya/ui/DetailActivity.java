@@ -18,6 +18,7 @@ import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.bean.Constants;
+import apollo.tianya.fragment.SearchFragment;
 import apollo.tianya.fragment.ThreadDetailFragment;
 import apollo.tianya.fragment.bar.BarBaseFragment;
 import apollo.tianya.fragment.bar.BarBaseFragment.Action;
