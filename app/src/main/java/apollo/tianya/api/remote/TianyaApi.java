@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -519,7 +520,7 @@ public class TianyaApi {
     }
 
     public static void searchThreads(String word, int pageIndex, AsyncHttpResponseHandler handler) {
-        String url = "http://search.tianya.cn/bbs?q=" + word + "&pn=" + pageIndex;
+        String url = "http://search.tianya.cn/bbs?q=" + URLEncoder.encode(word) + "&pn=" + pageIndex;
 
         ApiHttpClient.get(url, handler);
     }

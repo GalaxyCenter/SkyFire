@@ -126,7 +126,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            String body = new String(responseBody);
 
+            Log.e(TAG, body);
         }
     };
 
