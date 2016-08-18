@@ -1,5 +1,6 @@
 package apollo.tianya.ui;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -43,14 +45,20 @@ public class DetailActivity extends BaseActivity implements
         BaseFragment fragment = null;
         Intent intent = null;
         Class<? extends BaseFragment> clazz = null;
+        String query = null;
 
         intent = getIntent();
         clazz = (Class<? extends BaseFragment>) intent.getSerializableExtra(Constants.BUNDLE_KEY_FRAGMENT);
 
-        try {
-            fragment = clazz.newInstance();// new ThreadDetailFragment();
-        } catch (Exception ex) {
-            TLog.error(ex.getMessage());
+        query = intent.getStringExtra(SearchManager.QUERY);
+        if (TextUtils.isEmpty(query)) {
+            try {
+                fragment = clazz.newInstance();// new ThreadDetailFragment();
+            } catch (Exception ex) {
+                TLog.error(ex.getMessage());
+            }
+        } else {
+            fragment = new SearchFragment();
         }
         trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.container, fragment);

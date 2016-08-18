@@ -1,7 +1,10 @@
 package apollo.tianya.fragment;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -162,6 +165,13 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
             menu.findItem(R.id.menu_fav).setIcon(R.drawable.ic_bookmark_selected_24dp);
         else
             menu.findItem(R.id.menu_fav).setIcon(R.drawable.ic_bookmark_normal_24dp);
+
+        SearchManager searchManager =
+                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 
     @Override

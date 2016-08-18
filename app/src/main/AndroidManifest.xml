@@ -32,7 +32,16 @@
 
         <activity
             android:name=".ui.DetailActivity"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/thread_searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
 
         <activity
             android:name=".ui.CollapsedDetailActivity"

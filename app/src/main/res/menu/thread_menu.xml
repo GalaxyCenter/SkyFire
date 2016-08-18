@@ -17,7 +17,8 @@
 
     <item
         android:id="@+id/menu_search"
-        app:showAsAction="ifRoom"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/btn_opt_search_selector"
         android:title="@string/manu_search"
         android:visible="true"/>
