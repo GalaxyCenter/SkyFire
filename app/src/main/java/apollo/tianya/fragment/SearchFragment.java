@@ -13,6 +13,7 @@ import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Thread;
 import apollo.tianya.ui.DetailActivity;
+import apollo.tianya.util.UIHelper;
 
 /**
  * Created by kuibo on 2016/8/18.
@@ -56,7 +57,9 @@ public class SearchFragment extends BaseListFragment<Thread> {
     }
 
     @Override
-    public void onItemClick(View view, int postion) {
+    public void onItemClick(View view, int position) {
+        Thread thread = mAdapter.getItem(position);
 
+        UIHelper.showPostDetail(view.getContext(), thread);
     }
 }

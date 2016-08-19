@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class RecyclerBaseAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     public interface OnItemClickListener {
-        void onItemClick(View view,int postion);
+        void onItemClick(View view,int position);
     }
 
     public interface DisplayFloorHandle<T> {

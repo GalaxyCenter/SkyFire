@@ -204,7 +204,7 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
                 }
                 break;
 
-            case R.id.menu_search:
+            case R.id.menu_share:
                 Snackbar.make(mListView, getActivity().getString(R.string.unsuport), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break;

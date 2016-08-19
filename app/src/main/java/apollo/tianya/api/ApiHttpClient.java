@@ -93,7 +93,7 @@ public class ApiHttpClient {
 
     public static void setHttpClient(AsyncHttpClient c) {
         client = c;
-        client.setProxy("192.168.33.55", 8888);
+        //client.setProxy("192.168.33.55", 8888);
 
         client.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; rv:18.0) Gecko/20100101 Firefox/18.0");
         client.addHeader("Accept-Language", Locale.getDefault().toString());
