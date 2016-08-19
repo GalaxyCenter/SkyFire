@@ -1,6 +1,5 @@
 package apollo.tianya.fragment;
 
-import apollo.tianya.R;
 import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.bean.DataSet;
