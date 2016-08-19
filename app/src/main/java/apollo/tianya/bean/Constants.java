@@ -17,7 +17,7 @@ public class Constants {
         public static String KEY_FONT_SIZE = "font_size";
         public static String KEY_SHOW_IMG = "show_image";
         public static String KEY_SHOW_HEAD_IMG = "show_head_img";
-        public static String KEY_CLEAR_CACHE = "clear_cache";
+        public static String KEY_CLEAN_CACHE = "clean_cache";
     }
 
     public static final String KEY_NOTIFICATION_VIBRATION = "KEY_NOTIFICATION_VIBRATION";

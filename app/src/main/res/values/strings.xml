@@ -99,6 +99,7 @@
     <string name="prefs_font_size">正文字体大小</string>
     <string name="prefs_show_image">自动下载图片</string>
     <string name="prefs_show_head_img">自动下载头像</string>
+    <string name="prefs_clean_cache">清理缓存</string>
 
     <string name="prefs_font_size_big">巨大</string>
     <string name="prefs_font_size_mid">偏大</string>

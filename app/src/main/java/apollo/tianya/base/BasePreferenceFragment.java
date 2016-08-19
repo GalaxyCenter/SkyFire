@@ -3,6 +3,7 @@ package apollo.tianya.base;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
+import android.preference.Preference;
 
 import com.github.machinarius.preferencefragment.PreferenceFragment;
 

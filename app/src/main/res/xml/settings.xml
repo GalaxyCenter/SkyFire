@@ -5,27 +5,38 @@
         android:key="browsing_category"
         android:layout="@layout/prefs_category_widget"
         android:title="@string/prefs_settings">
+
         <ListPreference
             android:entries="@array/font_size_entries"
             android:entryValues="@array/font_size_values"
             android:key="font_size"
             android:layout="@layout/perfs_item"
+            android:negativeButtonText="@string/cancel"
             android:order="1"
             android:persistent="false"
-            android:title="@string/prefs_font_size"
-            android:negativeButtonText="@string/cancel"/>
+            android:title="@string/prefs_font_size" />
+
         <CheckBoxPreference
             android:key="show_image"
             android:layout="@layout/perfs_item"
             android:order="2"
             android:persistent="false"
             android:title="@string/prefs_show_image" />
+
         <CheckBoxPreference
             android:key="show_head_img"
             android:layout="@layout/perfs_item"
             android:order="3"
             android:persistent="false"
             android:title="@string/prefs_show_head_img" />
+
+        <Preference
+            android:key="clean_cache"
+            android:layout="@layout/perfs_item"
+            android:persistent="false"
+            android:summary=""
+            android:title="@string/prefs_clean_cache" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

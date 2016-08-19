@@ -29,6 +29,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     private ListPreference mFontSize = null;
     private CheckBoxPreference mShowImgEnable = null;
     private CheckBoxPreference mShowHeadEnable = null;
+    private Preference mCleanCache = null;
 
     private boolean mConfigChanged;
 
@@ -42,10 +43,12 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         mFontSize = (ListPreference) findPreference(Constants.Settings.KEY_FONT_SIZE);
         mShowImgEnable = (CheckBoxPreference) findPreference(Constants.Settings.KEY_SHOW_IMG);
         mShowHeadEnable = (CheckBoxPreference) findPreference(Constants.Settings.KEY_SHOW_HEAD_IMG);
+        mCleanCache = findPreference(Constants.Settings.KEY_CLEAN_CACHE);
 
         mFontSize.setOnPreferenceChangeListener(this);
         mShowImgEnable.setOnPreferenceChangeListener(this);
         mShowHeadEnable.setOnPreferenceChangeListener(this);
+
     }
 
     @Override
@@ -59,6 +62,8 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         mFontSizeValues = res.getStringArray(R.array.font_size_values);
 
         setPreference(mFontSize, fontSize, mFontSizeEntries, mFontSizeValues, mFontSizeValueSize);
+        mCleanCache.setSummary("12M");
+
         mShowImgEnable.setChecked(showImage);
         mShowHeadEnable.setChecked(showHeadImage);
     }
