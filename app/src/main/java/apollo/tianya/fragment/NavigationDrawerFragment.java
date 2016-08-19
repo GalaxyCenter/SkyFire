@@ -88,7 +88,7 @@ public class NavigationDrawerFragment extends BaseFragment
         int id = item.getItemId();
         String tag = null;
 
-        if (mUser == null) {
+        if (mUser == null && id != R.id.nav_my_settings) {
             UIHelper.showLoginActivity(getActivity());
             return true;
         }
