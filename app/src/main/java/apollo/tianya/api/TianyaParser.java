@@ -962,6 +962,14 @@ public class TianyaParser {
                 continue;
 
             thread.setTitle(item.text());
+            // 解析帖子和板块id
+            temp = item.attr("href");
+            pattern = Pattern.compile("post-(.*?)-(.*?)-");
+            matcher = pattern.matcher(temp);
+            if (matcher.find()) {
+                thread.setSectionId(matcher.group(1));
+                thread.setGuid(matcher.group(2));
+            }
 
             // 解析摘要内容
             item = elm.select("p.source a").first();
@@ -972,11 +980,6 @@ public class TianyaParser {
             temp = item.attr("href");
             thread.setSectionName(item.text());
 
-            pattern = Pattern.compile("http://bbs.tianya.cn/list-(.*?)-1.shtml");
-            matcher = pattern.matcher(temp);
-            if (matcher.find()) {
-                thread.setSectionId(matcher.group(1));
-            }
 
             // 解析作者
             item = elm.select("p.source a").get(1);

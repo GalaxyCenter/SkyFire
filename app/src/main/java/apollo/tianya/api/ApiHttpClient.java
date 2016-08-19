@@ -77,7 +77,7 @@ public class ApiHttpClient {
     }
 
     public static void setCookie(String cookie) {
-        client.addHeader("Cookie", cookie);
+        //client.addHeader("Cookie", cookie);
     }
 
     public static String getCookie(AppContext appContext) {
@@ -93,9 +93,10 @@ public class ApiHttpClient {
 
     public static void setHttpClient(AsyncHttpClient c) {
         client = c;
-        //client.setProxy("192.168.33.55", 8888);
+        client.setProxy("192.168.33.55", 8888);
+
+        client.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; rv:18.0) Gecko/20100101 Firefox/18.0");
         client.addHeader("Accept-Language", Locale.getDefault().toString());
-        client.addHeader("Connection", "keep-alive");
         client.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
     }

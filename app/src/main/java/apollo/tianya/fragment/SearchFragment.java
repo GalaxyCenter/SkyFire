@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.view.View;
 
+import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
 import apollo.tianya.adapter.ThreadAdapter;
 import apollo.tianya.api.TianyaParser;
@@ -11,6 +12,7 @@ import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseListFragment;
 import apollo.tianya.bean.DataSet;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.ui.DetailActivity;
 
 /**
  * Created by kuibo on 2016/8/18.
@@ -42,6 +44,10 @@ public class SearchFragment extends BaseListFragment<Thread> {
         mQueryWord = intent.getStringExtra(SearchManager.QUERY);
 
         super.initView(view);
+
+        DetailActivity activity = (DetailActivity) getActivity();
+        String title = getResources().getString(R.string.search_title, mQueryWord);
+        activity.setTitle(title);
     }
 
     @Override
