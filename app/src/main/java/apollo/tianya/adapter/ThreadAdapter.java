@@ -18,6 +18,7 @@ import org.jsoup.helper.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
@@ -158,23 +159,25 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
                 else
                     post = dataset.getObjects().get(0);
 
-                photos = TianyaParser.parseThreadImage(source);
-                if (photos == null) {
-                    String photo = null;
+                // 设置是否显示图片
+                if (AppContext.isShowImage()) {
+                    photos = TianyaParser.parseThreadImage(source);
+                    if (photos == null) {
+                        String photo = null;
 
-                    photo = TianyaParser.parseImage(source);
-                    if (!TextUtils.isEmpty(photo)) {
-                        photos = new ArrayList<String>();
-                        photos.add(photo);
+                        photo = TianyaParser.parseImage(source);
+                        if (!TextUtils.isEmpty(photo)) {
+                            photos = new ArrayList<String>();
+                            photos.add(photo);
+                        }
                     }
+                    post.setPhotos(photos);
                 }
-                post.setPhotos(photos);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
                 parserError = true;
             }
 
-            Log.i(TAG, post.getTitle() + "#" + StringUtil.join(post.getPhotos(), "#"));
             return post;
         }
 
@@ -200,7 +203,7 @@ public class ThreadAdapter extends RecyclerBaseAdapter<Thread, ThreadAdapter.Vie
 
                 adapter = (PhotoAdapter)vh.photos.getAdapter();
                 adapter.removeAllItem();
-                if (post.getPhotos().size() == 0) {
+                if (post.getPhotos() == null || post.getPhotos().size() == 0) {
                     vh.photos.setVisibility(View.GONE);
                 } else {
                     vh.photos.setVisibility(View.VISIBLE);

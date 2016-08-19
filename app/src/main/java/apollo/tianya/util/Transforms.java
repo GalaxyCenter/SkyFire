@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import apollo.tianya.AppConfig;
+import apollo.tianya.AppContext;
+
 /**
  * Created by Texel on 2016/6/3.
  */
@@ -47,8 +50,8 @@ public class Transforms {
             replacement = "$1 $2";
         formattedPost = formattedPost.replaceAll("(?i)(?s)<a.*?href=\"(.*?)\".*?>(.*?)</a>", replacement);
 
-        // pickup img
-        if (enableUBB)
+        // 是否允许UBB 和 设置是否显示图片
+        if (enableUBB && AppContext.isShowImage())
             replacement = "[img]$1[/img]";
         else
             replacement = "$1";
