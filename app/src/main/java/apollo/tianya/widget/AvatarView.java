@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import apollo.tianya.AppContext;
 import apollo.tianya.R;
 import apollo.tianya.api.remote.TianyaApi;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,7 +52,7 @@ public class AvatarView extends CircleImageView {
     }
 
     public void setAvatarUrl(String url) {
-        if (TextUtils.isEmpty(url)) {
+        if (TextUtils.isEmpty(url) || !AppContext.isShowHeadImage()) {
             setImageResource(R.drawable.ic_account_circle_blue_37dp);
             return;
         }
