@@ -207,6 +207,8 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
                             }
                         });
                 vh.body.setText(span_body);
+                vh.body.setLineSpacing(0.0F, 1.2F);
+                vh.body.setTextSize(AppContext.getFontSize());
                 vh.body.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
