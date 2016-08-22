@@ -24,6 +24,8 @@ import apollo.tianya.api.ApiHttpClient;
 import apollo.tianya.base.BaseApplication;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.User;
+import apollo.tianya.cache.DataCleanManager;
+import apollo.tianya.util.MethodsCompat;
 import apollo.tianya.util.StringUtil;
 
 /**
@@ -103,6 +105,10 @@ public class AppContext extends BaseApplication {
 
     public void setProperties(Properties ps) {
         AppConfig.getAppConfig(this).set(ps);
+    }
+
+    public Properties getProperties() {
+        return AppConfig.getAppConfig(this).get();
     }
 
     public void removeProperty(String... key) {
@@ -260,6 +266,35 @@ public class AppContext extends BaseApplication {
             editor.apply();
         } else {
             editor.commit();
+        }
+    }
+
+    /**
+     * 判断当前版本是否兼容目标版本的方法
+     *
+     * @param VersionCode
+     * @return
+     */
+    public static boolean isMethodsCompat(int VersionCode) {
+        int currentVersion = android.os.Build.VERSION.SDK_INT;
+        return currentVersion >= VersionCode;
+    }
+
+    public void clearAppCache() {
+        DataCleanManager.cleanDatabases(this);
+        // 清除数据缓存
+        DataCleanManager.cleanInternalCache(this);
+        // 2.2版本才有将应用缓存转移到sd卡的功能
+        if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+            DataCleanManager.cleanCustomCache(MethodsCompat
+                    .getExternalCacheDir(this));
+        }
+        // 清除编辑器保存的临时内容
+        Properties props = getProperties();
+        for (Object key : props.keySet()) {
+            String _key = key.toString();
+            if (_key.startsWith("temp"))
+                removeProperty(_key);
         }
     }
 }

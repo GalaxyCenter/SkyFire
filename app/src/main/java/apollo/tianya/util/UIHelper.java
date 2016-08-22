@@ -1,11 +1,17 @@
 package apollo.tianya.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
+import android.view.ViewGroup;
 
 import apollo.tianya.AppContext;
+import apollo.tianya.R;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
@@ -109,5 +115,34 @@ public class UIHelper {
         intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, section);
         intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, ThreadsFragment.class);
         context.startActivity(intent);
+    }
+
+    public static void clearAppCache(final Activity activity) {
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+                    Snackbar.make((ViewGroup)activity.getWindow().getDecorView(), "缓存清除成功", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Snackbar.make((ViewGroup)activity.getWindow().getDecorView(), "缓存清除失败", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            }
+        };
+        new java.lang.Thread() {
+            @Override
+            public void run() {
+                Message msg = new Message();
+                try {
+                    AppContext.getInstance().clearAppCache();
+                    msg.what = 1;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    msg.what = -1;
+                }
+                handler.sendMessage(msg);
+            }
+        }.start();
     }
 }
