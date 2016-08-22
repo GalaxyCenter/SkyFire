@@ -109,10 +109,10 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showThreadsActivity(Context context, String section) {
+    public static void showThreadsActivity(Context context, String sectionId) {
         Intent intent = new Intent(context, DetailActivity.class);
 
-        intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, section);
+        intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, sectionId);
         intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, ThreadsFragment.class);
         context.startActivity(intent);
     }

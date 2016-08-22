@@ -891,9 +891,26 @@ public class TianyaParser {
 
             thread.setSectionId(matcher.group(1));
             thread.setId(Integer.parseInt(matcher.group(2)));
+            thread.setGuid(matcher.group(2));
         }
         return thread;
     }
+
+    public static Section parseSectionUrl(String url) {
+        Section section = null;
+        Pattern pattern = null;
+        Matcher matcher = null;
+
+        pattern = Pattern.compile("(?s)list-(.*?)-1.shtml");
+        matcher = pattern.matcher(url);
+        if (matcher.find()) {
+            section = new Section();
+
+            section.setGuid(matcher.group(1));
+        }
+        return section;
+    }
+
 
     /**
      * 解析板块信息
