@@ -34,15 +34,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="http" />
-                <data
-                    android:host="bbs.tianya.cn"
-                    android:scheme="http" />
-                <data
-                    android:host="www.tianya.cn"
-                    android:scheme="http" />
-                <data
-                    android:host="ent.tianya.cn"
-                    android:scheme="http" />
+                <data android:scheme="http" android:host="bbs.tianya.cn"/>
+                <data android:scheme="http" android:host="www.tianya.cn"/>
+                <data android:scheme="http" android:host="ent.tianya.cn"/>
 
             </intent-filter>
         </activity>
