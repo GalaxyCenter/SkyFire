@@ -53,7 +53,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by Texel on 2016/6/20.
  */
-public class ThreadDetailFragment extends BaseListFragment<Post> implements
+public class PostsFragment extends BaseListFragment<Post> implements
         RecyclerBaseAdapter.DisplayFloorHandle<Post>, InputFragment.OnSendListener,
         BarBaseFragment.OnActionClickListener {
 
@@ -86,7 +86,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
                                     .setAction("Action", null).show();
                             return;
                         }
-                        ThreadDetailFragment.this.moveToFloor(floor);
+                        PostsFragment.this.moveToFloor(floor);
                         FlightDialogFragment.this.dismiss();
                     }
                 }
@@ -102,7 +102,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
     }
 
-    private static String TAG = "ThreadDetailFragment";
+    private static String TAG = "PostsFragment";
     private FlightDialogFragment mFlightDialog = null;
 
     private Thread mThread;
@@ -370,6 +370,7 @@ public class ThreadDetailFragment extends BaseListFragment<Post> implements
 
             data.setObjects(filted);
         }
+        mMaxPage = data.getTotalRecords() / 20;
         super.executeOnLoadDataSuccess(data);
     }
 

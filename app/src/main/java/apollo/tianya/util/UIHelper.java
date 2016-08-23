@@ -11,12 +11,11 @@ import android.support.design.widget.Snackbar;
 import android.view.ViewGroup;
 
 import apollo.tianya.AppContext;
-import apollo.tianya.R;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
 import apollo.tianya.bean.Thread;
-import apollo.tianya.fragment.ThreadDetailFragment;
+import apollo.tianya.fragment.PostsFragment;
 import apollo.tianya.fragment.ThreadsFragment;
 import apollo.tianya.ui.CollapsedDetailActivity;
 import apollo.tianya.ui.DetailActivity;
@@ -57,7 +56,7 @@ public class UIHelper {
         intent.putExtra(Constants.BUNDLE_KEY_SECTION_ID, thread.getSectionId());
         intent.putExtra(Constants.BUNDLE_KEY_THREAD_ID, thread.getGuid());
         intent.putExtra(Constants.BUNDLE_KEY_PAGE_INDEX, 1);
-        intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, ThreadDetailFragment.class);
+        intent.putExtra(Constants.BUNDLE_KEY_FRAGMENT, PostsFragment.class);
 
         context.startActivity(intent);
     }

@@ -143,6 +143,7 @@ public class TianyaParser {
         threads = new ArrayList<Thread>(80);
         datas = new DataSet<Thread>();
         datas.setObjects(threads);
+        datas.setTotalRecords(Integer.MAX_VALUE);
         while (matcher.find()) {
             td_cnt = matcher.group(1);
 
@@ -515,9 +516,22 @@ public class TianyaParser {
             thread.setId(Integer.parseInt(matcher.group(1)));
         }
 
+        // 解析页码
+        String temp = doc.select("i.icon-page").first().text();
+        int pages = 0;
+        pattern = Pattern.compile("\\d+/(\\d+)");
+        matcher = pattern.matcher(source);
+        if (matcher.find()) {
+            temp = matcher.group(1);
+            pages = Integer.parseInt(temp);
+        }
+
+        temp = temp.replace("1/", "");
+        pages = Integer.parseInt(temp);
+
         datas = new DataSet<Post>();
         datas.setObjects(list);
-        datas.setTotalRecords(replies);
+        datas.setTotalRecords(pages * 20);
         return datas;
     }
 

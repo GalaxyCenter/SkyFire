@@ -151,6 +151,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected String mCatalog = null;
     protected int mPageIndex = 1;
+    protected int mMaxPage = Integer.MAX_VALUE;
 
     protected RecyclerBaseAdapter<T, RecyclerView.ViewHolder> mAdapter;
     protected LinearLayoutManager mLinearLayoutManager;
@@ -219,9 +220,15 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
                 if (mState == STATE_NONE && scrollEnd) {
                     mPageIndex++;
-                    mState = STATE_LOADMORE;
-                    mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
-                    requestData(false);
+                    if (mPageIndex > mMaxPage) {
+                        mPageIndex--;
+                        mState = STATE_NOMORE;
+                        mAdapter.setState(RecyclerBaseAdapter.STATE_NO_MORE);
+                    } else {
+                        mState = STATE_LOADMORE;
+                        mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
+                        requestData(false);
+                    }
                 }
             }
         });

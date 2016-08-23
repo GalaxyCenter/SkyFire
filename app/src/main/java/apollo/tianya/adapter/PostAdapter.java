@@ -10,6 +10,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -81,6 +82,10 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
     }
 
     public static class FooterViewHolder extends ViewHolder {
+        @BindView(R.id.text) TextView text;
+        @BindView(R.id.progressbar)
+        ProgressBar progress;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
 
@@ -152,7 +157,24 @@ public class PostAdapter extends RecyclerBaseAdapter<Post, PostAdapter.ViewHolde
                     mOptionHandle.handleOption(vh, post, position);
             }
         } else if (itemType == TYPE_FOOTER) {
+            FooterViewHolder vh = (FooterViewHolder) holder;
 
+            switch (getState()) {
+                case STATE_LOAD_MORE:
+                    vh.progress.setVisibility(View.VISIBLE);
+                    vh.text.setText(R.string.loading);
+                    break;
+
+                case STATE_NO_MORE:
+                    vh.progress.setVisibility(View.GONE);
+                    vh.text.setText(R.string.loading_nor_more);
+                    break;
+
+                case STATE_PULL:
+                    vh.progress.setVisibility(View.GONE);
+                    vh.text.setText("");
+                    break;
+            }
         } else {
             Post post = null;
             SpannableString span_body = null;
