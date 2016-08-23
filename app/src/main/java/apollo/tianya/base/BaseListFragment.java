@@ -169,6 +169,12 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected void onRefreshNetworkSuccess() {}
 
+    protected void requestData() {
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+        mState = STATE_LOADMORE;
+        requestData(false);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_pull_refresh_listview;
@@ -232,9 +238,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 }
             }
         });
-        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-        mState = STATE_LOADMORE;
-        requestData(false);
+        requestData();
     }
 
     @Override

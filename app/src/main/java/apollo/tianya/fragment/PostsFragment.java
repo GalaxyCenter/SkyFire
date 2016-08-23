@@ -48,6 +48,7 @@ import apollo.tianya.ui.CollapsedDetailActivity;
 import apollo.tianya.util.Regex;
 import apollo.tianya.util.Transforms;
 import apollo.tianya.util.UIHelper;
+import apollo.tianya.widget.EmptyLayout;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -319,6 +320,18 @@ public class PostsFragment extends BaseListFragment<Post> implements
         });
     }
 
+    protected void requestData() {
+        String key = getCacheKeyPrefix();
+        int floor = AppContext.getInt(key, 0);
+
+        if (floor == 0) {
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+            mState = STATE_LOADMORE;
+            requestData(false);
+        } else {
+            moveToFloor(floor);
+        }
+    }
 
     @Override
     protected RecyclerBaseAdapter getListAdapter() {
@@ -372,6 +385,18 @@ public class PostsFragment extends BaseListFragment<Post> implements
         }
         mMaxPage = data.getTotalRecords() / 20;
         super.executeOnLoadDataSuccess(data);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        String key = getCacheKeyPrefix();
+        int floor = mCurFloor + mLinearLayoutManager.findFirstVisibleItemPosition();
+
+        AppContext.set(key, floor);
+
+        Log.i(TAG, "LAST FLOOR:" + floor);
     }
 
     @Override
@@ -483,7 +508,7 @@ public class PostsFragment extends BaseListFragment<Post> implements
             mPosition = pos;
         }
 
-        if (pi == mPageIndex) {
+        if (pi == mPageIndex && mAdapter.getRawItemCount() != 0) {
             moveToPosition(pos);
             return;
         }
