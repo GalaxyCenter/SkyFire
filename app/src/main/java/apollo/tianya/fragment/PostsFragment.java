@@ -465,24 +465,31 @@ public class PostsFragment extends BaseListFragment<Post> implements
         int pi = 0;
         int pos = 0;
 
-        // 默认每页20的计算分页,当目标页码是第一页时基数为21
-        pi = floor / 20;
-        base = pi == 1 ? 21 : 20;
-        if (floor % base > 0)
-            pi ++;
+        if (floor < 21) {
+            pi = 1;
+            mPosition = pos = floor;
+        } else {
+            pi = floor / 20;
+            base = 20;
+            if (floor % base > 0)
+                pi ++;
 
-        // 目标页面是非第一页的时候重新设置base值
-        base = pi == 1 ? 21 : 20;
-        pos = floor % base;
+            // 目标页面是非第一页的时候重新设置base值
+            base = pi == 1 ? 21 : 20;
+            pos = floor % base;
+            if (pos == 0)
+                pos = 20;
 
-        mPosition = pos;
+            mPosition = pos;
+        }
+
         if (pi == mPageIndex) {
             moveToPosition(pos);
             return;
         }
 
         mPageIndex = pi;
-        mCurFloor = (pi - 1) * 20 + 1;
+        mCurFloor = pi == 1 ? 0 : (pi - 1) * 20 + 1;
         setSwipeRefreshLoadingState();
         mState = STATE_REFRESH;
         mAdapter.setState(RecyclerBaseAdapter.STATE_LOAD_MORE);
