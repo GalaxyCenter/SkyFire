@@ -6,6 +6,7 @@
     <string name="cancel">取消</string>
     <string name="skip_to">跳转到</string>
     <string name="copy_data_success">成功复制</string>
+    <string name="auto_redirect_post_position">系统正在为您定位到最后一次阅读的位置</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -99,6 +100,7 @@
     <string name="prefs_font_size">正文字体大小</string>
     <string name="prefs_show_image">自动下载图片</string>
     <string name="prefs_show_head_img">自动下载头像</string>
+    <string name="prefs_auto_save_post_position">自动记录上次阅读位置</string>
     <string name="prefs_clean_cache">清理缓存</string>
 
     <string name="prefs_font_size_big">巨大</string>

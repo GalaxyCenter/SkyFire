@@ -215,8 +215,16 @@ public class AppContext extends BaseApplication {
         set(Constants.Settings.KEY_SHOW_HEAD_IMG, v);
     }
 
+    public static void setAutoSavePostPosition(boolean v) {
+        set(Constants.Settings.KEY_AUTO_SAVE_POST_POSITION, v);
+    }
+
     public static boolean isShowHeadImage() {
         return getBool(Constants.Settings.KEY_SHOW_HEAD_IMG, true);
+    }
+
+    public static boolean isAutoSavePostPosition() {
+        return getBool(Constants.Settings.KEY_AUTO_SAVE_POST_POSITION, true);
     }
 
     public static void set(String key, int value) {

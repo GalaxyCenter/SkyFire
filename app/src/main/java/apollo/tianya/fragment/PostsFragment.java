@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -330,6 +331,9 @@ public class PostsFragment extends BaseListFragment<Post> implements
             requestData(false);
         } else {
             moveToFloor(floor);
+
+            Snackbar.make((ViewGroup) getActivity().getWindow().getDecorView(), R.string.auto_redirect_post_position, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     }
 
@@ -391,12 +395,12 @@ public class PostsFragment extends BaseListFragment<Post> implements
     public void onDestroy() {
         super.onDestroy();
 
-        String key = getCacheKeyPrefix();
-        int floor = mCurFloor + mLinearLayoutManager.findFirstVisibleItemPosition();
+        if (AppContext.isAutoSavePostPosition()) {
+            String key = getCacheKeyPrefix();
+            int floor = mCurFloor + mLinearLayoutManager.findFirstVisibleItemPosition();
 
-        AppContext.set(key, floor);
-
-        Log.i(TAG, "LAST FLOOR:" + floor);
+            AppContext.set(key, floor);
+        }
     }
 
     @Override

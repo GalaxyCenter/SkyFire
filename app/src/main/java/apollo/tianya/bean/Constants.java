@@ -17,6 +17,7 @@ public class Constants {
         public static String KEY_FONT_SIZE = "font_size";
         public static String KEY_SHOW_IMG = "show_image";
         public static String KEY_SHOW_HEAD_IMG = "show_head_img";
+        public static String KEY_AUTO_SAVE_POST_POSITION = "auto_save_post_position";
         public static String KEY_CLEAN_CACHE = "clean_cache";
     }
 

@@ -32,6 +32,8 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     private ListPreference mFontSize = null;
     private CheckBoxPreference mShowImgEnable = null;
     private CheckBoxPreference mShowHeadEnable = null;
+    private CheckBoxPreference mAutoSavePostPosition = null;
+
     private Preference mCleanCache = null;
 
     @Override
@@ -44,11 +46,14 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         mFontSize = (ListPreference) findPreference(Constants.Settings.KEY_FONT_SIZE);
         mShowImgEnable = (CheckBoxPreference) findPreference(Constants.Settings.KEY_SHOW_IMG);
         mShowHeadEnable = (CheckBoxPreference) findPreference(Constants.Settings.KEY_SHOW_HEAD_IMG);
+        mAutoSavePostPosition = (CheckBoxPreference) findPreference(Constants.Settings.KEY_AUTO_SAVE_POST_POSITION);
+
         mCleanCache = findPreference(Constants.Settings.KEY_CLEAN_CACHE);
 
         mFontSize.setOnPreferenceChangeListener(this);
         mShowImgEnable.setOnPreferenceChangeListener(this);
         mShowHeadEnable.setOnPreferenceChangeListener(this);
+        mAutoSavePostPosition.setOnPreferenceChangeListener(this);
         mCleanCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -65,6 +70,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         int fontSize = AppContext.getFontSize();
         boolean showImage = AppContext.isShowImage();
         boolean showHeadImage = AppContext.isShowHeadImage();
+        boolean autoSavePostPosition = AppContext.isAutoSavePostPosition();
 
         mFontSizeEntries = res.getStringArray(R.array.font_size_entries);
         mFontSizeValues = res.getStringArray(R.array.font_size_values);
@@ -73,6 +79,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
         mShowImgEnable.setChecked(showImage);
         mShowHeadEnable.setChecked(showHeadImage);
+        mAutoSavePostPosition.setChecked(autoSavePostPosition);
 
         caculateCacheSize();
     }
@@ -94,6 +101,8 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
             AppContext.setShowImage((Boolean) newValue);
         } else if (preference == mShowHeadEnable) {
             AppContext.setShowHeadImage((Boolean) newValue);
+        } else if (preference == mAutoSavePostPosition) {
+            AppContext.setAutoSavePostPosition((Boolean) newValue);
         }
 
         mConfigChanged = true;

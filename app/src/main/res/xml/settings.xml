@@ -30,6 +30,13 @@
             android:persistent="false"
             android:title="@string/prefs_show_head_img" />
 
+        <CheckBoxPreference
+            android:key="auto_save_post_position"
+            android:layout="@layout/perfs_item"
+            android:order="3"
+            android:persistent="false"
+            android:title="@string/prefs_auto_save_post_position" />
+
         <Preference
             android:key="clean_cache"
             android:layout="@layout/perfs_item"
