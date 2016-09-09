@@ -135,4 +135,6 @@
     <string name="manu_share">分享</string>
     <string name="manu_fav">收藏</string>
     <string name="manu_search">搜索</string>
+
+    <string name="hint_pub_post_body">发个帖,把内容分享给网友~</string>
 </resources>
