@@ -322,19 +322,9 @@ public class PostsFragment extends BaseListFragment<Post> implements
     }
 
     protected void requestData() {
-        String key = getCacheKeyPrefix();
-        int floor = AppContext.getInt(key, 0);
-
-        if (floor == 0) {
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-            mState = STATE_LOADMORE;
-            requestData(false);
-        } else {
-            moveToFloor(floor);
-
-            Snackbar.make((ViewGroup) getActivity().getWindow().getDecorView(), R.string.auto_redirect_post_position, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+        mState = STATE_LOADMORE;
+        requestData(false);
     }
 
     @Override
@@ -388,7 +378,20 @@ public class PostsFragment extends BaseListFragment<Post> implements
             data.setObjects(filted);
         }
         mMaxPage = data.getTotalRecords() / 20;
-        super.executeOnLoadDataSuccess(data);
+
+        String key = getCacheKeyPrefix();
+        int floor = AppContext.getInt(key, 0);
+
+        if (floor == 0) {
+            super.executeOnLoadDataSuccess(data);
+        } else {
+            AppContext.set(key, 0);
+
+            moveToFloor(floor);
+
+            Snackbar.make((ViewGroup) getActivity().getWindow().getDecorView(), R.string.auto_redirect_post_position, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
@@ -397,7 +400,7 @@ public class PostsFragment extends BaseListFragment<Post> implements
 
         if (AppContext.isAutoSavePostPosition()) {
             String key = getCacheKeyPrefix();
-            int floor = mCurFloor + mLinearLayoutManager.findFirstVisibleItemPosition();
+            int floor = mCurFloor + mLinearLayoutManager.findFirstVisibleItemPosition() - 2;
 
             AppContext.set(key, floor);
         }
