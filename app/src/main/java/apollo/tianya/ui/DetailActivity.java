@@ -17,6 +17,7 @@ import apollo.tianya.fragment.SearchFragment;
 import apollo.tianya.fragment.bar.BarBaseFragment.Action;
 import apollo.tianya.fragment.bar.BarBaseFragment.OnActionClickListener;
 import apollo.tianya.fragment.bar.InputFragment;
+import apollo.tianya.patch.AndroidBug5497Workaround;
 import apollo.tianya.util.TLog;
 
 /**
@@ -39,6 +40,8 @@ public class DetailActivity extends BaseActivity implements
         Intent intent = null;
         Class<? extends BaseFragment> clazz = null;
         String query = null;
+
+        AndroidBug5497Workaround.assistActivity(this);
 
         intent = getIntent();
         clazz = (Class<? extends BaseFragment>) intent.getSerializableExtra(Constants.BUNDLE_KEY_FRAGMENT);
