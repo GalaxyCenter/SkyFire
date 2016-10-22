@@ -49,7 +49,7 @@
 
         <activity
             android:name=".ui.DetailActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
 
             <meta-data
                 android:name="android.app.searchable"
