@@ -85,6 +85,7 @@
     <string name="actionbar_title_histories">阅读记录</string>
     <string name="actionbar_title_posts">我的帖子</string>
     <string name="actionbar_title_notice">我的通知</string>
+    <string name="actionbar_title_activity_pub">发布一个帖子</string>
 
     <string name="nav_my_bookmarks">我的书签</string>
     <string name="nav_my_histories">阅读记录</string>
@@ -128,13 +129,17 @@
     <string name="error_view_no_data">暂无内容</string>
     <string name="error_view_load_error_click_to_refresh">内容加载失败\r\n点击重新加载</string>
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
+    <string name="error_no_sd">无法保存照片，请检查SD卡是否挂载</string>
     <string name="tip_network_error">没有可用的网络</string>
 
-    <string name="manu_thread_detail_mark">马克</string>
-    <string name="manu_thread_skip">跳楼</string>
-    <string name="manu_share">分享</string>
-    <string name="manu_fav">收藏</string>
-    <string name="manu_search">搜索</string>
+    <string name="menu_thread_detail_mark">马克</string>
+    <string name="menu_thread_skip">跳楼</string>
+    <string name="menu_share">分享</string>
+    <string name="menu_fav">收藏</string>
+    <string name="menu_search">搜索</string>
+    <string name="menu_pub">发布</string>
 
     <string name="hint_pub_post_body">发个帖,把内容分享给网友~</string>
+    <string name="hint_pub_post_subject">一个好的标题可以吸引网友点击</string>
+
 </resources>

@@ -6,20 +6,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTabHost;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -29,12 +26,11 @@ import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
-import apollo.tianya.fragment.BookMarksFragment;
+import apollo.tianya.fragment.ActivityPubFragment;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.fragment.CollectionViewPagerFragment;
 import apollo.tianya.fragment.NavigationDrawerFragment;
 import apollo.tianya.fragment.NoticeViewPagerFragment;
-import apollo.tianya.service.NoticeService;
 import apollo.tianya.service.NoticeUtils;
 import apollo.tianya.util.TLog;
 import apollo.tianya.util.UIHelper;
@@ -160,6 +156,13 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navigation_drawer);
 
+        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tag = getString(R.string.actionbar_title_activity_pub);
+                UIHelper.showSimpleBack(MainActivity.this, new ViewPageInfo(tag, tag, ActivityPubFragment.class, getBundle(tag)));
+            }
+        });
         initTabs();
     }
 

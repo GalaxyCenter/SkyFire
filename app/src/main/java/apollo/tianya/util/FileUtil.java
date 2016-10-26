@@ -1,5 +1,9 @@
 package apollo.tianya.util;
 
+import android.text.TextUtils;
+
+import org.w3c.dom.Text;
+
 import java.io.File;
 
 /**
@@ -45,6 +49,17 @@ public class FileUtil {
             fileSizeString = df.format((double) fileS / 1073741824) + "G";
         }
         return fileSizeString;
+    }
+
+    /**
+     * 根据文件绝对路径获取文件名
+     * @param filePath
+     * @return
+     */
+    public static String getFileName(String filePath) {
+        if (TextUtils.isEmpty(filePath))
+            return "";
+        return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
     }
 
 }
