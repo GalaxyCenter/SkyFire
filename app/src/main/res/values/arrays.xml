@@ -38,6 +38,12 @@
         <item>@string/channel_notifications</item>
     </string-array>
 
+    <string-array name="friend_viewpage_arrays">
+        <item>@string/friend_friends</item>
+        <item>@string/friend_followers</item>
+        <item>@string/friend_following</item>
+    </string-array>
+
     <array name="font_size_entries">
         <item>@string/prefs_font_size_small</item>
         <item>@string/prefs_font_size_mid</item>

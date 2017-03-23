@@ -86,6 +86,7 @@
     <string name="actionbar_title_posts">我的帖子</string>
     <string name="actionbar_title_notice">我的通知</string>
     <string name="actionbar_title_activity_pub">发布一个帖子</string>
+    <string name="actionbar_title_friends">我的好友</string>
 
     <string name="nav_my_bookmarks">我的书签</string>
     <string name="nav_my_histories">阅读记录</string>
@@ -131,6 +132,10 @@
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     <string name="error_no_sd">无法保存照片，请检查SD卡是否挂载</string>
     <string name="tip_network_error">没有可用的网络</string>
+    <string name="tip_subject_empty">标题不能为空哦</string>
+    <string name="tip_content_empty">内容不能为空哦</string>
+    <string name="tip_content_too_long">内容好像多了一点哦</string>
+    <string name="tip_subject_too_long">标题过长了</string>
 
     <string name="menu_thread_detail_mark">马克</string>
     <string name="menu_thread_skip">跳楼</string>
@@ -142,4 +147,12 @@
     <string name="hint_pub_post_body">发个帖,把内容分享给网友~</string>
     <string name="hint_pub_post_subject">一个好的标题可以吸引网友点击</string>
 
+    <string name="post_publishing">正在发表帖子</string>
+    <string name="post_public">发表帖子</string>
+    <string name="post_publish_success">帖子发布成功</string>
+    <string name="post_publish_faile">发布帖子失败</string>
+
+    <string name="friend_friends">我的好友</string>
+    <string name="friend_followers">我的关注者</string>
+    <string name="friend_following">我关注的</string>
 </resources>

@@ -5,8 +5,6 @@ import android.view.View;
 
 import apollo.tianya.R;
 import apollo.tianya.adapter.RecyclerBaseAdapter;
-import apollo.tianya.adapter.SectionAdapter;
-import apollo.tianya.adapter.ThreadAdapter;
 import apollo.tianya.api.TianyaParser;
 import apollo.tianya.api.remote.TianyaApi;
 import apollo.tianya.base.BaseListFragment;

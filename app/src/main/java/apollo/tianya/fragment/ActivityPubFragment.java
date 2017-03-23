@@ -16,7 +16,6 @@ import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
@@ -37,10 +36,17 @@ import java.util.Date;
 
 import apollo.tianya.AppContext;
 import apollo.tianya.R;
+import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.base.BaseFragment;
+import apollo.tianya.bean.Constants;
+import apollo.tianya.bean.Thread;
+import apollo.tianya.bean.User;
+import apollo.tianya.service.PublishTaskServiceUtils;
+import apollo.tianya.util.CompatibleUtil;
 import apollo.tianya.util.DialogHelp;
 import apollo.tianya.util.ImageUtil;
 import apollo.tianya.util.SpannableUtil;
+import apollo.tianya.util.UIHelper;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -50,12 +56,14 @@ import butterknife.OnClick;
 
 public class ActivityPubFragment extends BaseFragment {
 
-    private static final int MAX_TEXT_LENGTH = 2400;
+    private static final int MAX_CONTENT_LENGTH = 8000;
+    private static final int MAX_SUBJECT_LENGTH = 40;
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
 
     private MenuItem mMenuSend;
     private String mSelectedImgPatch;
+    private String mSectionId;
     private DisplayImageOptions mOptions;
 
     private final Handler handler = new Handler() {
@@ -98,6 +106,9 @@ public class ActivityPubFragment extends BaseFragment {
     @BindView(R.id.et_content)
     EditText mEtInput;
 
+    @BindView(R.id.et_subject)
+    EditText mEtSubject;
+
     @BindView(R.id.tv_clear)
     TextView mTvClear;
 
@@ -127,8 +138,13 @@ public class ActivityPubFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
+        Intent intent = null;
+        ViewPageInfo vpi = null;
         super.initView(view);
 
+        intent = getActivity().getIntent();
+        vpi = (ViewPageInfo) intent.getParcelableExtra(Constants.BUNDLE_KEY_PAGEINFO);
+        mSectionId = vpi.args.getString(Constants.BUNDLE_KEY_SECTION_ID); //.getStringExtra(Constants.BUNDLE_KEY_SECTION_ID);
         mEtInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -143,7 +159,24 @@ public class ActivityPubFragment extends BaseFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 updateSendMenu();
-                mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
+                mTvClear.setText((MAX_CONTENT_LENGTH - s.length()) + "");
+            }
+        });
+
+        mEtSubject.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateSendMenu();
             }
         });
     }
@@ -157,13 +190,28 @@ public class ActivityPubFragment extends BaseFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @OnClick({R.id.ib_picture})
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_pub:
+                createActivity();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    @OnClick({R.id.ib_picture, R.id.ib_follow})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_picture:
                 handleSelectPicture();
                 break;
 
+            case R.id.ib_follow:
+                handleSelectFriend();
+                break;
         }
     }
 
@@ -229,6 +277,15 @@ public class ActivityPubFragment extends BaseFragment {
         }).show();
     }
 
+    private void handleSelectFriend() {
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getContext());
+            return;
+        }
+
+
+    }
+
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -236,7 +293,7 @@ public class ActivityPubFragment extends BaseFragment {
         if (resultCode != Activity.RESULT_OK)
             return;
 
-        new Thread() {
+        new java.lang.Thread() {
             @Override
             public void run() {
                 Bitmap bmp = null;
@@ -260,7 +317,7 @@ public class ActivityPubFragment extends BaseFragment {
     }
 
     private void updateSendMenu() {
-        if (mEtInput.getText().length() == 0) {
+        if (mEtInput.getText().length() == 0 || mEtSubject.getText().length() == 0) {
             mMenuSend.setEnabled(false);
             mMenuSend.setIcon(R.drawable.ic_send_gray_24dp);
         } else {
@@ -269,13 +326,58 @@ public class ActivityPubFragment extends BaseFragment {
         }
     }
 
-    private void insertImage(SpannableStringBuilder spannable, Bitmap bmp) {
-        BitmapDrawable draw = null;
+    private void createActivity() {
+        if (!CompatibleUtil.hasInternet()) {
+            Snackbar.make(null, R.string.tip_network_error, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
 
-        draw = new BitmapDrawable(bmp);
-        draw.setBounds(0, 0, draw.getIntrinsicWidth(), draw.getIntrinsicHeight());
-        spannable.setSpan(new ImageSpan(draw, 0), 0, spannable.length(), Spannable.SPAN_POINT_MARK);
-        int start = mEtInput.getSelectionStart();
-        mEtInput.getText().insert(start, spannable);
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getContext());
+            return;
+        }
+
+        String content = mEtInput.getText().toString().trim();
+        if (TextUtils.isEmpty(content)) {
+            mEtInput.requestFocus();
+            Snackbar.make(null, R.string.tip_content_empty, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+        if (content.length() > MAX_CONTENT_LENGTH) {
+            Snackbar.make(null, R.string.tip_content_too_long, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+
+        String subject = mEtSubject.getText().toString().trim();
+        if (TextUtils.isEmpty(subject)) {
+            mEtSubject.requestFocus();
+            Snackbar.make(null, R.string.tip_subject_empty, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+
+        if (subject.length() > MAX_SUBJECT_LENGTH) {
+            Snackbar.make(null, R.string.tip_subject_too_long, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            return;
+        }
+
+        User user = null;
+        Thread post = null;
+
+        user = AppContext.getInstance().getLoginUser();
+        post = new Thread();
+        post.setAuthor(user.getName());
+        post.setAuthorId(user.getId());
+        post.setTitle(subject);
+        post.setBody(content);
+        post.setSectionId(mSectionId);
+
+        PublishTaskServiceUtils.pubThread(getActivity(), post);
+        getActivity().finish();
     }
+
 }

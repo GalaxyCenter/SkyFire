@@ -90,7 +90,7 @@
             android:src="@drawable/compose_toolbar_picture_selector" />
 
         <ImageButton
-            android:id="@+id/ib_mention"
+            android:id="@+id/ib_follow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

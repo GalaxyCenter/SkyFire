@@ -79,6 +79,11 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     private Section mSection;
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_thread_pull_refresh_listview;
+    }
+
+    @Override
     protected RecyclerBaseAdapter getListAdapter() {
         return new ThreadAdapter();
     }
@@ -153,6 +158,12 @@ public class ThreadsFragment extends BaseListFragment<Thread> {
     public void initView(View view) {
         mSectionId = getActivity().getIntent().getStringExtra(Constants.BUNDLE_KEY_SECTION_ID);
 
+        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showActivityPublish(getContext(), mSectionId);
+            }
+        });
         super.initView(view);
     }
 

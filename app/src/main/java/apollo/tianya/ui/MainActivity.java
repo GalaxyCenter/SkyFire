@@ -26,7 +26,6 @@ import apollo.tianya.base.BaseActivity;
 import apollo.tianya.base.BaseFragment;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
-import apollo.tianya.fragment.ActivityPubFragment;
 import apollo.tianya.fragment.ChannelViewPagerFragment;
 import apollo.tianya.fragment.CollectionViewPagerFragment;
 import apollo.tianya.fragment.NavigationDrawerFragment;
@@ -156,13 +155,6 @@ public class MainActivity extends BaseActivity implements TabHost.OnTabChangeLis
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navigation_drawer);
 
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tag = getString(R.string.actionbar_title_activity_pub);
-                UIHelper.showSimpleBack(MainActivity.this, new ViewPageInfo(tag, tag, ActivityPubFragment.class, getBundle(tag)));
-            }
-        });
         initTabs();
     }
 

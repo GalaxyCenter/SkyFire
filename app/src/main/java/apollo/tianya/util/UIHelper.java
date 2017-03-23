@@ -11,10 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.view.ViewGroup;
 
 import apollo.tianya.AppContext;
+import apollo.tianya.R;
 import apollo.tianya.adapter.ViewPageInfo;
 import apollo.tianya.bean.Constants;
 import apollo.tianya.bean.Notice;
 import apollo.tianya.bean.Thread;
+import apollo.tianya.fragment.ActivityPubFragment;
 import apollo.tianya.fragment.PostsFragment;
 import apollo.tianya.fragment.ThreadsFragment;
 import apollo.tianya.ui.CollapsedDetailActivity;
@@ -143,5 +145,20 @@ public class UIHelper {
                 handler.sendMessage(msg);
             }
         }.start();
+    }
+
+    public static void showActivityPublish(Context context, String sectionId) {
+        String tag = context.getString(R.string.actionbar_title_activity_pub);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.BUNDLE_KEY_SECTION_ID, sectionId);
+
+        UIHelper.showSimpleBack(context, new ViewPageInfo(tag, tag, ActivityPubFragment.class, bundle));
+    }
+
+    public static void showFriends(Context context) {
+        String tag = context.getString(R.string.actionbar_title_friends);
+        Bundle bundle = new Bundle();
+
+        UIHelper.showSimpleBack(context, new ViewPageInfo(tag, tag, ActivityPubFragment.class, bundle));
     }
 }
