@@ -296,54 +296,6 @@ public class TianyaApi {
         ApiHttpClient.get(post_url, handler);
     }
 
-    public static void createPost(String sectionId, String threadId, String title, String content, AsyncHttpResponseHandler handler) {
-        String url = null;
-        String referer = null;
-        RequestParams params = new RequestParams();
-        Header[] headers = null;
-
-        if (TextUtils.isEmpty(threadId)) {
-            url = "http://bbs.tianya.cn/api?method=bbs.ice.compose";
-            referer = "http://bbs.tianya.cn/post-" + sectionId + "-" + threadId + "-1.shtml";
-        } else {
-            url = "http://bbs.tianya.cn/api?method=bbs.ice.reply";
-            referer = "http://bbs.tianya.cn/post-" + sectionId + "-" + threadId + "-1.shtml";
-        }
-        headers = new Header[11];
-        headers[0] = new ApiHttpClient.HttpHeader("Referer", referer);
-        headers[1] = new ApiHttpClient.HttpHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; rv:18.0) Gecko/20100101 Firefox/18.0");
-        headers[2] = new ApiHttpClient.HttpHeader("Accept", "application/json, text/javascript, */*; q=0.01");
-        headers[3] = new ApiHttpClient.HttpHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
-        headers[4] = new ApiHttpClient.HttpHeader("Accept-Encoding", "gzip, deflate");
-        headers[5] = new ApiHttpClient.HttpHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        headers[6] = new ApiHttpClient.HttpHeader("X-Requested-With", "XMLHttpRequest");
-        headers[7] = new ApiHttpClient.HttpHeader("Connection", "keep-alive");
-        headers[8] = new ApiHttpClient.HttpHeader("Pragma", "no-cache");
-        headers[9] = new ApiHttpClient.HttpHeader("Cache-Control", "no-cache");
-        headers[10] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
-
-        content += AppContext.getInstance().getResources().getString(R.string.post_content_tail);
-        params.put("params.action", "");
-        params.put("params.appBlock", sectionId);
-        params.put("params.appId", "bbs");
-        params.put("params.artId", threadId);
-        params.put("params.bScore", "true");
-        params.put("params.bWeibo", "false");
-        params.put("params.content", content);
-        params.put("params.item", sectionId);
-        params.put("params.postId", threadId);
-        params.put("params.prePostTime", Long.toString(DateTime.now().getTime()));
-        params.put("params.preTitle", title);
-        params.put("params.preUrl", "");
-        params.put("params.preUserId", "");
-        params.put("params.preUserName", "");
-        params.put("params.sourceName", "iTianya");
-        params.put("params.title", title);
-        params.put("params.appId", "3");
-
-        ApiHttpClient.post(url, headers, params, handler);
-    }
-
     public static void getNotices(AsyncHttpResponseHandler handler) {
         String url = "http://bbs.tianya.cn/api?method=bbs.api.getUserNoticeCount";
         Header[] headers = null;
@@ -523,5 +475,53 @@ public class TianyaApi {
         String url = "http://search.tianya.cn/bbs?q=" + URLEncoder.encode(word) + "&pn=" + pageIndex;
 
         ApiHttpClient.get(url, handler);
+    }
+
+    public static void createPost(String sectionId, String threadId, String title, String content, AsyncHttpResponseHandler handler) {
+        String url = null;
+        String referer = null;
+        RequestParams params = new RequestParams();
+        Header[] headers = null;
+
+        if (TextUtils.isEmpty(threadId)) {
+            url = "http://bbs.tianya.cn/api?method=bbs.ice.compose";
+            referer = "http://bbs.tianya.cn/post-" + sectionId + "-" + threadId + "-1.shtml";
+        } else {
+            url = "http://bbs.tianya.cn/api?method=bbs.ice.reply";
+            referer = "http://bbs.tianya.cn/post-" + sectionId + "-" + threadId + "-1.shtml";
+        }
+        headers = new Header[11];
+        headers[0] = new ApiHttpClient.HttpHeader("Referer", referer);
+        headers[1] = new ApiHttpClient.HttpHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; rv:18.0) Gecko/20100101 Firefox/18.0");
+        headers[2] = new ApiHttpClient.HttpHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+        headers[3] = new ApiHttpClient.HttpHeader("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3");
+        headers[4] = new ApiHttpClient.HttpHeader("Accept-Encoding", "gzip, deflate");
+        headers[5] = new ApiHttpClient.HttpHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        headers[6] = new ApiHttpClient.HttpHeader("X-Requested-With", "XMLHttpRequest");
+        headers[7] = new ApiHttpClient.HttpHeader("Connection", "keep-alive");
+        headers[8] = new ApiHttpClient.HttpHeader("Pragma", "no-cache");
+        headers[9] = new ApiHttpClient.HttpHeader("Cache-Control", "no-cache");
+        headers[10] = new ApiHttpClient.HttpHeader("Cookie", AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
+
+        content += AppContext.getInstance().getResources().getString(R.string.post_content_tail);
+        params.put("params.action", "");
+        params.put("params.appBlock", sectionId);
+        params.put("params.appId", "bbs");
+        params.put("params.artId", threadId);
+        params.put("params.bScore", "true");
+        params.put("params.bWeibo", "false");
+        params.put("params.content", content);
+        params.put("params.item", sectionId);
+        params.put("params.postId", threadId);
+        params.put("params.prePostTime", Long.toString(DateTime.now().getTime()));
+        params.put("params.preTitle", title);
+        params.put("params.preUrl", "");
+        params.put("params.preUserId", "");
+        params.put("params.preUserName", "");
+        params.put("params.sourceName", "iTianya");
+        params.put("params.title", title);
+        params.put("params.appId", "3");
+
+        ApiHttpClient.post(url, headers, params, handler);
     }
 }

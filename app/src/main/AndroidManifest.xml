@@ -80,6 +80,13 @@
         <service
             android:name=".service.NoticeService"
             android:process=":notice" />
+        
+        <service android:name=".service.PublishTaskService">
+            <intent-filter>
+                <action android:name="apollo.tianya.ACTION_PUB_POST" />
+            </intent-filter>
+
+        </service>
 
     </application>
 
